@@ -1,0 +1,93 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>warnings</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>WinForms.Ribbon</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ribbon.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <AssemblyTitle>Ribbon Framework for .NET WinForms</AssemblyTitle>
+    <AssemblyDescription>Ribbon Framework for .NET WinForms</AssemblyDescription>
+	<NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryType>Git</RepositoryType>
+    <PackageId>RibbonFramework</PackageId>
+    <Product>Ribbon Framework for .NET WinForms</Product>
+    <Version>8.0.0</Version>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
+    <Authors>Hartmut Borkenhagen</Authors>
+    <Company>RibbonLib</Company>
+    <PackageIcon>Ribbon64.png</PackageIcon>
+	<Title>Ribbon Framework for .NET WinForms</Title>
+    <Description>Ribbon Framework for .NET WinForms</Description>
+    <Copyright>Copyright © 2025</Copyright>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageReadmeFile>.\NugetReadme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Ribbon64.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Ribbon16.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="NativeMethods.txt" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.183</MicrosoftWindowsCsWin32PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="$(MicrosoftWindowsCsWin32PackageVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CS8632</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CS8632</NoWarn>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Content Include="NugetReadme.md">
+      <Pack>True</Pack>
+      <PackagePath>.\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon16.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controls\Events\" />
+    <Folder Include="Controls\Properties\" />
+    <Folder Include="PropertySets\" />
+  </ItemGroup>
+
+<!--
+  <ItemGroup>
+    <Reference Include="WindowsCore">
+      <HintPath>..\WindowsCore\bin\Debug\net8.0-windows\WindowsCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+-->
+
+<!--
+  <ItemGroup>
+    <Reference Include="FromWinForms">
+      <HintPath>..\FromWinForms\bin\Debug\net8.0-windows\FromWinForms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+-->
+</Project>

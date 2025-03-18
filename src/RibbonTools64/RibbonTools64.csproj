@@ -1,0 +1,158 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+	<UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\Ribbon.ico</ApplicationIcon>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--
+	Can't set an other value to ApplicationHighDpiMode because there is a bug in WinForms
+	-->
+	
+	<ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+	
+	<DisableWinExeOutputInference>true</DisableWinExeOutputInference>
+	
+	<Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>RibbonGenerator.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <AssemblyName>RibbonTools64</AssemblyName>
+    <RootNamespace>UIRibbonTools</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NoWarn>1701;1702;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NoWarn>1701;1702;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <!--
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  -->
+  
+  <PropertyGroup>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.106-beta</MicrosoftWindowsCsWin32PackageVersion>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Example\**" />
+    <EmbeddedResource Remove="Example\**" />
+    <None Remove="Example\**" />
+    <Page Remove="Example\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Build\ToolsPathFinderx64.cs" />
+    <Compile Remove="CHelper.cs" />
+    <Compile Remove="ColorHelper.cs" />
+    <Compile Remove="Misc\NativeMethods.cs" />
+    <Compile Remove="Misc\UIImage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Images\ImageListAppModes_Shared.bmp" />
+    <None Remove="Images\ImageListToolbars_Commands.bmp" />
+    <None Remove="Images\ImageListToolbars_ImageList.bmp" />
+    <None Remove="Images\ImageListTreeView_Views.bmp" />
+    <None Remove="Images\ImageList_Edit.bmp" />
+    <None Remove="Images\ImageList_NewFile.bmp" />
+    <None Remove="Images\ImageList_Settings.bmp" />
+    <None Remove="Images\ImageSample_ApplicationMenu.png" />
+    <None Remove="Images\ImageSample_Button.png" />
+    <None Remove="Images\ImageSample_CheckBox.png" />
+    <None Remove="Images\ImageSample_ComboBox.png" />
+    <None Remove="Images\ImageSample_ContextMap.png" />
+    <None Remove="Images\ImageSample_ContextMenu.png" />
+    <None Remove="Images\ImageSample_ControlGroup.png" />
+    <None Remove="Images\ImageSample_DropDownButton.png" />
+    <None Remove="Images\ImageSample_DropDownColorPicker.png" />
+    <None Remove="Images\ImageSample_DropDownGallery.png" />
+    <None Remove="Images\ImageSample_FloatyFontControl.png" />
+    <None Remove="Images\ImageSample_FontControl.png" />
+    <None Remove="Images\ImageSample_Group.png" />
+    <None Remove="Images\ImageSample_Help.png" />
+    <None Remove="Images\ImageSample_InRibbonGallery.png" />
+    <None Remove="Images\ImageSample_MenuGroup.png" />
+    <None Remove="Images\ImageSample_MenuGroup1.png" />
+    <None Remove="Images\ImageSample_MiniToolBar.png" />
+    <None Remove="Images\ImageSample_QATControl.png" />
+    <None Remove="Images\ImageSample_QuickAccessToolBar.png" />
+    <None Remove="Images\ImageSample_Spinner.png" />
+    <None Remove="Images\ImageSample_SplitButton.png" />
+    <None Remove="Images\ImageSample_SplitButtonGallery.png" />
+    <None Remove="Images\ImageSample_Tab.png" />
+    <None Remove="Images\ImageSample_TabGroup.png" />
+    <None Remove="Images\ImageSample_ToggleButton.png" />
+    <None Remove="Images\ImageSample_ViewRibbon.png" />
+    <None Remove="Images\Images_Main.bmp" />
+    <None Remove="Wordpad.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\ImageListAppModes_Shared.bmp" />
+    <EmbeddedResource Include="Images\ImageListToolbars_Commands.bmp" />
+    <EmbeddedResource Include="Images\ImageListToolbars_ImageList.bmp" />
+    <EmbeddedResource Include="Images\ImageListTreeView_Views.bmp" />
+    <EmbeddedResource Include="Images\ImageList_Edit.bmp" />
+    <EmbeddedResource Include="Images\ImageList_NewFile.bmp" />
+    <EmbeddedResource Include="Images\ImageList_Settings.bmp" />
+    <EmbeddedResource Include="Images\ImageSample_ApplicationMenu.png" />
+    <EmbeddedResource Include="Images\ImageSample_Button.png" />
+    <EmbeddedResource Include="Images\ImageSample_CheckBox.png" />
+    <EmbeddedResource Include="Images\ImageSample_ComboBox.png" />
+    <EmbeddedResource Include="Images\ImageSample_ContextMap.png" />
+    <EmbeddedResource Include="Images\ImageSample_ContextMenu.png" />
+    <EmbeddedResource Include="Images\ImageSample_ControlGroup.png" />
+    <EmbeddedResource Include="Images\ImageSample_DropDownButton.png" />
+    <EmbeddedResource Include="Images\ImageSample_DropDownColorPicker.png" />
+    <EmbeddedResource Include="Images\ImageSample_DropDownGallery.png" />
+    <EmbeddedResource Include="Images\ImageSample_FloatyFontControl.png" />
+    <EmbeddedResource Include="Images\ImageSample_FontControl.png" />
+    <EmbeddedResource Include="Images\ImageSample_Group.png" />
+    <EmbeddedResource Include="Images\ImageSample_Help.png" />
+    <EmbeddedResource Include="Images\ImageSample_InRibbonGallery.png" />
+    <EmbeddedResource Include="Images\ImageSample_MenuGroup.png" />
+    <EmbeddedResource Include="Images\ImageSample_MenuGroup1.png" />
+    <EmbeddedResource Include="Images\ImageSample_MiniToolBar.png" />
+    <EmbeddedResource Include="Images\ImageSample_QATControl.png" />
+    <EmbeddedResource Include="Images\ImageSample_QuickAccessToolBar.png" />
+    <EmbeddedResource Include="Images\ImageSample_Spinner.png" />
+    <EmbeddedResource Include="Images\ImageSample_SplitButton.png" />
+    <EmbeddedResource Include="Images\ImageSample_SplitButtonGallery.png" />
+    <EmbeddedResource Include="Images\ImageSample_Tab.png" />
+    <EmbeddedResource Include="Images\ImageSample_TabGroup.png" />
+    <EmbeddedResource Include="Images\ImageSample_ToggleButton.png" />
+    <EmbeddedResource Include="Images\ImageSample_ViewRibbon.png" />
+    <EmbeddedResource Include="Images\Images_Main.bmp" />
+    <EmbeddedResource Include="Wordpad.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WindowsRibbon">
+      <Version>2.16.1</Version>
+      <!--	  
+	  <HintPath>"..\..\..\Visual Studio 2017\Projects\RibbonLibNew\Ribbon\bin\Release\WindowsRibbon.2.16.0.nupkg"</HintPath>
+	  -->
+	</PackageReference>
+  </ItemGroup>
+
+</Project>

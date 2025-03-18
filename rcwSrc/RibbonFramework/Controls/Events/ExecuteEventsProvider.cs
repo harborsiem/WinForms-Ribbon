@@ -1,0 +1,86 @@
+//*****************************************************************************
+//
+//  File:       ExecuteEventsProvider.cs
+//
+//  Contents:   Definition for execute events provider 
+//
+//*****************************************************************************
+
+using System;
+using System.Windows.Forms;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.Ribbon;
+using Windows.Win32.UI.Shell.PropertiesSystem;
+using Windows.Win32.System.Com.StructuredStorage;
+
+namespace WinForms.Ribbon
+{
+    /// <summary>
+    /// Definition for Execute events provider
+    /// </summary>
+    public interface IExecuteEventsProvider
+    {
+        /// <summary>
+        /// Execute event
+        /// </summary>
+        event EventHandler<ExecuteEventArgs>? ExecuteEvent;
+    }
+
+    /// <summary>
+    /// Implementation of IExecuteEventsProvider
+    /// </summary>
+    public sealed class ExecuteEventsProvider : BaseEventsProvider, IExecuteEventsProvider
+    {
+        /// <summary>
+        /// Initializes a new instance of the ExecuteEventsProvider
+        /// </summary>
+        /// <param name="ribbonItem"></param>
+        public ExecuteEventsProvider(RibbonStripItem ribbonItem) : base(ribbonItem)
+        {
+            ((IEventsProvider)this).SupportedEvents.Add(UI_EXECUTIONVERB.UI_EXECUTIONVERB_EXECUTE);
+        }
+
+        /// <summary>
+        /// Handles IUICommandHandler.Execute function for supported events
+        /// </summary>
+        /// <param name="verb">the mode of execution</param>
+        /// <param name="key">the property that has changed</param>
+        /// <param name="currentValue">the new value of the property that has changed</param>
+        /// <param name="commandExecutionProperties">additional data for this execution</param>
+        /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
+        private protected override unsafe HRESULT ExecuteImpl(UI_EXECUTIONVERB verb, PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
+        {
+            if (verb == UI_EXECUTIONVERB.UI_EXECUTIONVERB_EXECUTE)
+            {
+                try
+                {
+                    _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
+                    {
+                        _ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
+                    });
+                    //_ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
+                    if (ExecuteEvent != null)
+                    {
+                        ExecuteEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return _ribbonItem.EventExceptionHandler(ex);
+                }
+            }
+
+            return HRESULT.S_OK;
+        }
+
+        #region IExecuteEventsProvider Members
+
+        /// <summary>
+        /// Execute event
+        /// </summary>
+        public event EventHandler<ExecuteEventArgs>? ExecuteEvent;
+
+        #endregion
+    }
+}

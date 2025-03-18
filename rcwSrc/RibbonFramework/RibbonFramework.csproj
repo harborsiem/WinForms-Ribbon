@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <UseWindowsForms>true</UseWindowsForms>
+	<ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+	<Nullable>enable</Nullable>
+    <RootNamespace>WinForms.Ribbon</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ribbon.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <AssemblyTitle>Ribbon Framework for .NET WinForms</AssemblyTitle>
+    <AssemblyDescription>Ribbon Framework for .NET WinForms</AssemblyDescription>
+	<NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryType>Git</RepositoryType>
+    <PackageId>RibbonFramework</PackageId>
+    <Product>Ribbon Framework for .NET WinForms</Product>
+    <Version>8.0.0</Version>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
+    <Authors>Hartmut Borkenhagen</Authors>
+    <Company>RibbonLib</Company>
+    <PackageIcon>Ribbon64.png</PackageIcon>
+	<Title>Ribbon Framework for .NET WinForms</Title>
+    <Description>Ribbon Framework for .NET WinForms</Description>
+    <Copyright>Copyright © 2025</Copyright>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageReadmeFile>.\NugetReadme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Darkmode.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Ribbon64.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="docs\Theme.h" />
+    <None Remove="docs\TortoiseTheme.cpp" />
+    <None Remove="NativeMethods.txt" />
+    <None Remove="NugetReadme.md" />
+    <None Remove="Ribbon16.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="NativeMethods.txt" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.183</MicrosoftWindowsCsWin32PackageVersion>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="$(MicrosoftWindowsCsWin32PackageVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CS8604;CS8618</NoWarn>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CS8604;CS8618</NoWarn>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Content Include="NugetReadme.md">
+      <Pack>True</Pack>
+      <PackagePath>.\</PackagePath>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon16.bmp" />
+  </ItemGroup>
+
+</Project>

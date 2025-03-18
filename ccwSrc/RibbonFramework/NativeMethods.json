@@ -1,0 +1,29 @@
+{
+  "$schema": "https://aka.ms/CsWin32.schema.json",
+  "emitSingleFile": true,
+  "public": true,
+  "comInterop": {
+    "useIntPtrForComOutPointers": false,
+    "preserveSigMethods": [
+      "IUIApplication",
+      "IUICollection",
+      "IUICollectionChangedEvent",
+      "IUICommandHandler",
+      "IUIContextualUI",
+      "IUIEventingManager",
+      "IUIEventLogger",
+      "IUIFramework",
+      "IUIImage",
+      "IUIImageFromBitmap",
+      "IUIRibbon",
+      "IUISimplePropertySet",
+      "IPropertyStore",
+      "IStream",
+      "IGlobalInterfaceTable",
+      "ITypeLib"
+    ]
+  },
+  "useSafeHandles": false,
+  "allowMarshaling": false,
+  "friendlyOverloads": {"enabled": true}
+}
