@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04-TabGroupHelp", "04-TabGroupHelp.csproj", "{A44E714A-6672-DC0F-E308-B4078F85A2FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A44E714A-6672-DC0F-E308-B4078F85A2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A44E714A-6672-DC0F-E308-B4078F85A2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A44E714A-6672-DC0F-E308-B4078F85A2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A44E714A-6672-DC0F-E308-B4078F85A2FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9E19E765-BF94-4D49-A18E-4014EB3C320A}
+	EndGlobalSection
+EndGlobal

@@ -30,11 +30,11 @@ namespace WinForms.Ribbon
 
         public MarkupHandler(Assembly executingAssembly, RibbonStrip ribbonStrip)
         {
-            MarkupResourceIdent = nameof(RibbonStrip) + "." + nameof(ribbonStrip.ResourceName);
+            MarkupResourceIdent = nameof(RibbonStrip) + "." + nameof(ribbonStrip.MarkupResource);
             _ribbonStrip = ribbonStrip;
             ResourceIdentifier = ribbonStrip.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
-            InitFramework(ribbonStrip.ResourceName, executingAssembly);
+            InitFramework(ribbonStrip.MarkupResource, executingAssembly);
         }
 
         ~MarkupHandler()

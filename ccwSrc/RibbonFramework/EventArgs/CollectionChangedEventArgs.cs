@@ -38,11 +38,11 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Collection change action
         /// </summary>
-        public UI_CollectionChange Action
+        public CollectionChange Action
         {
             get
             {
-                return (UI_CollectionChange)_action;
+                return (CollectionChange)_action;
             }
         }
 

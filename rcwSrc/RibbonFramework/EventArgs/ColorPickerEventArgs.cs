@@ -22,14 +22,14 @@ namespace WinForms.Ribbon
         /// <param name="color"></param>
         private ColorPickerEventArgs(UI_SWATCHCOLORTYPE colorType, Color? color)
         {
-            ColorType = (UI_SwatchColorType)colorType;
+            ColorType = (SwatchColorType)colorType;
             RGBColor = color;
         }
 
         /// <summary>
         /// The ColorType
         /// </summary>
-        public UI_SwatchColorType ColorType { get; private set; }
+        public SwatchColorType ColorType { get; private set; }
 
         /// <summary>
         /// Selected Color

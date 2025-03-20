@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>_19_Localization</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Res\Drop32.bmp" />
+    <None Remove="Res\dropA32.bmp" />
+    <None Remove="Res\dropB32.bmp" />
+    <None Remove="Res\dropC32.bmp" />
+    <None Remove="Res\ExitOff32.bmp" />
+    <None Remove="Res\ExitOff48.bmp" />
+    <None Remove="Res\ExitOff64.bmp" />
+    <None Remove="Res\ExitOn32.bmp" />
+    <None Remove="Res\ExitOn48.bmp" />
+    <None Remove="Res\ExitOn64.bmp" />
+    <None Remove="RibbonMarkup.de.ribbon" />
+    <None Remove="RibbonMarkup.ribbon" />
+    <None Remove="RibbonMarkup.shortcuts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Res\Drop32.bmp" />
+    <EmbeddedResource Include="Res\dropA32.bmp" />
+    <EmbeddedResource Include="Res\dropB32.bmp" />
+    <EmbeddedResource Include="Res\dropC32.bmp" />
+    <EmbeddedResource Include="Res\ExitOff32.bmp" />
+    <EmbeddedResource Include="Res\ExitOff48.bmp" />
+    <EmbeddedResource Include="Res\ExitOff64.bmp" />
+    <EmbeddedResource Include="Res\ExitOn32.bmp" />
+    <EmbeddedResource Include="Res\ExitOn48.bmp" />
+    <EmbeddedResource Include="Res\ExitOn64.bmp" />
+    <EmbeddedResource Include="RibbonMarkup.de.ribbon" />
+    <EmbeddedResource Include="RibbonMarkup.ribbon" />
+    <EmbeddedResource Include="RibbonMarkup.shortcuts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RibbonFramework">
+      <HintPath>..\..\..\ccwSrc\RibbonFramework\bin\Debug\net8.0-windows\RibbonFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

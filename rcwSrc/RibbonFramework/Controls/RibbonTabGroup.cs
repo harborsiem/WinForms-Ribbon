@@ -42,7 +42,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Get or set the status of the context.
         /// </summary>
-        public UI_ContextAvailability ContextAvailable
+        public ContextAvailability ContextAvailable
         {
             get
             {

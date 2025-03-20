@@ -34,22 +34,22 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Bold property
         /// </summary>
-        UI_FontProperties Bold { get; set; }
+        FontProperties Bold { get; set; }
 
         /// <summary>
         /// Italic property
         /// </summary>
-        UI_FontProperties Italic { get; set; }
+        FontProperties Italic { get; set; }
 
         /// <summary>
         /// Underline property
         /// </summary>
-        UI_FontUnderline Underline { get; set; }
+        FontUnderline Underline { get; set; }
 
         /// <summary>
         /// Strikethrough property
         /// </summary>
-        UI_FontProperties Strikethrough { get; set; }
+        FontProperties Strikethrough { get; set; }
 
         /// <summary>
         /// Foreground color property
@@ -64,7 +64,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Vertical positioning property
         /// </summary>
-        UI_FontVerticalPosition VerticalPositioning { get; set; }
+        FontVerticalPosition VerticalPositioning { get; set; }
     }
 
     /// <summary>
@@ -305,7 +305,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Bold property
         /// </summary>
-        public unsafe UI_FontProperties Bold
+        public unsafe FontProperties Bold
         {
             get
             {
@@ -319,11 +319,11 @@ namespace WinForms.Ribbon
                         hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
-                        return (UI_FontProperties)retResult;
+                        return (FontProperties)retResult;
                     }
                 }
 
-                return (UI_FontProperties)_bold.GetValueOrDefault(UI_FONTPROPERTIES.UI_FONTPROPERTIES_NOTAVAILABLE);
+                return (FontProperties)_bold.GetValueOrDefault(UI_FONTPROPERTIES.UI_FONTPROPERTIES_NOTAVAILABLE);
             }
             set
             {
@@ -338,7 +338,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Italic property
         /// </summary>
-        public unsafe UI_FontProperties Italic
+        public unsafe FontProperties Italic
         {
             get
             {
@@ -352,11 +352,11 @@ namespace WinForms.Ribbon
                         hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
-                        return (UI_FontProperties)retResult;
+                        return (FontProperties)retResult;
                     }
                 }
 
-                return (UI_FontProperties)_italic.GetValueOrDefault(UI_FONTPROPERTIES.UI_FONTPROPERTIES_NOTAVAILABLE);
+                return (FontProperties)_italic.GetValueOrDefault(UI_FONTPROPERTIES.UI_FONTPROPERTIES_NOTAVAILABLE);
             }
             set
             {
@@ -371,7 +371,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Underline property
         /// </summary>
-        public unsafe UI_FontUnderline Underline
+        public unsafe FontUnderline Underline
         {
             get
             {
@@ -385,11 +385,11 @@ namespace WinForms.Ribbon
                         hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTUNDERLINE retResult = (UI_FONTUNDERLINE)result;
-                        return (UI_FontUnderline)retResult;
+                        return (FontUnderline)retResult;
                     }
                 }
 
-                return (UI_FontUnderline)_underline.GetValueOrDefault(UI_FONTUNDERLINE.UI_FONTUNDERLINE_NOTAVAILABLE);
+                return (FontUnderline)_underline.GetValueOrDefault(UI_FONTUNDERLINE.UI_FONTUNDERLINE_NOTAVAILABLE);
             }
             set
             {
@@ -404,7 +404,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Strikethrough property
         /// </summary>
-        public unsafe UI_FontProperties Strikethrough
+        public unsafe FontProperties Strikethrough
         {
             get
             {
@@ -418,11 +418,11 @@ namespace WinForms.Ribbon
                         hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
-                        return (UI_FontProperties)retResult;
+                        return (FontProperties)retResult;
                     }
                 }
 
-                return (UI_FontProperties)_strikethrough.GetValueOrDefault(UI_FONTPROPERTIES.UI_FONTPROPERTIES_NOTAVAILABLE);
+                return (FontProperties)_strikethrough.GetValueOrDefault(UI_FONTPROPERTIES.UI_FONTPROPERTIES_NOTAVAILABLE);
             }
             set
             {
@@ -541,7 +541,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Vertical positioning property
         /// </summary>
-        public unsafe UI_FontVerticalPosition VerticalPositioning
+        public unsafe FontVerticalPosition VerticalPositioning
         {
             get
             {
@@ -555,11 +555,11 @@ namespace WinForms.Ribbon
                         hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTVERTICALPOSITION retResult = (UI_FONTVERTICALPOSITION)result;
-                        return (UI_FontVerticalPosition)retResult;
+                        return (FontVerticalPosition)retResult;
                     }
                 }
 
-                return (UI_FontVerticalPosition)_verticalPositioning.GetValueOrDefault(UI_FONTVERTICALPOSITION.UI_FONTVERTICALPOSITION_NOTAVAILABLE);
+                return (FontVerticalPosition)_verticalPositioning.GetValueOrDefault(UI_FONTVERTICALPOSITION.UI_FONTVERTICALPOSITION_NOTAVAILABLE);
             }
             set
             {

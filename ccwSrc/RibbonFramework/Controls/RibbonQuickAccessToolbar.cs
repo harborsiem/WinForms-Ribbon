@@ -245,7 +245,7 @@ namespace WinForms.Ribbon
         private protected override void OnDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
             base.OnDestroyUICommand(commandId, typeID);
-            if (CommandType != UI_CommandType.Unknown)
+            if (CommandType != CommandType.Unknown)
             {
                 QatItemsSource!.Destroy();
             }

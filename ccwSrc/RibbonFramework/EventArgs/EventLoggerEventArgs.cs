@@ -14,7 +14,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Identifies the types of events associated with a Ribbon.
         /// </summary>
-        public UI_EventType EventType { get; private set; }
+        public EventType EventType { get; private set; }
         /// <summary>
         /// The application modes. Only used when a EventType ApplicationModeSwitched has been fired.
         /// In all other cases it is set to 0.
@@ -44,11 +44,11 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Identifies the locations where events associated with a Ribbon control can originate.
         /// </summary>
-        public UI_EventLocation Location { get; private set; }
+        public EventLocation Location { get; private set; }
 
         internal EventLoggerEventArgs(in UI_EVENTPARAMS pEventParams)
         {
-            EventType = (UI_EventType)pEventParams.EventType;
+            EventType = (EventType)pEventParams.EventType;
             switch (pEventParams.EventType)
             {
                 case UI_EVENTTYPE.UI_EVENTTYPE_ApplicationModeSwitched:
@@ -75,7 +75,7 @@ namespace WinForms.Ribbon
             ParentCommandID = pEventParams.Anonymous.Params.ParentCommandID;
             ParentCommandName = pEventParams.Anonymous.Params.ParentCommandName.ToString(); //PCWStr
             SelectionIndex = (int)pEventParams.Anonymous.Params.SelectionIndex;
-            Location = (UI_EventLocation)pEventParams.Anonymous.Params.Location;
+            Location = (EventLocation)pEventParams.Anonymous.Params.Location;
         }
     }
 }

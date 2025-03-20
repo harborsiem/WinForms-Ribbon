@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12-FontControl", "12-FontControl.csproj", "{66A0600C-CA79-E242-042C-D41E5C698E17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66A0600C-CA79-E242-042C-D41E5C698E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A0600C-CA79-E242-042C-D41E5C698E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A0600C-CA79-E242-042C-D41E5C698E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A0600C-CA79-E242-042C-D41E5C698E17}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4C71D5FE-AAB4-4715-ACC7-605900F3C61C}
+	EndGlobalSection
+EndGlobal

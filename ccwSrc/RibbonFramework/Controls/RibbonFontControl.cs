@@ -84,7 +84,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Flag that indicates whether bold is selected.
         /// </summary>
-        public UI_FontProperties Bold
+        public FontProperties Bold
         {
             get
             {
@@ -99,7 +99,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Flag that indicates whether italic is selected.
         /// </summary>
-        public UI_FontProperties Italic
+        public FontProperties Italic
         {
             get
             {
@@ -114,7 +114,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Flag that indicates whether underline is selected.
         /// </summary>
-        public UI_FontUnderline Underline
+        public FontUnderline Underline
         {
             get
             {
@@ -130,7 +130,7 @@ namespace WinForms.Ribbon
         /// Flag that indicates whether strikethrough is selected
         /// (sometimes called Strikeout).
         /// </summary>
-        public UI_FontProperties Strikethrough
+        public FontProperties Strikethrough
         {
             get
             {
@@ -180,7 +180,7 @@ namespace WinForms.Ribbon
         /// Flag that indicates which one of the Subscript
         /// and Superscript buttons are selected, if any.
         /// </summary>
-        public UI_FontVerticalPosition VerticalPositioning
+        public FontVerticalPosition VerticalPositioning
         {
             get
             {

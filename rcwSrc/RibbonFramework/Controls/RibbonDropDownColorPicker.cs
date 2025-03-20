@@ -94,7 +94,7 @@ namespace WinForms.Ribbon
         /// The type of selected color.
         /// Can be: NoColor, Automatic or RGB (meaning specific color).
         /// </summary>
-        public UI_SwatchColorType ColorType
+        public SwatchColorType ColorType
         {
             get
             {

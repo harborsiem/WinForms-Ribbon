@@ -59,6 +59,6 @@ namespace WinForms.Ribbon
         /// The CommandType of the Control
         /// If the CommandType is UI_CommandType.Unknown (UI_COMMANDTYPE.UI_COMMANDTYPE_UNKNOWN) then the Control is not initialized by the Framework
         /// </summary>
-        UI_CommandType CommandType { get; }
+        CommandType CommandType { get; }
     }
 }

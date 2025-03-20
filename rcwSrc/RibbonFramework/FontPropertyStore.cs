@@ -76,7 +76,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Flag that indicates whether bold is selected.
         /// </summary>
-        public unsafe UI_FontProperties Bold
+        public unsafe FontProperties Bold
         {
             get
             {
@@ -85,14 +85,14 @@ namespace WinForms.Ribbon
                 hr = _cpPropertyStore.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
-                return (UI_FontProperties)retResult;
+                return (FontProperties)retResult;
             }
         }
 
         /// <summary>
         /// Flag that indicates whether italic is selected.
         /// </summary>
-        public unsafe UI_FontProperties Italic
+        public unsafe FontProperties Italic
         {
             get
             {
@@ -101,14 +101,14 @@ namespace WinForms.Ribbon
                 hr = _cpPropertyStore.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
-                return (UI_FontProperties)retResult;
+                return (FontProperties)retResult;
             }
         }
 
         /// <summary>
         /// Flag that indicates whether underline is selected.
         /// </summary>
-        public unsafe UI_FontUnderline Underline
+        public unsafe FontUnderline Underline
         {
             get
             {
@@ -117,7 +117,7 @@ namespace WinForms.Ribbon
                 hr = _cpPropertyStore.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTUNDERLINE retResult = (UI_FONTUNDERLINE)result;
-                return (UI_FontUnderline)retResult;
+                return (FontUnderline)retResult;
             }
         }
 
@@ -125,7 +125,7 @@ namespace WinForms.Ribbon
         /// Flag that indicates whether strikethrough is selected
         /// (sometimes called Strikeout).
         /// </summary>
-        public unsafe UI_FontProperties Strikethrough
+        public unsafe FontProperties Strikethrough
         {
             get
             {
@@ -134,7 +134,7 @@ namespace WinForms.Ribbon
                 hr = _cpPropertyStore.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
-                return (UI_FontProperties)retResult;
+                return (FontProperties)retResult;
             }
         }
 
@@ -161,7 +161,7 @@ namespace WinForms.Ribbon
         /// If RGB is selected, the user should get the color from the ForegroundColor property. 
         /// If Automatic is selected the user should use SystemColors.WindowText.
         /// </summary>
-        public unsafe UI_SwatchColorType ForegroundColorType
+        public unsafe SwatchColorType ForegroundColorType
         {
             get
             {
@@ -174,14 +174,14 @@ namespace WinForms.Ribbon
                 else
                     result = (uint)propvar; //PropVariantToUInt32
                 UI_SWATCHCOLORTYPE retResult = (UI_SWATCHCOLORTYPE)result;
-                return (UI_SwatchColorType)retResult;
+                return (SwatchColorType)retResult;
             }
         }
 
         /// <summary>
         /// Indicated whether the "Grow Font" or "Shrink Font" buttons were pressed.
         /// </summary>
-        public unsafe UI_FontDeltaSize? DeltaSize
+        public unsafe FontDeltaSize? DeltaSize
         {
             get
             {
@@ -194,7 +194,7 @@ namespace WinForms.Ribbon
                         return null;
                     uint result = (uint)propvar; //PropVariantToUInt32
                     UI_FONTDELTASIZE? retResult = (UI_FONTDELTASIZE?)(uint?)result;
-                    return (UI_FontDeltaSize?)retResult;
+                    return (FontDeltaSize?)retResult;
                 }
                 return null;
             }
@@ -223,7 +223,7 @@ namespace WinForms.Ribbon
         /// If RGB is selected, the user should get the color from the BackgroundColor property.
         /// If NoColor is selected the user should use SystemColors.Window.
         /// </summary>
-        public unsafe UI_SwatchColorType BackgroundColorType
+        public unsafe SwatchColorType BackgroundColorType
         {
             get
             {
@@ -236,7 +236,7 @@ namespace WinForms.Ribbon
                 else
                     result = (uint)propvar; //PropVariantToUInt32
                 UI_SWATCHCOLORTYPE retResult = (UI_SWATCHCOLORTYPE)result;
-                return (UI_SwatchColorType)retResult;
+                return (SwatchColorType)retResult;
             }
         }
 
@@ -244,7 +244,7 @@ namespace WinForms.Ribbon
         /// Flag that indicates which one of the Subscript
         /// and Superscript buttons are selected, if any.
         /// </summary>
-        public unsafe UI_FontVerticalPosition VerticalPositioning
+        public unsafe FontVerticalPosition VerticalPositioning
         {
             get
             {
@@ -253,7 +253,7 @@ namespace WinForms.Ribbon
                 hr = _cpPropertyStore.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTVERTICALPOSITION retResult = (UI_FONTVERTICALPOSITION)result;
-                return (UI_FontVerticalPosition)retResult;
+                return (FontVerticalPosition)retResult;
             }
         }
     }

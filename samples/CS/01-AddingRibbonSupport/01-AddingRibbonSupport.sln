@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01-AddingRibbonSupport", "01-AddingRibbonSupport.csproj", "{906EA000-96BB-CBBF-3526-9E511C21166F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{906EA000-96BB-CBBF-3526-9E511C21166F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906EA000-96BB-CBBF-3526-9E511C21166F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906EA000-96BB-CBBF-3526-9E511C21166F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906EA000-96BB-CBBF-3526-9E511C21166F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9E0A764-087D-4EE3-94E9-416E216E43F4}
+	EndGlobalSection
+EndGlobal

@@ -374,7 +374,7 @@ namespace WinForms.Ribbon
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_FontProperties)(UI_FONTPROPERTIES)uintResult;
+                        objValue = (FontProperties)(UI_FONTPROPERTIES)uintResult;
                         keys.Add(FontPropertiesEnum.Bold, objValue);
                     }
                 }
@@ -384,7 +384,7 @@ namespace WinForms.Ribbon
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_FontProperties)(UI_FONTPROPERTIES)uintResult;
+                        objValue = (FontProperties)(UI_FONTPROPERTIES)uintResult;
                         keys.Add(FontPropertiesEnum.Italic, objValue);
                     }
                 }
@@ -394,7 +394,7 @@ namespace WinForms.Ribbon
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_FontUnderline)(UI_FONTUNDERLINE)uintResult;
+                        objValue = (FontUnderline)(UI_FONTUNDERLINE)uintResult;
                         keys.Add(FontPropertiesEnum.Underline, objValue);
                     }
                 }
@@ -404,7 +404,7 @@ namespace WinForms.Ribbon
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_FontProperties)(UI_FONTPROPERTIES)uintResult;
+                        objValue = (FontProperties)(UI_FONTPROPERTIES)uintResult;
                         keys.Add(FontPropertiesEnum.Strikethrough, objValue);
                     }
                 }
@@ -437,7 +437,7 @@ namespace WinForms.Ribbon
                             uintResult = (uint)(int)propvar;
                         else
                             uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_SwatchColorType)(UI_SWATCHCOLORTYPE)uintResult;
+                        objValue = (SwatchColorType)(UI_SWATCHCOLORTYPE)uintResult;
                         keys.Add(FontPropertiesEnum.ForegroundColorType, objValue);
                     }
                 }
@@ -450,7 +450,7 @@ namespace WinForms.Ribbon
                             uintResult = (uint)(int)propvar;
                         else
                             uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_SwatchColorType)(UI_SWATCHCOLORTYPE)uintResult;
+                        objValue = (SwatchColorType)(UI_SWATCHCOLORTYPE)uintResult;
                         keys.Add(FontPropertiesEnum.BackgroundColorType, objValue);
                     }
                 }
@@ -460,7 +460,7 @@ namespace WinForms.Ribbon
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
-                        objValue = (UI_FontVerticalPosition)(UI_FONTVERTICALPOSITION)uintResult;
+                        objValue = (FontVerticalPosition)(UI_FONTVERTICALPOSITION)uintResult;
                         keys.Add(FontPropertiesEnum.VerticalPositioning, objValue);
                     }
                 }
@@ -472,7 +472,7 @@ namespace WinForms.Ribbon
                         if (!propvar.IsEmpty)
                         {
                             uintResult = (uint)propvar; //PropVariantToUInt32
-                            objValue = (UI_FontDeltaSize)(UI_FONTDELTASIZE)uintResult;
+                            objValue = (FontDeltaSize)(UI_FONTDELTASIZE)uintResult;
                             keys.Add(FontPropertiesEnum.DeltaSize, objValue);
                         }
                     }

@@ -13,12 +13,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.ComponentModel;
-//using System.ComponentModel.Design;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-//using System.Reflection;
 using System.Buffers;
 using System.IO;
 using Windows.Win32;
@@ -28,16 +26,12 @@ using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Com;
-//using Windows.Win32.Graphics.Imaging;
-//using static Windows.Win32.PInvoke;
-//using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace WinForms.Ribbon
 {
     /// <summary>
     /// Main class for using the Windows Ribbon Framework in a .NET application
     /// </summary>
-    //[ProvideToolboxControl]
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(RibbonStrip), "Ribbon16.bmp")]
     public sealed unsafe class RibbonStrip : Control
@@ -72,7 +66,7 @@ namespace WinForms.Ribbon
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        private readonly EventSet _eventSet = new EventSet();
+        //private readonly EventSet _eventSet = new EventSet();
         private Dictionary<uint, RibbonStripItem> _mapRibbonStripItems = new Dictionary<uint, RibbonStripItem>();
         private IUIFramework* _cpIUIFramework;
         private IUIImageFromBitmap* _cpIUIImageFromBitmap;
@@ -80,9 +74,9 @@ namespace WinForms.Ribbon
         private QatSetting? _qatSetting;
         private MarkupHandler? _markupHandler;
         private ShortcutHandler? _shortcutHandler;
-        private string? _resourceName;
+        private string? _markupResource;
 
-        private EventSet EventSet => _eventSet;
+        //private EventSet EventSet => _eventSet;
 
         /// <summary>
         /// Get EventLogger object which implements IUIEventLogger.
@@ -286,12 +280,12 @@ namespace WinForms.Ribbon
         /// in the application assembly. The RibbonMarkup.ribbon file.
         /// </summary>
         [Category("RibbonBehavior"), Description("Is a reference to an embedded resource file in the application assembly. The RibbonMarkup.ribbon file.")]
-        public string? ResourceName
+        public string? MarkupResource
         {
-            get { return _resourceName; }
+            get { return _markupResource; }
             set
             {
-                _resourceName = value;
+                _markupResource = value;
                 CheckInitialize();
             }
         }
@@ -317,8 +311,8 @@ namespace WinForms.Ribbon
             if (IsInitialized)
                 return;
 
-            if (string.IsNullOrEmpty(ResourceName))
-                throw new ApplicationException(string.Format("'{0}' not set", nameof(ResourceName)));
+            if (string.IsNullOrEmpty(MarkupResource))
+                throw new ApplicationException(string.Format("'{0}' not set", nameof(MarkupResource)));
             //return;
 
             var form = this.Parent as Form;
@@ -948,16 +942,16 @@ namespace WinForms.Ribbon
         /// Specifies whether the quick access toolbar is docked at the top or at the bottom
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public UI_ControlDock QuickAccessToolbarDock
+        public ControlDock QuickAccessToolbarDock
         {
             get
             {
                 // check that ribbon is initialized
                 if (Framework == null)
                 {
-                    return (UI_ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
+                    return (ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
                 }
-                return (UI_ControlDock)_uIApplication.GetQuickAccessToolbarDock();
+                return (ControlDock)_uIApplication.GetQuickAccessToolbarDock();
             }
             set
             {

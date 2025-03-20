@@ -8,7 +8,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the availability
     /// of a contextual tab.
     /// </summary>
-    public enum UI_ContextAvailability
+    public enum ContextAvailability
     {
         /// <summary>
         /// A contextual tab is not available for the selected object.
@@ -30,7 +30,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the font property state
     /// of a FontControl, such as Strikethrough.
     /// </summary>
-    public enum UI_FontProperties
+    public enum FontProperties
     {
         /// <summary>
         /// The property is not available.
@@ -50,7 +50,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the
     /// vertical-alignment state of a FontControl.
     /// </summary>
-    public enum UI_FontVerticalPosition
+    public enum FontVerticalPosition
     {
         /// <summary>
         /// Vertical positioning is not enabled.
@@ -74,7 +74,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the
     /// underline state of a FontControl.
     /// </summary>
-    public enum UI_FontUnderline
+    public enum FontUnderline
     {
         /// <summary>
         /// Underlining is not enabled.
@@ -95,7 +95,7 @@ namespace WinForms.Ribbon
     /// the font size of a highlighted text run
     /// should be incremented or decremented.
     /// </summary>
-    public enum UI_FontDeltaSize
+    public enum FontDeltaSize
     {
         /// <summary>
         /// Increment the font size.
@@ -111,7 +111,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the dock state
     /// of the Quick Access Toolbar (QAT).
     /// </summary>
-    public enum UI_ControlDock
+    public enum ControlDock
     {
         /// <summary>
         /// The QAT is docked in the nonclient area of the Ribbon host application.
@@ -131,7 +131,7 @@ namespace WinForms.Ribbon
     /// in a DropDownColorPicker or a FontControl color picker
     /// (Text color or Text highlight) is filled.
     /// </summary>
-    public enum UI_SwatchColorType
+    public enum SwatchColorType
     {
         /// <summary>
         /// The swatch is transparent.
@@ -151,7 +151,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Specifies whether a swatch has normal or monochrome mode.
     /// </summary>
-    public enum UI_SwatchColorMode
+    public enum SwatchColorMode
     {
         /// <summary>
         /// The swatch is normal mode.
@@ -168,7 +168,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the types
     /// of changes that can be made to a collection.
     /// </summary>
-    public enum UI_CollectionChange
+    public enum CollectionChange
     {
         /// <summary>
         /// Insert an item into the collection.
@@ -192,7 +192,7 @@ namespace WinForms.Ribbon
     /// Specifies values that identify the type
     /// of Command associated with a Ribbon control.
     /// </summary>
-    public enum UI_CommandType
+    public enum CommandType
     {
         /// <summary>
         /// The type of command is not known.
@@ -257,7 +257,7 @@ namespace WinForms.Ribbon
     /// Identifies the types of events associated with a Ribbon.
     /// UI_EVENTTYPE enum
     /// </summary>
-    public enum UI_EventType
+    public enum EventType
     {
         /// <summary>
         /// The ApplicationMenu opened
@@ -298,7 +298,7 @@ namespace WinForms.Ribbon
     /// with a Ribbon control can originate.
     /// UI_EVENTLOCATION enum
     /// </summary>
-    public enum UI_EventLocation
+    public enum EventLocation
     {
         /// <summary>
         /// The Ribbon

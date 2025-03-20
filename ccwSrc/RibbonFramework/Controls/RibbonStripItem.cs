@@ -232,7 +232,7 @@ namespace WinForms.Ribbon
         /// The CommandType of the Control
         /// If the CommandType is UI_CommandType.Unknown (UI_COMMANDTYPE.UI_COMMANDTYPE_UNKNOWN) then the Control is not initialized by the Framework
         /// </summary>
-        public UI_CommandType CommandType { get; internal set; }
+        public CommandType CommandType { get; internal set; }
 
         #endregion
 
@@ -294,7 +294,7 @@ namespace WinForms.Ribbon
         /// <param name="typeID"></param>
         internal void BaseCreateUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
-            CommandType = (UI_CommandType)typeID;
+            CommandType = (CommandType)typeID;
             Ribbon.Invoke((MethodInvoker)delegate
             {
                 OnCreateUICommand(commandId, typeID);

@@ -22,7 +22,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Context available property
         /// </summary>
-        UI_ContextAvailability ContextAvailable { get; set; }
+        ContextAvailability ContextAvailable { get; set; }
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Context available property
         /// </summary>
-        public unsafe UI_ContextAvailability ContextAvailable
+        public unsafe ContextAvailability ContextAvailable
         {
             get
             {
@@ -83,13 +83,17 @@ namespace WinForms.Ribbon
                         hr = _ribbon.Framework->GetUICommandProperty(_commandId, pContextAvailable, &propvar);
                     if (hr.Succeeded)
                     {
-                        uint result = (uint)propvar; //PropVariantToUInt32
+                        uint result;
+                        if (propvar.vt == Windows.Win32.System.Variant.VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
+                            result = (uint)(int)propvar;
+                        else
+                            result = (uint)propvar; //PropVariantToUInt32
                         UI_CONTEXTAVAILABILITY retResult = (UI_CONTEXTAVAILABILITY)result;
-                        return (UI_ContextAvailability)retResult;
+                        return (ContextAvailability)retResult;
                     }
                 }
 
-                return (UI_ContextAvailability)_contextAvailable.GetValueOrDefault();
+                return (ContextAvailability)_contextAvailable.GetValueOrDefault();
             }
             set
             {

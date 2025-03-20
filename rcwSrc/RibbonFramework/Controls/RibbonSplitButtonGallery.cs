@@ -446,7 +446,7 @@ namespace WinForms.Ribbon
         internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
         {
             GalleryItemEventArgs? eventArgs = GalleryItemEventArgs.Create(*key, *currentValue, commandExecutionProperties);
-            EventSet.Raise(s_SelectedIndexChangedKey, this, EventArgs.Empty);
+            EventSet.Raise(s_SelectedIndexChangedKey, this, eventArgs);
             return HRESULT.S_OK;
         }
 
@@ -467,12 +467,12 @@ namespace WinForms.Ribbon
         private protected override void OnDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
             base.OnDestroyUICommand(commandId, typeID);
-            if (CommandType != UI_CommandType.Unknown)
+            if (CommandType != CommandType.Unknown)
             {
                 GalleryCategories!.Destroy();
-                if (CommandType == UI_CommandType.Collection)
+                if (CommandType == CommandType.Collection)
                     GalleryItemItemsSource!.Destroy();
-                if (CommandType == UI_CommandType.CommandCollection)
+                if (CommandType == CommandType.CommandCollection)
                     GalleryCommandItemsSource!.Destroy();
             }
         }

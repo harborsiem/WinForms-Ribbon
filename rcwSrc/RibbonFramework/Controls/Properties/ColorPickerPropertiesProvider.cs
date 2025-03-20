@@ -35,7 +35,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Color type property
         /// </summary>
-        UI_SwatchColorType ColorType { get; set; }
+        SwatchColorType ColorType { get; set; }
 
         /// <summary>
         /// More colors label property
@@ -313,7 +313,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Color type property
         /// </summary>
-        public unsafe UI_SwatchColorType ColorType
+        public unsafe SwatchColorType ColorType
         {
             get
             {
@@ -326,11 +326,11 @@ namespace WinForms.Ribbon
                     {
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_SWATCHCOLORTYPE retResult = (UI_SWATCHCOLORTYPE)result;
-                        return (UI_SwatchColorType)retResult;
+                        return (SwatchColorType)retResult;
                     }
                 }
 
-                return (UI_SwatchColorType)_colorType.GetValueOrDefault();
+                return (SwatchColorType)_colorType.GetValueOrDefault();
             }
             set
             {

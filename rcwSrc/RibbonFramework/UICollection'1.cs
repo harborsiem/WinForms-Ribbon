@@ -550,7 +550,7 @@ namespace WinForms.Ribbon
                     {
                         CommandId = commandId,
                         CategoryId = (int)categoryId,
-                        CommandType = (UI_CommandType)commandType
+                        CommandType = (CommandType)commandType
                     };
                     return result as T;
                 }

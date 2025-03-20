@@ -42,11 +42,11 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Get or set the Command Type
         /// </summary>
-        public UI_CommandType CommandType
+        public CommandType CommandType
         {
             get
             {
-                return (UI_CommandType)_commandType.GetValueOrDefault();
+                return (CommandType)_commandType.GetValueOrDefault();
             }
             set
             {

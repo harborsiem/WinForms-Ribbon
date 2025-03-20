@@ -15,12 +15,13 @@ It also uses some classes and structs from Microsoft WinForms project on [Github
 - Namespace for all classes, structs, enums changed to **WinForms.Ribbon**
 - Name of class Ribbon changed to RibbonStrip similar to ToolStrip, MenuStrip.
 - Events changed from ExecuteEvent to specific event names.
+- Some events added
 - Invoke functions for events integrated. No Invoke functions for ItemsSourceReady, CategoriesReady 
-- Easier persistence of Qat settings with new Property QatSettingsFile in RibbonStrip.
+- Easier persistence of Qat settings with new RibbonStrip property QatSettingsFile.
 - Two different RibbonFramework libraries.
   1. One library has Com callable wrappers (CCW) for all COM interfaces for more performance. (Less Garbage collection, ...) 
   2. The other library has Runtime callable wrappers (RCW) for all COM interfaces. This is similar to WindowsRibbon.
-Todo: RibbonStrip properties ResourceName => MarkupResource, ResourceIdentifier => ResourceName ???
+- RibbonStrip property ResourceName changed to MarkupResource
 
 ## **Project Description**
 
