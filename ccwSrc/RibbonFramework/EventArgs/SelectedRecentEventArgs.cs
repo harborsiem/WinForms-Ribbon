@@ -19,13 +19,11 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed class SelectedRecentEventArgs : EventArgs
     {
-        new internal static SelectedRecentEventArgs Empty => new SelectedRecentEventArgs(null);
-
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="selected"></param>
-        private SelectedRecentEventArgs(SelectedItem<RecentItemsPropertySet>? selected)
+        private SelectedRecentEventArgs(SelectedItem<RecentItemsPropertySet> selected)
         {
             SelectedItem = selected;
         }
@@ -33,7 +31,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// SelectedRecentItem, can be null
         /// </summary>
-        public SelectedItem<RecentItemsPropertySet>? SelectedItem { get; private set; }
+        public SelectedItem<RecentItemsPropertySet> SelectedItem { get; private set; }
 
         /// <summary>
         /// Creates a SelectedRecentEventArgs from ExecuteEventArgs of a RibbonRecentItems event

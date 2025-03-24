@@ -23,7 +23,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The ID of the Command directly related to the event, which is specified in the markup resource file.
         /// </summary>
-        public uint CommandID { get; private set; }
+        public uint CommandId { get; private set; }
         /// <summary>
         /// The Command name that is associated with CommandId.
         /// </summary>
@@ -31,7 +31,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The ID for the parent of the Command, which is specified in the markup resource file.
         /// </summary>
-        public uint ParentCommandID { get; private set; }
+        public uint ParentCommandId { get; private set; }
         /// <summary>
         /// The Command name of the parent that is associated with CommandId.
         /// </summary>
@@ -70,9 +70,9 @@ namespace WinForms.Ribbon
 
         private void CopyAndMarshal(in UI_EVENTPARAMS pEventParams)
         {
-            CommandID = pEventParams.Anonymous.Params.CommandID;
+            CommandId = pEventParams.Anonymous.Params.CommandID;
             CommandName = pEventParams.Anonymous.Params.CommandName.ToString(); //PCWStr
-            ParentCommandID = pEventParams.Anonymous.Params.ParentCommandID;
+            ParentCommandId = pEventParams.Anonymous.Params.ParentCommandID;
             ParentCommandName = pEventParams.Anonymous.Params.ParentCommandName.ToString(); //PCWStr
             SelectionIndex = (int)pEventParams.Anonymous.Params.SelectionIndex;
             Location = (EventLocation)pEventParams.Anonymous.Params.Location;

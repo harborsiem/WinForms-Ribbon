@@ -18,11 +18,11 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The selected Item index
         /// </summary>
-        public int SelectedItemIndex { get; private set; }
+        public readonly int SelectedItemIndex;
 
         /// <summary>
         /// The selected PropertySet
         /// </summary>
-        public T PropertySet { get; private set; }
+        public readonly T PropertySet;
     }
 }

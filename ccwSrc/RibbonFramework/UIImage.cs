@@ -35,10 +35,10 @@ namespace WinForms.Ribbon
             Dispose(false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public RibbonStrip Ribbon => _strip;
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //public RibbonStrip Ribbon => _strip;
 
         private UIImage(RibbonStrip strip)
         {
@@ -51,6 +51,20 @@ namespace WinForms.Ribbon
         //{
         //    //?
         //}
+
+        /// <summary>
+        /// Ctor with IUIImage
+        /// </summary>
+        /// <param name="cpIUIImage"></param>
+        internal unsafe UIImage(IUIImage* cpIUIImage)
+        {
+            if (cpIUIImage == null)
+                throw new ArgumentNullException(nameof(cpIUIImage));
+            _cpIUIImage = cpIUIImage;
+            fixed (HBITMAP* bitmapLocal = &_hbitmap)
+                _cpIUIImage->GetBitmap(bitmapLocal);
+            GetBitmapProperties();
+        }
 
         /// <summary>
         /// Ctor with IUIImage

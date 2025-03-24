@@ -5,7 +5,7 @@ using System.Text;
 namespace WinForms.Ribbon
 {
     /// <summary>
-    /// Helper class for sender parameter in UICollectionChangedEvent.ChangedEvent or InternChangedEvent 
+    /// Helper class for sender parameter in UICollectionChangedEvent.ChangedEvent 
     /// </summary>
     public class CollectionItem
     {
@@ -20,7 +20,7 @@ namespace WinForms.Ribbon
         /// </summary>
         public readonly CollectionType CollectionType;
 
-        internal CollectionItem(RibbonStripItem ribbonItem, CollectionType collectionType)
+        internal CollectionItem(IRibbonControl ribbonItem, CollectionType collectionType)
         {
             Sender = ribbonItem;
             CollectionType = collectionType;

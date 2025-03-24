@@ -22,24 +22,24 @@ using Windows.Win32.UI.Shell.PropertiesSystem;
 namespace WinForms.Ribbon
 {
     /// <summary>
-    /// The uiCollection member
+    /// The UICollection member
     /// </summary>
     public enum CollectionType
     {
         /// <summary>
-        /// The uiCollection member ItemsSource of a Gallery Control with Items
+        /// The UICollection member ItemsSource of a Gallery Control with Items
         /// </summary>
         ItemsSource,
         /// <summary>
-        /// The uiCollection member Categories of a Gallery Control
+        /// The UICollection member Categories of a Gallery Control
         /// </summary>
         Categories,
         /// <summary>
-        /// The uiCollection member ItemsSource of a Qat Control
+        /// The UICollection member ItemsSource of a Qat Control
         /// </summary>
         QatItemsSource,
         /// <summary>
-        /// The uiCollection member ItemsSource of a Gallery Control with Commands
+        /// The UICollection member ItemsSource of a Gallery Control with Commands
         /// </summary>
         CommandItemsSource
     }
@@ -68,7 +68,7 @@ namespace WinForms.Ribbon
         /// <param name="cpIUICollection"></param>
         /// <param name="item"></param>
         /// <param name="colType"></param>
-        internal unsafe UICollection(ComScope<IUICollection> cpIUICollection, RibbonStripItem item, CollectionType colType)
+        internal unsafe UICollection(ComScope<IUICollection> cpIUICollection, IRibbonControl item, CollectionType colType)
         {
             if (cpIUICollection.IsNull)
                 throw new ArgumentNullException(nameof(cpIUICollection));
@@ -626,6 +626,7 @@ namespace WinForms.Ribbon
                     {
                         UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, out cpIUIImage);
                     }
+                    propvar.Clear(); //PropVariantClear
                     GalleryItemPropertySet result = new GalleryItemPropertySet()
                     {
                         Label = label,

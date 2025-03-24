@@ -22,24 +22,24 @@ using Windows.Win32.UI.Shell.PropertiesSystem;
 namespace WinForms.Ribbon
 {
     /// <summary>
-    /// The uiCollection member
+    /// The UICollection member
     /// </summary>
     public enum CollectionType
     {
         /// <summary>
-        /// The uiCollection member ItemsSource of a Gallery Control with Items
+        /// The UICollection member ItemsSource of a Gallery Control with Items
         /// </summary>
         ItemsSource,
         /// <summary>
-        /// The uiCollection member Categories of a Gallery Control
+        /// The UICollection member Categories of a Gallery Control
         /// </summary>
         Categories,
         /// <summary>
-        /// The uiCollection member ItemsSource of a Qat Control
+        /// The UICollection member ItemsSource of a Qat Control
         /// </summary>
         QatItemsSource,
         /// <summary>
-        /// The uiCollection member ItemsSource of a Gallery Control with Commands
+        /// The UICollection member ItemsSource of a Gallery Control with Commands
         /// </summary>
         CommandItemsSource
     }
@@ -68,7 +68,7 @@ namespace WinForms.Ribbon
         /// <param name="cpIUICollection"></param>
         /// <param name="item"></param>
         /// <param name="colType"></param>
-        internal UICollection(IUICollection cpIUICollection, RibbonStripItem item, CollectionType colType)
+        internal UICollection(IUICollection cpIUICollection, IRibbonControl item, CollectionType colType)
         {
             if (cpIUICollection == null)
                 throw new ArgumentNullException(nameof(cpIUICollection));
@@ -562,7 +562,7 @@ namespace WinForms.Ribbon
                     string label = string.Empty;
                     if (propvar.vt == VARENUM.VT_LPWSTR)
                     {
-                        UIPropVariant.UIPropertyToStringAlloc(propvar, out  pwstr);
+                        UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
                         label = pwstr.ToString();
                         PInvoke.CoTaskMemFree(pwstr);
                         //fixed (char* emptyLocal = string.Empty)
@@ -581,8 +581,10 @@ namespace WinForms.Ribbon
                     hr = cpIUISimplePropertySet.GetValue(RibbonProperties.ItemImage, out propvar);
                     IUIImage? cpIUIImage = null;
                     if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)
+                    {
                         UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, out cpIUIImage!);
-
+                    }
+                    propvar.Clear(); //PropVariantClear
                     GalleryItemPropertySet result = new GalleryItemPropertySet()
                     {
                         Label = label,

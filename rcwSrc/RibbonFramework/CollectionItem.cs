@@ -5,12 +5,12 @@ using System.Text;
 namespace WinForms.Ribbon
 {
     /// <summary>
-    /// Helper class for sender parameter in UICollectionChangedEvent.ChangedEvent or InternChangedEvent 
+    /// Helper class for sender parameter in UICollectionChangedEvent.ChangedEvent 
     /// </summary>
     public class CollectionItem
     {
         /// <summary>
-        /// This is a RibbonStrip item which contains UICollections
+        /// This is a IRibbonControl which contains UICollections
         /// RibbonComboBox, RibbonQuickAccessToolbar and all Galleries (DropDown, InRibbon, SplitButton) 
         /// </summary>
         public readonly object Sender;
@@ -20,7 +20,7 @@ namespace WinForms.Ribbon
         /// </summary>
         public readonly CollectionType CollectionType;
 
-        internal CollectionItem(RibbonStripItem ribbonItem, CollectionType collectionType)
+        internal CollectionItem(IRibbonControl ribbonItem, CollectionType collectionType)
         {
             Sender = ribbonItem;
             CollectionType = collectionType;
