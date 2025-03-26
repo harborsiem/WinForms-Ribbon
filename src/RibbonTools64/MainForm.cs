@@ -594,7 +594,10 @@ namespace UIRibbonTools
 
         private void ActionTutorialExecute(object sender, EventArgs e)
         {
-            OpenWebsite("https://github.com/harborsiem/WindowsRibbon/wiki");
+            if (Settings.Instance.RibbonFramework)
+                OpenWebsite("https://github.com/harborsiem/WinForms-Ribbon/wiki");
+            else
+                OpenWebsite("https://github.com/harborsiem/WindowsRibbon/wiki");
             //OpenWebsite("https://www.bilsen.com/windowsribbon/tutorial.shtml");
         }
 
@@ -605,7 +608,10 @@ namespace UIRibbonTools
 
         private void ActionDotnetWebSiteExecute(object sender, EventArgs e)
         {
-            OpenWebsite("https://github.com/harborsiem/WindowsRibbon");
+            if (Settings.Instance.RibbonFramework)
+                OpenWebsite("https://github.com/harborsiem/WinForms-Ribbon");
+            else
+                OpenWebsite("https://github.com/harborsiem/WindowsRibbon");
         }
 
         private void ApplicationEventsException(object sender, ThreadExceptionEventArgs e)

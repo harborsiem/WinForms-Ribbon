@@ -49,7 +49,7 @@ namespace UIRibbonTools
         public bool AllowChangingResourceName { get; set; } = false;
         public int Width { get; set; }
         public int Height { get; set; }
-        public bool RibbonFramework { get; set; }
+        public bool RibbonFramework { get; set; } = true;
 
         public bool Modified { get => _modified; set => _modified = value; }
 
