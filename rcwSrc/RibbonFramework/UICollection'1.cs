@@ -89,8 +89,8 @@ namespace WinForms.Ribbon
             }
             else if (colType == CollectionType.Categories)
             {
-                if (_typeofT != typeof(GalleryItemPropertySet))
-                    throw new ArgumentException("T is not a valid Type: GalleryItemPropertySet");
+                if (_typeofT != typeof(CategoriesPropertySet))
+                    throw new ArgumentException("T is not a valid Type: CategoriesPropertySet");
             }
             else if (!((itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION && _typeofT == typeof(GalleryCommandPropertySet))
                 || (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION && _typeofT == typeof(GalleryItemPropertySet))))
@@ -580,16 +580,50 @@ namespace WinForms.Ribbon
                     propvar.Clear(); //PropVariantClear
                     hr = cpIUISimplePropertySet.GetValue(RibbonProperties.ItemImage, out propvar);
                     IUIImage? cpIUIImage = null;
+                    UIImage? uIImage = null;
                     if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)
                     {
                         UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, out cpIUIImage!);
+                        propvar.Clear(); //PropVariantClear
+                        if (cpIUIImage != null)
+                            uIImage = new UIImage(cpIUIImage);
                     }
-                    propvar.Clear(); //PropVariantClear
                     GalleryItemPropertySet result = new GalleryItemPropertySet()
                     {
                         Label = label,
                         CategoryId = (int)categoryId,
-                        ItemImage = cpIUIImage
+                        ItemImage = uIImage
+                    };
+                    return result as T;
+                }
+
+                if (_caller._typeofT == typeof(CategoriesPropertySet))
+                {
+                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
+                    PWSTR pwstr;
+                    string label = string.Empty;
+                    if (propvar.vt == VARENUM.VT_LPWSTR)
+                    {
+                        UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
+                        label = pwstr.ToString();
+                        PInvoke.CoTaskMemFree(pwstr);
+                        //fixed (char* emptyLocal = string.Empty)
+                        //{
+                        //    pwstr = PInvoke.PropVariantToStringWithDefault(propvar, emptyLocal);
+                        //    label = pwstr.ToString();
+                        //}
+                        propvar.Clear(); //PropVariantClear
+                    }
+                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+                    uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX; //if VT_EMPTY
+                    if (propvar.vt == VARENUM.VT_UI4)
+                        categoryId = (uint)propvar;
+                    //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
+                    propvar.Clear(); //PropVariantClear
+                    CategoriesPropertySet result = new CategoriesPropertySet()
+                    {
+                        Label = label,
+                        CategoryId = (int)categoryId,
                     };
                     return result as T;
                 }

@@ -113,6 +113,8 @@ namespace WinForms.Ribbon
                 return null;
             }
 
+            //We need this part for a RibbonComboBox with markup IsEditable
+
             if (propSet == null)
             {
                 HRESULT hr;
@@ -150,10 +152,13 @@ namespace WinForms.Ribbon
                 PROPVARIANT propItemImage;
                 fixed (PROPERTYKEY* pItemImage = &RibbonProperties.ItemImage)
                     commandExecutionProperties->GetValue(pItemImage, &propItemImage);
-                IUIImage* image;
-                UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propItemImage, out image);
-                propSet.ItemImage = image;
-                propItemImage.Clear(); //PropVariantClear
+                if (propItemImage.vt == VARENUM.VT_UNKNOWN)
+                {
+                    IUIImage* image;
+                    UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propItemImage, out image);
+                    propSet.ItemImage = new UIImage(image);
+                    propItemImage.Clear(); //PropVariantClear
+                }
             }
             uint count = commandExecutionProperties->Release(); //Release GetObjectForIUnknown
             return propSet;

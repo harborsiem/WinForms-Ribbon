@@ -23,7 +23,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Categories property, Managed version
         /// </summary>
-        UICollection<GalleryItemPropertySet>? GalleryCategories { get; }
+        UICollection<CategoriesPropertySet>? GalleryCategories { get; }
 
         /// <summary>
         /// Items source property
@@ -135,7 +135,7 @@ namespace WinForms.Ribbon
                         IUICollection cpCollection;
                         UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, *currentValue, out cpCollection!);
                         //(*currentValue).Clear(); //PropVariantClear ???
-                        GalleryCategories = new UICollection<GalleryItemPropertySet>(cpCollection, _ribbonItem, CollectionType.Categories);
+                        GalleryCategories = new UICollection<CategoriesPropertySet>(cpCollection, _ribbonItem, CollectionType.Categories);
                     }
                     //if (CategoriesReady != null)
                     {
@@ -197,7 +197,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Categories property
         /// </summary>
-        public UICollection<GalleryItemPropertySet>? GalleryCategories { get; private set; }
+        public UICollection<CategoriesPropertySet>? GalleryCategories { get; private set; }
 
         /// <summary>
         /// Items source property for Item

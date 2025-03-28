@@ -138,9 +138,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Large images
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use UIImage class.
         /// </summary>
-        public IUIImage? LargeImage
+        public UIImage? LargeImage
         {
             get
             {
@@ -154,9 +154,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Small images
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use use UIImage class.
         /// </summary>
-        public IUIImage? SmallImage
+        public UIImage? SmallImage
         {
             get
             {
@@ -170,9 +170,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Large images for use with high-contrast system settings
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use use UIImage class.
         /// </summary>
-        public IUIImage? LargeHighContrastImage
+        public UIImage? LargeHighContrastImage
         {
             get
             {
@@ -186,9 +186,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Small images for use with high-contrast system settings
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use UIImage class.
         /// </summary>
-        public IUIImage? SmallHighContrastImage
+        public UIImage? SmallHighContrastImage
         {
             get
             {
@@ -242,7 +242,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Event provider similar to a Click event.
         /// </summary>
-        public event EventHandler<ExecuteEventArgs>? ExecuteEvent
+        event EventHandler<ExecuteEventArgs>? IExecuteEventsProvider.ExecuteEvent
         {
             add
             {

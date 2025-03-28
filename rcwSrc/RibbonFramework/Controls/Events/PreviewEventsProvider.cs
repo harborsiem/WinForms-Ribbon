@@ -19,7 +19,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Definition for Preview and CancelPreview events provider
     /// </summary>
-    public interface IPreviewEventsProvider
+    internal interface IPreviewEventsProvider
     {
         /// <summary>
         /// Preview event
@@ -35,7 +35,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IPreviewEventsProvider
     /// </summary>
-    sealed class PreviewEventsProvider : BaseEventsProvider, IPreviewEventsProvider
+    internal sealed class PreviewEventsProvider : BaseEventsProvider, IPreviewEventsProvider
     {
         public PreviewEventsProvider(RibbonStripItem ribbonItem) : base(ribbonItem)
         {

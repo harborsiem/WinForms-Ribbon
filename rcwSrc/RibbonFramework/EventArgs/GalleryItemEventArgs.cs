@@ -37,7 +37,7 @@ namespace WinForms.Ribbon
         /// <param name="sender">Parameter from event: sender</param>
         /// <param name="e">Parameters from event: ExecuteEventArgs</param>
         /// <returns></returns>
-        public static GalleryItemEventArgs? Create(object sender, ExecuteEventArgs e)
+        internal static GalleryItemEventArgs? Create(object sender, ExecuteEventArgs e)
         {
             bool isItemClass = false;
             if (sender is RibbonComboBox cBox)
@@ -112,6 +112,8 @@ namespace WinForms.Ribbon
                 return null;
             }
 
+            //We need this part for a RibbonComboBox with markup IsEditable
+
             if (propSet == null)
             {
                 HRESULT hr;
@@ -146,10 +148,13 @@ namespace WinForms.Ribbon
                 // get item ItemImage value
                 PROPVARIANT propItemImage;
                 commandExecutionProperties.GetValue(RibbonProperties.ItemImage, out propItemImage);
-                IUIImage image;
-                UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propItemImage, out image!);
-                propSet.ItemImage = image;
-                propItemImage.Clear(); //PropVariantClear
+                if (propItemImage.vt == VARENUM.VT_UNKNOWN)
+                {
+                    IUIImage image;
+                    UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propItemImage, out image!);
+                    propSet.ItemImage = new UIImage(image);
+                    propItemImage.Clear(); //PropVariantClear
+                }
             }
             return propSet;
         }

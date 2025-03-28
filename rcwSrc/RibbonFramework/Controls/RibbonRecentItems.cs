@@ -159,7 +159,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Event provider similar to a Click event.
         /// </summary>
-        public event EventHandler<ExecuteEventArgs>? ExecuteEvent
+        event EventHandler<ExecuteEventArgs>? IExecuteEventsProvider.ExecuteEvent
         {
             add
             {

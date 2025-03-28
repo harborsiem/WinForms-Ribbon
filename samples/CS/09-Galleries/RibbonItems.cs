@@ -36,7 +36,7 @@ namespace WinForms.Ribbon
             {
                 itemsSource.Add(new GalleryItemPropertySet()
                 {
-                    ItemImage = new UIImage(Ribbon, (Bitmap)image).UIImageHandle //.ConvertToUIImage((Bitmap)image)
+                    ItemImage = new UIImage(Ribbon, (Bitmap)image) //.ConvertToUIImage((Bitmap)image)
                 }); 
             }
         }
@@ -44,9 +44,9 @@ namespace WinForms.Ribbon
         void _splitButtonGallery_CategoriesReady(object sender, EventArgs e)
         {
             // set _splitButtonGallery categories
-            UICollection<GalleryItemPropertySet> categories = SplitButtonGallery.GalleryCategories;
+            UICollection<CategoriesPropertySet> categories = SplitButtonGallery.GalleryCategories;
             categories.Clear();
-            categories.Add(new GalleryItemPropertySet() { Label = "Category 1", CategoryId = 1 });
+            categories.Add(new CategoriesPropertySet() { Label = "Category 1", CategoryId = 1 });
         }
 
         unsafe void _splitButtonGallery_ItemsSourceReady(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace WinForms.Ribbon
                 _buttons[i] = new RibbonButton(Ribbon, 2000 + i)
                 {
                     Label = "Label " + i.ToString(),
-                    LargeImage = new UIImage(Ribbon, (Bitmap)_form.ImageListBrushes.Images[(int)i]).UIImageHandle //.ConvertToUIImage((Bitmap)_form.ImageListBrushes.Images[(int)i])
+                    LargeImage = new UIImage(Ribbon, (Bitmap)_form.ImageListBrushes.Images[(int)i]) //.ConvertToUIImage((Bitmap)_form.ImageListBrushes.Images[(int)i])
                 };
             }
 
@@ -90,7 +90,7 @@ namespace WinForms.Ribbon
             {
                 itemsSource.Add(new GalleryItemPropertySet()
                 {
-                    ItemImage = new UIImage(Ribbon, (Bitmap)image).UIImageHandle //.ConvertToUIImage((Bitmap)image)
+                    ItemImage = new UIImage(Ribbon, (Bitmap)image) //.ConvertToUIImage((Bitmap)image)
                 });
             }
         }

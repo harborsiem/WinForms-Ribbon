@@ -19,7 +19,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Definition for Execute events provider
     /// </summary>
-    public interface IExecuteEventsProvider
+    internal interface IExecuteEventsProvider
     {
         /// <summary>
         /// Execute event
@@ -30,7 +30,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IExecuteEventsProvider
     /// </summary>
-    public sealed class ExecuteEventsProvider : BaseEventsProvider, IExecuteEventsProvider
+    internal sealed class ExecuteEventsProvider : BaseEventsProvider, IExecuteEventsProvider
     {
         /// <summary>
         /// Initializes a new instance of the ExecuteEventsProvider

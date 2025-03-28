@@ -24,7 +24,7 @@ namespace WinForms.Ribbon
     {
         private string? _label;
         private uint? _categoryId;
-        private IUIImage* _itemImage;
+        private UIImage? _itemImage;
 
         /// <summary>
         /// Get or set the label
@@ -59,7 +59,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Get or set the Item Image
         /// </summary>
-        public IUIImage* ItemImage
+        public UIImage? ItemImage
         {
             get
             {
@@ -117,7 +117,7 @@ namespace WinForms.Ribbon
             {
                 if (_itemImage != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.ItemImage, _itemImage, out value);
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.ItemImage, _itemImage.UIImageHandle, out value);
                 }
                 else
                 {

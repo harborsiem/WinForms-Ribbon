@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Definition for execute events arguments
     /// </summary>
-    public sealed class ExecuteEventArgs : EventArgs
+    internal sealed class ExecuteEventArgs : EventArgs
     {
         private PROPERTYKEY? _key;
         private PROPVARIANT? _currentValue;

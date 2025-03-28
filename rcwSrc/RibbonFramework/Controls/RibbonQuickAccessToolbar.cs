@@ -194,20 +194,20 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The customizeButton Click event
         /// </summary>
-        public event EventHandler<ExecuteEventArgs>? ExecuteEvent
+        event EventHandler<ExecuteEventArgs>? IExecuteEventsProvider.ExecuteEvent
         {
             add
             {
                 if (_customizeButton != null)
                 {
-                    _customizeButton.ExecuteEvent += value;
+                    ((IExecuteEventsProvider)_customizeButton).ExecuteEvent += value;
                 }
             }
             remove
             {
                 if (_customizeButton != null)
                 {
-                    _customizeButton.ExecuteEvent -= value;
+                    ((IExecuteEventsProvider)_customizeButton).ExecuteEvent -= value;
                 }
             }
         }

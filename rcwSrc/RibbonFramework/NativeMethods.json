@@ -1,7 +1,7 @@
 {
   "$schema": "https://aka.ms/CsWin32.schema.json",
   "emitSingleFile": true,
-  "public": true,
+  "public": false,
   "comInterop": {
     "useIntPtrForComOutPointers": false,
     "preserveSigMethods": [

@@ -105,10 +105,10 @@ namespace WinForms.Ribbon
         void _comboBox2_CategoriesReady(object sender, EventArgs e)
         {
             // set _comboBox2 categories
-            UICollection<GalleryItemPropertySet> categories2 = ComboBox2.GalleryCategories;
+            UICollection<CategoriesPropertySet> categories2 = ComboBox2.GalleryCategories;
             categories2.Clear();
-            categories2.Add(new GalleryItemPropertySet() { Label = "Category 1", CategoryId = 1 });
-            categories2.Add(new GalleryItemPropertySet() { Label = "Category 2", CategoryId = 2 });
+            categories2.Add(new CategoriesPropertySet() { Label = "Category 1", CategoryId = 1 });
+            categories2.Add(new CategoriesPropertySet() { Label = "Category 2", CategoryId = 2 });
         }
 
         void _comboBox2_ItemsSourceReady(object sender, EventArgs e)

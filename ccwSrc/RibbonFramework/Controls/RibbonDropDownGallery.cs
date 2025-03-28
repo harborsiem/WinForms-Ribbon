@@ -63,9 +63,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// The list of categories. 
-        /// Also exposed as an UICollection of GalleryItemPropertySet elements
+        /// Also exposed as an UICollection of CategoriesPropertySet elements
         /// </summary>
-        public UICollection<GalleryItemPropertySet>? GalleryCategories => _galleryPropertiesProvider.GalleryCategories;
+        public UICollection<CategoriesPropertySet>? GalleryCategories => _galleryPropertiesProvider.GalleryCategories;
 
         /// <summary>
         /// The list of DropDownGallery items.
@@ -240,9 +240,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Large images
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use UIImage class.
         /// </summary>
-        public IUIImage* LargeImage
+        public UIImage? LargeImage
         {
             get
             {
@@ -256,9 +256,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Small images
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use UIImage class.
         /// </summary>
-        public IUIImage* SmallImage
+        public UIImage? SmallImage
         {
             get
             {
@@ -272,9 +272,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Large images for use with high-contrast system settings
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use UIImage class.
         /// </summary>
-        public IUIImage* LargeHighContrastImage
+        public UIImage? LargeHighContrastImage
         {
             get
             {
@@ -288,9 +288,9 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Small images for use with high-contrast system settings
-        /// For setting the Image, use method Ribbon.ConvertToUIImage(Bitmap)
+        /// For setting the Image, use UIImage class.
         /// </summary>
-        public IUIImage* SmallHighContrastImage
+        public UIImage? SmallHighContrastImage
         {
             get
             {

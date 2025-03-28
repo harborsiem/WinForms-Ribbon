@@ -48,7 +48,7 @@ namespace WinForms.Ribbon
         /// <param name="sender">Parameter from event: sender</param>
         /// <param name="e">Parameters from event: ExecuteEventArgs</param>
         /// <returns></returns>
-        public static FontControlEventArgs? Create(object sender, ExecuteEventArgs e)
+        internal static FontControlEventArgs? Create(object sender, ExecuteEventArgs e)
         {
             if (!(sender is RibbonFontControl))
                 throw new ArgumentException("Not a RibbonFontControl", nameof(sender));

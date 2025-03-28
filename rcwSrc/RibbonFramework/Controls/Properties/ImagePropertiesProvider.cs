@@ -21,22 +21,22 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Large image property
         /// </summary>
-        IUIImage? LargeImage { get; set; }
+        UIImage? LargeImage { get; set; }
 
         /// <summary>
         /// Small image property
         /// </summary>
-        IUIImage? SmallImage { get; set; }
+        UIImage? SmallImage { get; set; }
 
         /// <summary>
         /// Large high contrast image property
         /// </summary>
-        IUIImage? LargeHighContrastImage { get; set; }
+        UIImage? LargeHighContrastImage { get; set; }
 
         /// <summary>
         /// Small high contrast image property
         /// </summary>
-        IUIImage? SmallHighContrastImage { get; set; }
+        UIImage? SmallHighContrastImage { get; set; }
     }
 
     /// <summary>
@@ -59,10 +59,10 @@ namespace WinForms.Ribbon
             _supportedProperties.Add(RibbonProperties.SmallHighContrastImage);
         }
 
-        private IUIImage? _largeImage;
-        private IUIImage? _smallImage;
-        private IUIImage? _largeHighContrastImage;
-        private IUIImage? _smallHighContrastImage;
+        private UIImage? _largeImage;
+        private UIImage? _smallImage;
+        private UIImage? _largeHighContrastImage;
+        private UIImage? _smallHighContrastImage;
 
         /// <summary>
         /// Handles IUICommandHandler.UpdateProperty function for the supported properties
@@ -78,28 +78,28 @@ namespace WinForms.Ribbon
             {
                 if (_largeImage != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeImage, _largeImage, out newValue);
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeImage, _largeImage.UIImageHandle, out newValue);
                 }
             }
             else if (key == RibbonProperties.SmallImage)
             {
                 if (_smallImage != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallImage, _smallImage, out newValue); 
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallImage, _smallImage.UIImageHandle, out newValue); 
                 }
             }
             else if (key == RibbonProperties.LargeHighContrastImage)
             {
                 if (_largeHighContrastImage != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeHighContrastImage, _largeHighContrastImage, out newValue);
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeHighContrastImage, _largeHighContrastImage.UIImageHandle, out newValue);
                 }
             }
             else if (key == RibbonProperties.SmallHighContrastImage)
             {
                 if (_smallHighContrastImage != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallHighContrastImage, _smallHighContrastImage, out newValue);
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallHighContrastImage, _smallHighContrastImage.UIImageHandle, out newValue);
                 }
             }
 
@@ -111,7 +111,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Large image property
         /// </summary>
-        public unsafe IUIImage? LargeImage
+        public unsafe UIImage? LargeImage
         {
             get
             {
@@ -133,7 +133,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Small image property
         /// </summary>
-        public unsafe IUIImage? SmallImage
+        public unsafe UIImage? SmallImage
         {
             get
             {
@@ -155,7 +155,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Large high contrast image property
         /// </summary>
-        public unsafe IUIImage? LargeHighContrastImage
+        public unsafe UIImage? LargeHighContrastImage
         {
             get
             {
@@ -177,7 +177,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Small high contrast image property
         /// </summary>
-        public unsafe IUIImage? SmallHighContrastImage
+        public unsafe UIImage? SmallHighContrastImage
         {
             get
             {

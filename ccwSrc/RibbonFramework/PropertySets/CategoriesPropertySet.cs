@@ -1,8 +1,8 @@
 //*****************************************************************************
 //
-//  File:       GalleryItemPropertySet.cs
+//  File:       CategoriesPropertySet.cs
 //
-//  Contents:   Helper class that wraps a gallery item IUISimplePropertySet.
+//  Contents:   Helper class that wraps a categories IUISimplePropertySet.
 //
 //*****************************************************************************
 
@@ -12,17 +12,17 @@ using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Com;
 
 namespace WinForms.Ribbon
 {
     /// <summary>
-    /// Helper class that wraps a gallery item IUISimplePropertySet.
+    /// Helper class that wraps a categories item IUISimplePropertySet.
     /// </summary>
-    public sealed class GalleryItemPropertySet : AbstractPropertySet
+    public sealed unsafe class CategoriesPropertySet : AbstractPropertySet
     {
         private string? _label;
         private uint? _categoryId;
-        private UIImage? _itemImage;
 
         /// <summary>
         /// Get or set the label
@@ -51,21 +51,6 @@ namespace WinForms.Ribbon
             set
             {
                 _categoryId = (uint)value;
-            }
-        }
-
-        /// <summary>
-        /// Get or set the Item Image
-        /// </summary>
-        public UIImage? ItemImage
-        {
-            get
-            {
-                return _itemImage;
-            }
-            set
-            {
-                _itemImage = value;
             }
         }
 
@@ -103,19 +88,6 @@ namespace WinForms.Ribbon
                 if (_categoryId.HasValue)
                 {
                     value = (PROPVARIANT)_categoryId.Value; //InitPropVariantFromUInt32
-                }
-                else
-                {
-                    value = PROPVARIANT.Empty;
-                }
-                return HRESULT.S_OK;
-            }
-
-            if (key == RibbonProperties.ItemImage)
-            {
-                if (_itemImage != null)
-                {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.ItemImage, _itemImage.UIImageHandle, out value);
                 }
                 else
                 {

@@ -23,7 +23,7 @@ namespace WinForms.Ribbon
             //bitmap.MakeTransparent();
 
             // set large image property
-            ButtonDropA.LargeImage = new UIImage(Ribbon, bitmap).UIImageHandle; //.ConvertToUIImage(bitmap);
+            ButtonDropA.LargeImage = new UIImage(Ribbon, bitmap); //.ConvertToUIImage(bitmap);
         }
 
         unsafe void _buttonDropB_ExecuteEvent(object sender, EventArgs e)
@@ -49,9 +49,9 @@ namespace WinForms.Ribbon
             bitmapFileName.AppendFormat(@"..\..\..\Res\Exit{0}{1}.bmp", exitStatus, selectedImageSize);
 
             bitmap = new System.Drawing.Bitmap(bitmapFileName.ToString());
-            bitmap.MakeTransparent();
+            //bitmap.MakeTransparent();
 
-            ButtonDropB.LargeImage = new UIImage(Ribbon, bitmap).UIImageHandle; //.ConvertToUIImage(bitmap);
+            ButtonDropB.LargeImage = new UIImage(Ribbon, bitmap); //.ConvertToUIImage(bitmap);
         }
 
         public void Load()

@@ -38,7 +38,7 @@ namespace WinForms.Ribbon
         /// <param name="sender">Parameters from event: sender = RibbonControl</param>
         /// <param name="e">Parameters from event: ExecuteEventArgs</param>
         /// <returns></returns>
-        public static SelectedRecentEventArgs? Create(object sender, ExecuteEventArgs e)
+        internal static SelectedRecentEventArgs? Create(object sender, ExecuteEventArgs e)
         {
             if (!(sender is RibbonRecentItems recentItems))
                 throw new ArgumentException("Not a RibbonRecentItems", nameof(sender));

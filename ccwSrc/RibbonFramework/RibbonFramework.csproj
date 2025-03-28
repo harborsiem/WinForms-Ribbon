@@ -69,12 +69,6 @@
     <EmbeddedResource Include="Ribbon16.bmp" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controls\Events\" />
-    <Folder Include="Controls\Properties\" />
-    <Folder Include="PropertySets\" />
-  </ItemGroup>
-
 <!--
   <ItemGroup>
     <Reference Include="WindowsCore">

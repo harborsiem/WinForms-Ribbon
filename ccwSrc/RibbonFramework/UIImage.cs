@@ -66,20 +66,20 @@ namespace WinForms.Ribbon
             GetBitmapProperties();
         }
 
-        /// <summary>
-        /// Ctor with IUIImage
-        /// </summary>
-        /// <param name="strip"></param>
-        /// <param name="cpIUIImage"></param>
-        public unsafe UIImage(RibbonStrip strip, IUIImage* cpIUIImage) : this(strip)
-        {
-            if (cpIUIImage == null)
-                throw new ArgumentNullException(nameof(cpIUIImage));
-            _cpIUIImage = cpIUIImage;
-            fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                _cpIUIImage->GetBitmap(bitmapLocal);
-            GetBitmapProperties();
-        }
+        ///// <summary>
+        ///// Ctor with IUIImage
+        ///// </summary>
+        ///// <param name="strip"></param>
+        ///// <param name="cpIUIImage"></param>
+        //public unsafe UIImage(RibbonStrip strip, IUIImage* cpIUIImage) : this(strip)
+        //{
+        //    if (cpIUIImage == null)
+        //        throw new ArgumentNullException(nameof(cpIUIImage));
+        //    _cpIUIImage = cpIUIImage;
+        //    fixed (HBITMAP* bitmapLocal = &_hbitmap)
+        //        _cpIUIImage->GetBitmap(bitmapLocal);
+        //    GetBitmapProperties();
+        //}
 
         /// <summary>
         /// Ctor for a bitmap file (*.bmp, *.png)
@@ -235,7 +235,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The IUIImage interface, Low-level handle to the image
         /// </summary>
-        public IUIImage* UIImageHandle { get { return _cpIUIImage; } }
+        internal IUIImage* UIImageHandle { get { return _cpIUIImage; } }
 
         private void ConvertToArgbBitmap(Bitmap bitmap)
         {

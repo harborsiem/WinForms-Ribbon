@@ -42,7 +42,7 @@ namespace WinForms.Ribbon
         /// <param name="sender">Parameter from event: sender</param>
         /// <param name="e">Parameters from event: ExecuteEventArgs</param>
         /// <returns></returns>
-        public static ColorPickerEventArgs? Create(object sender, ExecuteEventArgs e)
+        internal static ColorPickerEventArgs? Create(object sender, ExecuteEventArgs e)
         {
             if (!(sender is RibbonDropDownColorPicker))
                 throw new ArgumentException("Not a RibbonDropDownColorPicker", nameof(sender));
