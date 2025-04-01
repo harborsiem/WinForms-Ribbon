@@ -38,4 +38,6 @@ Todo
 
 ## Installation:
 
+Nuget package for CCW RibbonFramework with name RibbonFramework.CCW
+
 Todo

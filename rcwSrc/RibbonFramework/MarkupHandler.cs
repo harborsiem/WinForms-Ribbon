@@ -30,7 +30,7 @@ namespace WinForms.Ribbon
 
         public MarkupHandler(Assembly executingAssembly, RibbonStrip ribbonStrip)
         {
-            MarkupResourceIdent = nameof(RibbonStrip) + "." + nameof(ribbonStrip.MarkupResource);
+            MarkupResourceIdent = $"{nameof(RibbonStrip)}.{nameof(ribbonStrip.MarkupResource)}";
             _ribbonStrip = ribbonStrip;
             ResourceIdentifier = ribbonStrip.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
@@ -178,11 +178,11 @@ namespace WinForms.Ribbon
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(MarkupResourceIdent + " is invalid", ex);
+                throw new ArgumentException($"{MarkupResourceIdent} is invalid", ex);
             }
             if (String.IsNullOrEmpty(localizedPath))
             {
-                throw new ArgumentException(MarkupResourceIdent + " is invalid");
+                throw new ArgumentException($"{MarkupResourceIdent} is invalid");
             }
             else
                 return File.ReadAllBytes(localizedPath);

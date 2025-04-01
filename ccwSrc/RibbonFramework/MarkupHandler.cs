@@ -23,6 +23,7 @@ namespace WinForms.Ribbon
         private string? _tempDllFilename;
         private RibbonStrip _ribbonStrip;
         private readonly string MarkupResourceIdent; //for Exceptions comment
+        private Dictionary<string, HeaderResIds> commandNameAdditionalResIds = new Dictionary<string, HeaderResIds>();
 
         public string? ResourceIdentifier { get; private set; }
 
@@ -30,11 +31,12 @@ namespace WinForms.Ribbon
 
         public MarkupHandler(Assembly executingAssembly, RibbonStrip ribbonStrip)
         {
-            MarkupResourceIdent = nameof(RibbonStrip) + "." + nameof(ribbonStrip.MarkupResource);
+            MarkupResourceIdent = $"{nameof(RibbonStrip)}.{nameof(ribbonStrip.MarkupResource)}";
             _ribbonStrip = ribbonStrip;
             ResourceIdentifier = ribbonStrip.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
             InitFramework(ribbonStrip.MarkupResource, executingAssembly);
+            //ParseHeader(ribbonStrip.MarkupHeader, executingAssembly);
         }
 
         ~MarkupHandler()
@@ -178,11 +180,11 @@ namespace WinForms.Ribbon
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(MarkupResourceIdent + " is invalid", ex);
+                throw new ArgumentException($"{MarkupResourceIdent} is invalid", ex);
             }
             if (String.IsNullOrEmpty(localizedPath))
             {
-                throw new ArgumentException(MarkupResourceIdent + " is invalid");
+                throw new ArgumentException($"{MarkupResourceIdent} is invalid");
             }
             else
                 return File.ReadAllBytes(localizedPath);
@@ -337,5 +339,84 @@ namespace WinForms.Ribbon
         //    }
         //    return true;
         //}
+
+        internal void ParseHeader(string? markupHeader, Assembly executingAssembly)
+        {
+            if (markupHeader == null)
+                return;
+            using Stream? stream = executingAssembly.GetManifestResourceStream(markupHeader);
+            if (stream == null)
+                return;
+            StreamReader sr = new StreamReader(stream);
+            try
+            {
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    if (line.StartsWith("#define"))
+                    {
+                        if (!line.Contains("_RESID "))
+                        {
+                            line = line.Remove(0, "#define ".Length).TrimEnd();
+                            string[] lineSplit = line.Split(' ');
+                            if (lineSplit.Length < 2)
+                            {
+                                throw new ArgumentException("Error in .h file");
+                            }
+                            //pair3List.Add(new KeyValuePair<string, string>(lineSplit[0], lineSplit[1]));
+                            if (lineSplit.Length > 2)
+                            {
+                                string comment = line.Substring(line.IndexOf("/*")).Remove(0, 3);
+                                comment = comment.Substring(0, comment.LastIndexOf(" */"));
+                                //_commentPairs.Add(lineSplit[0], comment);
+                            }
+                        }
+                        else
+                        {
+                            line = line.Remove(0, "#define ".Length).TrimEnd();
+                            string[] lineSplit = line.Split(' ');
+                            if (lineSplit.Length < 2)
+                            {
+                                throw new ArgumentException("Error in .h file");
+                            }
+                            if (ushort.TryParse(lineSplit[1], out ushort value))
+                            {
+                                string[] lineSplitComponents = lineSplit[0].Split('_');
+                                string extraName = lineSplitComponents[lineSplitComponents.Length - 2];
+                                if (!string.IsNullOrEmpty(extraName)) //It is a Image with dpi value
+                                {
+                                    int index = lineSplit[0].LastIndexOf(extraName, StringComparison.CurrentCulture);
+                                    string commandName = lineSplit[0].Remove(index - 1);
+                                    HeaderResIds resIds;
+                                    if (commandNameAdditionalResIds.ContainsKey(commandName))
+                                    {
+                                        resIds = commandNameAdditionalResIds[commandName];
+                                    }
+                                    else
+                                    {
+                                        resIds = new HeaderResIds();
+                                    }
+                                    if (extraName == "LabelTitle")
+                                        resIds.LabelTitleId = value;
+                                    else if (extraName == "LabelDescription")
+                                        resIds.LabelDescriptionId = value;
+                                    else if (extraName == "TooltipTitle")
+                                        resIds.TooltipTitleId = value;
+                                    else if (extraName == "TooltipDescription")
+                                        resIds.TooltipDescriptionId = value;
+                                    else if (extraName == "Keytip")
+                                        resIds.KeytipId = value;
+                                    commandNameAdditionalResIds[commandName] = resIds;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                sr.Close();
+            }
+        }
     }
 }

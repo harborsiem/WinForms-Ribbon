@@ -36,7 +36,7 @@ namespace WinForms.Ribbon
     [ToolboxBitmap(typeof(RibbonStrip), "Ribbon16.bmp")]
     public sealed unsafe class RibbonStrip : Control
     {
-        private const string NotInitialized = "RibbonStrip not initialized";
+        private const string NotInitialized = $"{nameof(RibbonStrip)} not initialized";
         private const string NotSupported = "Not supported by this Windows version";
 
         private static readonly object EventRibbonEventException = new object();
@@ -88,8 +88,6 @@ namespace WinForms.Ribbon
         //private RibbonShortcutTable _ribbonShortcutTable;
         private string? _shortcutTableResourceName;
 
-        //internal Dictionary<uint, IRibbonControl> MapRibbonStripItems { get { return _mapRibbonStripItems; } }
-
         /// <summary>
         /// is a reference to an embedded resource file
         /// in the application assembly. The (xml)-file contains
@@ -138,7 +136,7 @@ namespace WinForms.Ribbon
             }
             var form = parent as Form;
             if (form == null)
-                throw new ApplicationException("Parent of Ribbon does not derive from Form class.");
+                throw new ApplicationException($"Parent of {nameof(RibbonStrip)} does not derive from Form class.");
 
             RegisterForm(form);
         }
@@ -219,7 +217,7 @@ namespace WinForms.Ribbon
             }
             var form = parent as Form;
             if (form == null)
-                throw new ApplicationException("Parent of Ribbon does not derive from Form class.");
+                throw new ApplicationException($"Parent of {nameof(RibbonStrip)} does not derive from Form class.");
 
             RegisterForm(form);
 
@@ -291,6 +289,16 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
+        /// Is a reference to an embedded resource header file
+        /// in the application assembly. The RibbonMarkup.h file.
+        /// Don't use symbols for Keytip, LableTitle, ...
+        /// In a later version we want to get informations from MarkupResource by parsing the header file for Id's and find strings and UIImage.
+        /// </summary>
+        [Category("RibbonBehavior"), Description("Is a reference to an embedded resource header file in the application assembly. The RibbonMarkup.h file.")]
+        [DefaultValue(null)]
+        public string? MarkupHeader;
+
+        /// <summary>
         /// Don't use
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -312,7 +320,7 @@ namespace WinForms.Ribbon
                 return;
 
             if (string.IsNullOrEmpty(MarkupResource))
-                throw new ApplicationException(string.Format("'{0}' not set", nameof(MarkupResource)));
+                throw new ApplicationException($"'{nameof(MarkupResource)}' not set");
             //return;
 
             var form = this.Parent as Form;

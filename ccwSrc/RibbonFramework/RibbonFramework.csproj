@@ -12,13 +12,14 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ribbon.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <AssemblyTitle>Ribbon Framework for .NET WinForms</AssemblyTitle>
+    <AssemblyTitle>Ribbon Framework (CCW) for .NET WinForms</AssemblyTitle>
     <AssemblyDescription>Ribbon Framework for .NET WinForms</AssemblyDescription>
 	<NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryUrl>https://github.com/harborsiem/WinForms-Ribbon</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageId>RibbonFramework</PackageId>
+    <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>8.0.0</Version>
+    <Version>0.9.0</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>
@@ -28,6 +29,9 @@
     <Copyright>Copyright © 2025</Copyright>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageReadmeFile>.\NugetReadme.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/harborsiem/WinForms-Ribbon</PackageProjectUrl>
+    <PackageTags>Ribbon Framework;ribbon;winforms;csharp</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
