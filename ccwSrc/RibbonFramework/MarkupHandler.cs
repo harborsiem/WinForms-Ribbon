@@ -21,7 +21,7 @@ namespace WinForms.Ribbon
         private const string ResourceIdentExtension = "_RIBBON";
 
         private string? _tempDllFilename;
-        private RibbonStrip _ribbonStrip;
+        private RibbonStrip _ribbon;
         private readonly string MarkupResourceIdent; //for Exceptions comment
         private Dictionary<string, HeaderResIds> commandNameAdditionalResIds = new Dictionary<string, HeaderResIds>();
 
@@ -29,14 +29,14 @@ namespace WinForms.Ribbon
 
         public HMODULE MarkupDllHandle { get; private set; }
 
-        public MarkupHandler(Assembly executingAssembly, RibbonStrip ribbonStrip)
+        public MarkupHandler(Assembly executingAssembly, RibbonStrip ribbon)
         {
-            MarkupResourceIdent = $"{nameof(RibbonStrip)}.{nameof(ribbonStrip.MarkupResource)}";
-            _ribbonStrip = ribbonStrip;
-            ResourceIdentifier = ribbonStrip.ResourceIdentifier;
+            MarkupResourceIdent = $"{nameof(RibbonStrip)}.{nameof(ribbon.MarkupResource)}";
+            _ribbon = ribbon;
+            ResourceIdentifier = ribbon.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
-            InitFramework(ribbonStrip.MarkupResource, executingAssembly);
-            //ParseHeader(ribbonStrip.MarkupHeader, executingAssembly);
+            InitFramework(ribbon.MarkupResource, executingAssembly);
+            //ParseHeader(ribbon.MarkupHeader, executingAssembly);
         }
 
         ~MarkupHandler()
@@ -296,7 +296,7 @@ namespace WinForms.Ribbon
             if (imageSize == 0)
             {
                 Dispose();
-                throw new ApplicationException(string.Format("Resource DLL not valid '{0}'?", nameof(RibbonStrip) + "." + nameof(_ribbonStrip.ResourceIdentifier)));
+                throw new ApplicationException(string.Format("Resource DLL not valid '{0}'?", nameof(RibbonStrip) + "." + nameof(_ribbon.ResourceIdentifier)));
             }
         }
 

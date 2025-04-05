@@ -54,7 +54,7 @@ namespace WinForms.Ribbon
         //IPropertySystem propSystem; //@
         private List<T> _items;
         private IUICollection _cpIUICollection;
-        internal readonly RibbonStrip _ribbonStrip;
+        internal readonly RibbonStrip _ribbon;
         private Type _typeofT;
         //private CollectionType _colType;
         //private CollectionChange marker = CollectionChange.None;
@@ -81,7 +81,7 @@ namespace WinForms.Ribbon
                 throw new ArgumentException("not an IUICollection ComObject", nameof(cpIUICollection));
             _typeofT = typeof(T);
             //_colType = colType;
-            _ribbonStrip = item.Ribbon;
+            _ribbon = item.Ribbon;
             if (item is RibbonQuickAccessToolbar)
             {
                 if (!(colType == CollectionType.QatItemsSource && _typeofT == typeof(QatCommandPropertySet)))
@@ -369,8 +369,8 @@ namespace WinForms.Ribbon
         {
             private UICollection<T> _caller;
             private IEnumUnknown _cpIEnumUnknown;
+            private Type _typeOfT;
             private T? _current;
-            private readonly RibbonStrip _ribbonStrip;
 
             /// <summary>
             /// Ctor
@@ -379,8 +379,8 @@ namespace WinForms.Ribbon
             public PropertySetEnumerator(UICollection<T> caller)
             {
                 _caller = caller;
-                _ribbonStrip = caller._ribbonStrip;
                 _cpIEnumUnknown = (IEnumUnknown)caller._cpIUICollection;
+                _typeOfT = caller._typeofT;
                 Reset();
             }
 
@@ -513,7 +513,7 @@ namespace WinForms.Ribbon
                 PROPVARIANT propvar = PROPVARIANT.Empty;
                 HRESULT hr;
 
-                if (_caller._typeofT == typeof(QatCommandPropertySet))
+                if (_typeOfT == typeof(QatCommandPropertySet))
                 {
                     hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandId, out propvar);
                     uint commandId = 0;
@@ -527,7 +527,7 @@ namespace WinForms.Ribbon
                     return result as T;
                 }
 
-                if (_caller._typeofT == typeof(GalleryCommandPropertySet))
+                if (_typeOfT == typeof(GalleryCommandPropertySet))
                 {
                     hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandId, out propvar);
                     uint commandId = 0;
@@ -555,7 +555,7 @@ namespace WinForms.Ribbon
                     return result as T;
                 }
 
-                if (_caller._typeofT == typeof(GalleryItemPropertySet))
+                if (_typeOfT == typeof(GalleryItemPropertySet))
                 {
                     hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
                     PWSTR pwstr;
@@ -597,7 +597,7 @@ namespace WinForms.Ribbon
                     return result as T;
                 }
 
-                if (_caller._typeofT == typeof(CategoriesPropertySet))
+                if (_typeOfT == typeof(CategoriesPropertySet))
                 {
                     hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
                     PWSTR pwstr;

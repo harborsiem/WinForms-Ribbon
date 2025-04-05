@@ -54,7 +54,7 @@ namespace WinForms.Ribbon
         //IPropertySystem propSystem; //@
         private List<T> _items;
         private IUICollection* _cpIUICollection;
-        internal readonly RibbonStrip _ribbonStrip;
+        internal readonly RibbonStrip _ribbon;
         private Type _typeofT;
         //private CollectionType _colType;
         //private CollectionChange marker = CollectionChange.None;
@@ -86,7 +86,7 @@ namespace WinForms.Ribbon
                 _cpIUICollection = cpIUICollection;
             _typeofT = typeof(T);
             //_colType = colType;
-            _ribbonStrip = item.Ribbon;
+            _ribbon = item.Ribbon;
             if (item is RibbonQuickAccessToolbar)
             {
                 if (!(colType == CollectionType.QatItemsSource && _typeofT == typeof(QatCommandPropertySet)))
@@ -393,8 +393,8 @@ namespace WinForms.Ribbon
         {
             private UICollection<T> _caller;
             private IEnumUnknown* _cpIEnumUnknown;
+            private Type _typeOfT;
             private T? _current;
-            private readonly RibbonStrip _ribbonStrip;
 
             /// <summary>
             /// Ctor
@@ -403,8 +403,9 @@ namespace WinForms.Ribbon
             public PropertySetEnumerator(UICollection<T> caller)
             {
                 _caller = caller;
-                _ribbonStrip = caller._ribbonStrip;
                 ComScope<IEnumUnknown> cpEnumUnknownScope = ComScope<IEnumUnknown>.QueryFrom(caller._cpIUICollection);
+                _typeOfT = caller._typeofT;
+
                 //IEnumUnknown* cpIEnumUnknown;
                 //    caller._cpIUICollection->QueryInterface(IID.Get<IEnumUnknown>(), (void**)&cpIEnumUnknown);
                 _cpIEnumUnknown = cpEnumUnknownScope;
@@ -547,7 +548,7 @@ namespace WinForms.Ribbon
                 PROPVARIANT propvar = PROPVARIANT.Empty;
                 HRESULT hr;
 
-                if (_caller._typeofT == typeof(QatCommandPropertySet))
+                if (_typeOfT == typeof(QatCommandPropertySet))
                 {
                     fixed (PROPERTYKEY* pCommandId = &RibbonProperties.CommandId)
                         hr = cpIUISimplePropertySet->GetValue(pCommandId, &propvar);
@@ -564,7 +565,7 @@ namespace WinForms.Ribbon
 
                 //Just in case, do not know if this ever happens
 
-                if (_caller._typeofT == typeof(GalleryCommandPropertySet))
+                if (_typeOfT == typeof(GalleryCommandPropertySet))
                 {
                     fixed (PROPERTYKEY* pCommandId = &RibbonProperties.CommandId)
                         hr = cpIUISimplePropertySet->GetValue(pCommandId, &propvar);
@@ -597,7 +598,7 @@ namespace WinForms.Ribbon
 
                 //Just in case, do not know if this ever happens
 
-                if (_caller._typeofT == typeof(GalleryItemPropertySet))
+                if (_typeOfT == typeof(GalleryItemPropertySet))
                 {
                     fixed (PROPERTYKEY* pLabel = &RibbonProperties.Label)
                         hr = cpIUISimplePropertySet->GetValue(pLabel, &propvar);
@@ -645,7 +646,7 @@ namespace WinForms.Ribbon
 
                 //Just in case, do not know if this ever happens
 
-                if (_caller._typeofT == typeof(CategoriesPropertySet))
+                if (_typeOfT == typeof(CategoriesPropertySet))
                 {
                     fixed (PROPERTYKEY* pLabel = &RibbonProperties.Label)
                         hr = cpIUISimplePropertySet->GetValue(pLabel, &propvar);

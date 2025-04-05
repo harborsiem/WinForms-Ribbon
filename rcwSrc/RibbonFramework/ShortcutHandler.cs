@@ -12,12 +12,12 @@ namespace WinForms.Ribbon
     internal sealed class ShortcutHandler : IDisposable
     {
         private IUICommandHandler _commandHandler;
-        private RibbonStrip _ribbonStrip;
+        private RibbonStrip _ribbon;
         private RibbonShortcutTable? _ribbonShortcutTable;
 
-        public ShortcutHandler(RibbonStrip ribbonStrip, IUICommandHandler commandHandler)
+        public ShortcutHandler(RibbonStrip ribbon, IUICommandHandler commandHandler)
         {
-            _ribbonStrip = ribbonStrip;
+            _ribbon = ribbon;
             _commandHandler = commandHandler;
         }
 
@@ -25,14 +25,14 @@ namespace WinForms.Ribbon
         {
             _ribbonShortcutTable = null;
 
-            if (string.IsNullOrEmpty(_ribbonStrip.ShortcutTableResourceName))
+            if (string.IsNullOrEmpty(_ribbon.ShortcutTableResourceName))
                 return;
 
             _ribbonShortcutTable = Util.DeserializeEmbeddedResource<RibbonShortcutTable>(
-                _ribbonStrip.ShortcutTableResourceName, assembly);
+                _ribbon.ShortcutTableResourceName, assembly);
             if (_ribbonShortcutTable != null)
             {
-                var form = _ribbonStrip.FindForm();
+                var form = _ribbon.FindForm();
                 if (form != null)
                 {
                     form.KeyPreview = true;
@@ -40,7 +40,7 @@ namespace WinForms.Ribbon
                 }
             }
             else
-                throw new ArgumentException(string.Format("Embedded resource not found '{0}'", nameof(RibbonStrip) + "." + nameof(_ribbonStrip.ShortcutTableResourceName)));
+                throw new ArgumentException(string.Format("Embedded resource not found '{0}'", nameof(RibbonStrip) + "." + nameof(_ribbon.ShortcutTableResourceName)));
         }
 
         private unsafe void Form_KeyUp(object? sender, KeyEventArgs e)
@@ -66,7 +66,7 @@ namespace WinForms.Ribbon
             {
                 if (_ribbonShortcutTable != null)
                 {
-                    var form = _ribbonStrip.FindForm();
+                    var form = _ribbon.FindForm();
                     if (form != null)
                     {
                         form.KeyUp -= new KeyEventHandler(Form_KeyUp);

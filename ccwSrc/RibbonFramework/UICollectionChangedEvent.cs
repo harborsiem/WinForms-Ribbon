@@ -126,7 +126,7 @@ namespace WinForms.Ribbon
             _collection.OnChanged(action, oldIndex, oldItem, newIndex, newItem);
 
             CollectionChangedEventArgs e = new CollectionChangedEventArgs(action, oldIndex, newIndex);
-            _collection._ribbonStrip.BeginInvoke((MethodInvoker)delegate
+            _collection._ribbon.BeginInvoke((MethodInvoker)delegate
             {
                 OnChanged(e);
             });

@@ -114,6 +114,7 @@ namespace WinForms.Ribbon
             }
 
             //We need this part for a RibbonComboBox with markup IsEditable
+            //but this ComboBox has no image
 
             if (propSet == null)
             {

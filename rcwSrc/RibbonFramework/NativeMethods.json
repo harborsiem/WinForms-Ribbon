@@ -14,7 +14,9 @@
       "IUIRibbon",
       "IUISimplePropertySet",
       "IPropertyStore",
-      "IStream"
+      "IStream",
+      "IUIImage",
+      "IUIImageFromBitmap"
     ]
   },
   "useSafeHandles": false,

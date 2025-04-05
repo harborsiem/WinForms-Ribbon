@@ -17,12 +17,12 @@ namespace WinForms.Ribbon
     {
         private string? _qatSettingsFile;
         private byte[]? _loadedQatSettings;
-        private RibbonStrip _strip;
+        private RibbonStrip _ribbon;
 
-        public QatSetting(RibbonStrip strip, string? qatSettingsFile)
+        public QatSetting(RibbonStrip ribbon, string? qatSettingsFile)
         {
             _qatSettingsFile = BuildQatSettingsFile(qatSettingsFile);
-            _strip = strip;
+            _ribbon = ribbon;
         }
 
         private string? BuildQatSettingsFile(string? filename)
@@ -70,7 +70,7 @@ namespace WinForms.Ribbon
                 MemoryStream stream = new MemoryStream();
                 try
                 {
-                    _strip.SaveSettingsToStreamInternal(stream);
+                    _ribbon.SaveSettingsToStreamInternal(stream);
                     stream.Position = 0;
                     if (!IsEqualSetting(stream))
                     {
@@ -101,7 +101,7 @@ namespace WinForms.Ribbon
                         _loadedQatSettings = new byte[stream.Length];
                         stream.Read(_loadedQatSettings, 0, _loadedQatSettings.Length);
                         stream.Position = 0;
-                        _strip.LoadSettingsFromStreamInternal(stream);
+                        _ribbon.LoadSettingsFromStreamInternal(stream);
                     }
                     finally
                     {

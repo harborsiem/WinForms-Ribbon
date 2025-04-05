@@ -23,9 +23,10 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed class UIImage : IDisposable
     {
-        private RibbonStrip _strip;
+        private RibbonStrip _ribbon;
         private HBITMAP _hbitmap;
         private IUIImage? _cpIUIImage;
+        private bool _suppressRelease; //suppress IUIImage release
 
         /// <summary>
         /// Finalizer
@@ -35,22 +36,12 @@ namespace WinForms.Ribbon
             Dispose(false);
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public RibbonStrip Ribbon => _strip;
-
-        private UIImage(RibbonStrip strip)
+        private UIImage(RibbonStrip ribbon)
         {
-            if (strip == null)
-                throw new ArgumentNullException(nameof(strip));
-            _strip = strip;
+            if (ribbon == null)
+                throw new ArgumentNullException(nameof(ribbon));
+            _ribbon = ribbon;
         }
-
-        //internal UIImage(ushort resourceId)
-        //{
-        //    //?
-        //}
 
         /// <summary>
         /// Ctor with IUIImage
@@ -60,41 +51,27 @@ namespace WinForms.Ribbon
         {
             if (cpIUIImage == null)
                 throw new ArgumentNullException(nameof(cpIUIImage));
+            _suppressRelease = true;
             _cpIUIImage = cpIUIImage;
-            fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                _cpIUIImage.GetBitmap(bitmapLocal);
+            fixed (HBITMAP* phbitmap = &_hbitmap)
+                _cpIUIImage.GetBitmap(phbitmap);
             GetBitmapProperties();
         }
-
-        ///// <summary>
-        ///// Ctor with IUIImage
-        ///// </summary>
-        ///// <param name="strip"></param>
-        ///// <param name="cpIUIImage"></param>
-        //public unsafe UIImage(RibbonStrip strip, IUIImage cpIUIImage) : this(strip)
-        //{
-        //    if (cpIUIImage == null)
-        //        throw new ArgumentNullException(nameof(cpIUIImage));
-        //    _cpIUIImage = cpIUIImage;
-        //    fixed (HBITMAP* bitmapLocal = &_hbitmap)
-        //        _cpIUIImage.GetBitmap(bitmapLocal);
-        //    GetBitmapProperties();
-        //}
 
         /// <summary>
         /// Ctor for a bitmap file (*.bmp, *.png)
         /// </summary>
-        /// <param name="strip"></param>
+        /// <param name="ribbon"></param>
         /// <param name="filename"></param>
         /// <param name="highContrast"></param>
-        public UIImage(RibbonStrip strip, string filename, bool highContrast = false) : this(strip)
+        public UIImage(RibbonStrip ribbon, string filename, bool highContrast = false) : this(ribbon)
         {
             if (!File.Exists(filename))
                 throw new FileNotFoundException(nameof(filename));
             Load(filename, highContrast);
         }
 
-        internal UIImage(RibbonStrip strip, HMODULE markupHandle, string resourceName) : this(strip)
+        internal UIImage(RibbonStrip ribbon, HMODULE markupHandle, string resourceName) : this(ribbon)
         {
             if (string.IsNullOrEmpty(resourceName))
                 throw new ArgumentNullException(nameof(resourceName));
@@ -104,17 +81,14 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Ctor for a resource dll
         /// </summary>
-        /// <param name="strip"></param>
+        /// <param name="ribbon"></param>
         /// <param name="markupHandle">Use MarkupHandle from RibbonStrip class</param>
         /// <param name="resourceName">Name in the resource file</param>
-        public UIImage(RibbonStrip strip, IntPtr markupHandle, string resourceName) : this(strip, (HMODULE)markupHandle, resourceName)
+        public UIImage(RibbonStrip ribbon, IntPtr markupHandle, string resourceName) : this(ribbon, (HMODULE)markupHandle, resourceName)
         {
-            //if (string.IsNullOrEmpty(resourceName))
-            //    throw new ArgumentNullException(nameof(resourceName));
-            //Load(markupHandle, resourceName);
         }
 
-        internal UIImage(RibbonStrip strip, HMODULE markupHandle, ushort resourceId) : this(strip)
+        internal UIImage(RibbonStrip ribbon, HMODULE markupHandle, ushort resourceId) : this(ribbon)
         {
             if (resourceId < 1)
                 throw new ArgumentOutOfRangeException(nameof(resourceId));
@@ -124,63 +98,43 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Ctor for a resource dll
         /// </summary>
-        /// <param name="strip"></param>
+        /// <param name="ribbon"></param>
         /// <param name="markupHandle">Use MarkupHandle from RibbonStrip class</param>
         /// <param name="resourceId">Id from the RibbonMarkup.h file</param>
-        public UIImage(RibbonStrip strip, IntPtr markupHandle, ushort resourceId) : this(strip, (HMODULE)markupHandle, resourceId)
+        public UIImage(RibbonStrip ribbon, IntPtr markupHandle, ushort resourceId) : this(ribbon, (HMODULE)markupHandle, resourceId)
         {
-            //if (resourceId < 1)
-            //    throw new ArgumentOutOfRangeException(nameof(resourceId));
-            //Load(markupHandle, resourceId);
         }
-
-        ///// <summary>
-        ///// Ctor for a resource dll
-        ///// </summary>
-        ///// <param name="strip">MarkupHandle from RibbonStrip class will be used</param>
-        ///// <param name="resourceName">Name in the resource file</param>
-        //public UIImage(RibbonStrip strip, string resourceName) : this(strip)
-        //{
-        //    if (string.IsNullOrEmpty(resourceName))
-        //        throw new ArgumentNullException(nameof(resourceName));
-        //    Load(strip.MarkupHandleInternal, resourceName);
-        //}
-
-        ///// <summary>
-        ///// Ctor for a resource dll
-        ///// </summary>
-        ///// <param name="strip">MarkupHandle from RibbonStrip class will be used</param>
-        ///// <param name="resourceId">Id from the RibbonMarkup.h file</param>
-        //public UIImage(RibbonStrip strip, ushort resourceId) : this(strip)
-        //{
-        //    if (resourceId < 1)
-        //        throw new ArgumentOutOfRangeException(nameof(resourceId));
-        //    Load(strip.MarkupHandleInternal, resourceId);
-        //}
 
         /// <summary>
         /// Ctor for a Bitmap. The Bitmap will be converted to a Bitmap with Alpha channel
         /// </summary>
-        /// <param name="strip"></param>
+        /// <param name="ribbon"></param>
         /// <param name="bitmap"></param>
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
-        public unsafe UIImage(RibbonStrip strip, Bitmap bitmap) : this(strip)
+        public unsafe UIImage(RibbonStrip ribbon, Bitmap bitmap) : this(ribbon)
         {
             if (bitmap == null)
                 throw new ArgumentNullException(nameof(bitmap));
+            HRESULT hr;
             bitmap = TryGetArgbBitmap(bitmap);
-            if (strip.CpIUIImageFromBitmap != null)
+            if (ribbon.CpIUIImageFromBitmap != null)
             {
-                strip.CpIUIImageFromBitmap.CreateImage((HBITMAP)bitmap.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_COPY, out _cpIUIImage);
-                fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                    _cpIUIImage.GetBitmap(bitmapLocal);
+                hr = ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)bitmap.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                if (hr.Failed)
+                {
+                    bitmap.Dispose();
+                    return;
+                }
+                fixed (HBITMAP* phbitmap = &_hbitmap)
+                    _cpIUIImage.GetBitmap(phbitmap);
                 GetBitmapProperties();
             }
         }
 
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
-        internal unsafe UIImage(RibbonStrip strip, ImageList pImageList, int index) : this(strip)
+        internal unsafe UIImage(RibbonStrip ribbon, ImageList pImageList, int index) : this(ribbon)
         {
+            HRESULT hr;
             Bitmap lBitmap;
             lBitmap = new Bitmap(pImageList.ImageSize.Width, pImageList.ImageSize.Height, PixelFormat.Format32bppArgb);
             try
@@ -194,16 +148,21 @@ namespace WinForms.Ribbon
                 g.Dispose();
                 if (result == false)
                     return;
-                if (strip.CpIUIImageFromBitmap != null)
+                if (ribbon.CpIUIImageFromBitmap != null)
                 {
-                    strip.CpIUIImageFromBitmap.CreateImage((HBITMAP)lBitmap.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_COPY, out _cpIUIImage);
-                    fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                        _cpIUIImage.GetBitmap(bitmapLocal);
+                    hr = ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)lBitmap.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    if (hr.Failed)
+                    {
+                        lBitmap.Dispose();
+                        return;
+                    }
+                    fixed (HBITMAP* phbitmap = &_hbitmap)
+                        _cpIUIImage.GetBitmap(phbitmap);
                 }
             }
             finally
             {
-                lBitmap?.Dispose();
+                //lBitmap?.Dispose();
             }
         }
 
@@ -248,8 +207,8 @@ namespace WinForms.Ribbon
                 return _hbitmap;
             if (UIImageHandle != null)
             {
-                fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                    UIImageHandle.GetBitmap(bitmapLocal);
+                fixed (HBITMAP* phbitmap = &_hbitmap)
+                    UIImageHandle.GetBitmap(phbitmap);
                 return _hbitmap;
             }
             return HBITMAP.Null;
@@ -450,6 +409,7 @@ namespace WinForms.Ribbon
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
         private unsafe void Load(HMODULE markupHandle, PCWSTR resourceName)
         {
+            HRESULT hr;
             _hbitmap = new HBITMAP((void*)PInvoke.LoadImage(markupHandle, resourceName, GDI_IMAGE_TYPE.IMAGE_BITMAP, 0, 0, IMAGE_FLAGS.LR_CREATEDIBSECTION));
             ////With following code we can get a Bitmap stream
             ////We only have to add a BITMAPFILEHEADER in front of imageData1 array
@@ -512,22 +472,31 @@ namespace WinForms.Ribbon
             }
             try
             {
-                if (_strip.CpIUIImageFromBitmap != null)
+                if (_ribbon.CpIUIImageFromBitmap != null)
                 {
-                    _strip.CpIUIImageFromBitmap.CreateImage(_hbitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage(_hbitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    if (hr.Failed)
+                    {
+                        PInvoke.DeleteObject(_hbitmap);
+                        _hbitmap = HBITMAP.Null;
+                        return;
+                    }
+                    fixed (HBITMAP* phbitmap = &_hbitmap)
+                        _cpIUIImage.GetBitmap(phbitmap);
                     GetBitmapProperties();
                 }
             }
             catch
             {
-                PInvoke.DeleteObject(_hbitmap);
-                _hbitmap = HBITMAP.Null;
+                //PInvoke.DeleteObject(_hbitmap);
+                //_hbitmap = HBITMAP.Null;
             }
         }
 
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
         private unsafe void LoadBmp(string filename, bool highContrast)
         {
+            HRESULT hr;
             Bitmap? bmp = null;
             try
             {
@@ -535,38 +504,49 @@ namespace WinForms.Ribbon
                 bmp = TryGetArgbBitmap(bmp);
                 if (!highContrast)
                     ConvertToArgbBitmap(bmp);
-                if (_strip.CpIUIImageFromBitmap != null)
+                if (_ribbon.CpIUIImageFromBitmap != null)
                 {
-                    _strip.CpIUIImageFromBitmap.CreateImage((HBITMAP)bmp.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_COPY, out _cpIUIImage);
-                    fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                        _cpIUIImage.GetBitmap(bitmapLocal);
+                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)bmp.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    if (hr.Failed)
+                    {
+                        bmp?.Dispose();
+                        return;
+                    }
+                    fixed (HBITMAP* phbitmap = &_hbitmap)
+                        _cpIUIImage.GetBitmap(phbitmap);
                 }
             }
             finally
             {
-                bmp?.Dispose();
+                //bmp?.Dispose();
             }
         }
 
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
         private unsafe void LoadPng(string filename, bool highContrast)
         {
+            HRESULT hr;
             Bitmap? bmp = null;
             try
             {
                 bmp = new Bitmap(filename);
                 if (!highContrast)
                     ConvertToArgbBitmap(bmp);
-                if (_strip.CpIUIImageFromBitmap != null)
+                if (_ribbon.CpIUIImageFromBitmap != null)
                 {
-                    _strip.CpIUIImageFromBitmap.CreateImage((HBITMAP)bmp.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_COPY, out _cpIUIImage);
-                    fixed (HBITMAP* bitmapLocal = &_hbitmap)
-                        _cpIUIImage.GetBitmap(bitmapLocal);
+                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)bmp.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    if (hr.Failed)
+                    {
+                        bmp?.Dispose();
+                        return;
+                    }
+                    fixed (HBITMAP* phbitmap = &_hbitmap)
+                        _cpIUIImage.GetBitmap(phbitmap);
                 }
             }
             finally
             {
-                bmp?.Dispose();
+                //bmp?.Dispose();
             }
         }
 
@@ -709,7 +689,13 @@ namespace WinForms.Ribbon
             }
             if (_cpIUIImage != null)
             {
-                PInvoke.DeleteObject(_hbitmap);
+                int refCount;
+                if (!_suppressRelease)
+                {
+                    refCount = Marshal.ReleaseComObject(_cpIUIImage);
+                    Debug.WriteLine("IUIImage refCount " + refCount);
+                }
+                //PInvoke.DeleteObject(_hbitmap);
                 _cpIUIImage = null;
             }
         }

@@ -16,12 +16,12 @@ namespace WinForms.Ribbon
 {
     internal sealed class UIApplication : IUIApplication, IUICommandHandler
     {
-        private RibbonStrip _ribbonStrip;
+        private RibbonStrip _ribbon;
         private IPropertyStore? _cpPropertyStore;
 
-        public UIApplication(RibbonStrip ribbonStrip)
+        public UIApplication(RibbonStrip ribbon)
         {
-            _ribbonStrip = ribbonStrip;
+            _ribbon = ribbon;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace WinForms.Ribbon
             Debug.WriteLine(string.Format("Execute verb: {0} for command {1}", verb, commandId));
 #endif
             RibbonStripItem? item;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out item))
+            if (_ribbon.TryGetRibbonControlById(commandId, out item))
             {
                 ICommandHandler control = item! as ICommandHandler;
                 //cast PROPVARIANT_unmanaged* to PROPVARIANT* is neccessary, because it's the same struct (CsWin32 should only use PROPVARIANT)
@@ -72,7 +72,7 @@ namespace WinForms.Ribbon
             Debug.WriteLine(string.Format("UpdateProperty key: {0} for command {1}", RibbonProperties.GetPropertyKeyName(*key), commandId));
 #endif
             RibbonStripItem? item;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out item))
+            if (_ribbon.TryGetRibbonControlById(commandId, out item))
             {
                 ICommandHandler control = item! as ICommandHandler;
                 //cast PROPVARIANT_unmanaged* to PROPVARIANT* is neccessary, because it's the same struct (CsWin32 should only use PROPVARIANT)
@@ -95,7 +95,7 @@ namespace WinForms.Ribbon
         unsafe HRESULT IUIApplication.OnCreateUICommand(uint commandId, UI_COMMANDTYPE typeID, out IUICommandHandler commandHandler)
         {
             RibbonStripItem? item;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out item))
+            if (_ribbon.TryGetRibbonControlById(commandId, out item))
             {
                 if (item != null)
                 {
@@ -117,7 +117,7 @@ namespace WinForms.Ribbon
         HRESULT IUIApplication.OnDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID, IUICommandHandler commandHandler)
         {
             RibbonStripItem? item;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out item))
+            if (_ribbon.TryGetRibbonControlById(commandId, out item))
             {
                 if (item != null)
                 {
@@ -153,7 +153,7 @@ namespace WinForms.Ribbon
                             if (UIRibbon != null)
                             {
                                 _cpPropertyStore = UIRibbon as IPropertyStore;
-                                _ribbonStrip.BeginInvoke(new MethodInvoker(_ribbonStrip.OnViewCreated));
+                                _ribbon.BeginInvoke(new MethodInvoker(_ribbon.OnViewCreated));
                                 hr = HRESULT.S_OK;
                             }
                         }
@@ -172,8 +172,8 @@ namespace WinForms.Ribbon
                         }
                         else
                         {
-                            _ribbonStrip.Height = (int)uRibbonHeight;
-                            _ribbonStrip.BeginInvoke(new MethodInvoker(_ribbonStrip.OnRibbonHeightChanged));
+                            _ribbon.Height = (int)uRibbonHeight;
+                            _ribbon.BeginInvoke(new MethodInvoker(_ribbon.OnRibbonHeightChanged));
                         }
                         break;
 
@@ -182,7 +182,7 @@ namespace WinForms.Ribbon
 
                         if (UIRibbon != null)
                         {
-                            _ribbonStrip.Invoke(new MethodInvoker(_ribbonStrip.OnViewDestroy));
+                            _ribbon.Invoke(new MethodInvoker(_ribbon.OnViewDestroy));
                             _cpPropertyStore = null;
                             Marshal.ReleaseComObject(UIRibbon);
                             UIRibbon = null;

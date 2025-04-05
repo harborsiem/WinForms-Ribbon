@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     public sealed class EventLogger : IUIEventLogger
     {
 #pragma warning disable CA1416
-        private RibbonStrip _strip;
+        private RibbonStrip _ribbon;
         private IUIEventingManager _cpEventingManager;
         private bool attached;
 
@@ -27,9 +27,9 @@ namespace WinForms.Ribbon
         /// </summary>
         public event EventHandler<EventLoggerEventArgs>? LogEvent;
 
-        internal EventLogger(RibbonStrip strip, IUIEventingManager cpEventingManager)
+        internal EventLogger(RibbonStrip ribbon, IUIEventingManager cpEventingManager)
         {
-            _strip = strip;
+            _ribbon = ribbon;
             _cpEventingManager = cpEventingManager;
         }
 
@@ -61,7 +61,7 @@ namespace WinForms.Ribbon
         unsafe void IUIEventLogger.OnUIEvent(UI_EVENTPARAMS* pEventParams)
         {
             EventLoggerEventArgs e = new EventLoggerEventArgs(in *pEventParams);
-            _strip.BeginInvoke((MethodInvoker)delegate
+            _ribbon.BeginInvoke((MethodInvoker)delegate
             {
                 OnUIEvent(e);
             });

@@ -16,12 +16,12 @@ namespace WinForms.Ribbon
     internal sealed unsafe class UIApplication : IUIApplication.Interface, IUICommandHandler.Interface , IManagedWrapper<IUIApplication, IUICommandHandler>
     {
         private IUIRibbon* _cpIUIRibbon;
-        private RibbonStrip _ribbonStrip;
+        private RibbonStrip _ribbon;
         private IUICommandHandler* _cpIUICommandHandler;
 
-        public UIApplication(RibbonStrip ribbonStrip)
+        public UIApplication(RibbonStrip ribbon)
         {
-            _ribbonStrip = ribbonStrip;
+            _ribbon = ribbon;
             ComScope<IUICommandHandler> cpCommandHandler = ComHelpers.GetComScope<IUICommandHandler>(this);
             _cpIUICommandHandler = cpCommandHandler;
         }
@@ -50,7 +50,7 @@ namespace WinForms.Ribbon
             Debug.WriteLine(string.Format("Execute verb: {0} for command {1}", verb, commandId));
 #endif
             RibbonStripItem item;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out item))
+            if (_ribbon.TryGetRibbonControlById(commandId, out item))
             {
                 ICommandHandler commands = item as ICommandHandler;
                 return commands!.Execute(verb, key, currentValue, commandExecutionProperties);
@@ -75,7 +75,7 @@ namespace WinForms.Ribbon
             Debug.WriteLine(string.Format("UpdateProperty key: {0} for command {1}", RibbonProperties.GetPropertyKeyName(*key), commandId));
 #endif
             RibbonStripItem item;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out item))
+            if (_ribbon.TryGetRibbonControlById(commandId, out item))
             {
                 ICommandHandler commands = item as ICommandHandler;
                 return commands!.UpdateProperty(*key, currentValue, out *newValue);
@@ -86,7 +86,7 @@ namespace WinForms.Ribbon
         HRESULT IUIApplication.Interface.OnCreateUICommand(uint commandId, Windows.Win32.UI.Ribbon.UI_COMMANDTYPE typeID, Windows.Win32.UI.Ribbon.IUICommandHandler** commandHandler)
         {
             RibbonStripItem control = null;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out control))
+            if (_ribbon.TryGetRibbonControlById(commandId, out control))
             {
                 if (control != null)
                     control.BaseCreateUICommand(commandId, typeID);
@@ -98,7 +98,7 @@ namespace WinForms.Ribbon
         HRESULT IUIApplication.Interface.OnDestroyUICommand(uint commandId, Windows.Win32.UI.Ribbon.UI_COMMANDTYPE typeID, Windows.Win32.UI.Ribbon.IUICommandHandler* commandHandler)
         {
             RibbonStripItem control = null;
-            if (_ribbonStrip.TryGetRibbonControlById(commandId, out control))
+            if (_ribbon.TryGetRibbonControlById(commandId, out control))
             {
                 if (control != null)
                     control.BaseDestroyUICommand(commandId, typeID);
@@ -123,7 +123,7 @@ namespace WinForms.Ribbon
                             _cpIUIRibbon = cpIUIRibbonScope;
                             if (!cpIUIRibbonScope.IsNull)
                             {
-                                _ribbonStrip.BeginInvoke(new MethodInvoker(_ribbonStrip.OnViewCreated));
+                                _ribbon.BeginInvoke(new MethodInvoker(_ribbon.OnViewCreated));
                                 hr = HRESULT.S_OK;
                             }
                         }
@@ -142,8 +142,8 @@ namespace WinForms.Ribbon
                         }
                         else
                         {
-                            _ribbonStrip.Height = (int)uRibbonHeight;
-                            _ribbonStrip.BeginInvoke(new MethodInvoker(_ribbonStrip.OnRibbonHeightChanged));
+                            _ribbon.Height = (int)uRibbonHeight;
+                            _ribbon.BeginInvoke(new MethodInvoker(_ribbon.OnRibbonHeightChanged));
                         }
                         break;
 
@@ -152,7 +152,7 @@ namespace WinForms.Ribbon
 
                         if (_cpIUIRibbon != null)
                         {
-                            _ribbonStrip.Invoke(new MethodInvoker(_ribbonStrip.OnViewDestroy));
+                            _ribbon.Invoke(new MethodInvoker(_ribbon.OnViewDestroy));
                             Dispose();
                             hr = HRESULT.S_OK;
                         }

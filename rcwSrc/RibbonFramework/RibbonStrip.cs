@@ -297,7 +297,7 @@ namespace WinForms.Ribbon
         /// </summary>
         [Category("RibbonBehavior"), Description("Is a reference to an embedded resource header file in the application assembly. The RibbonMarkup.h file.")]
         [DefaultValue(null)]
-        public string? MarkupHeader;
+        public string? MarkupHeader { get; set; }
 
         /// <summary>
         /// Don't use

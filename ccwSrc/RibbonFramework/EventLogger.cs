@@ -17,7 +17,7 @@ namespace WinForms.Ribbon
     public sealed unsafe class EventLogger : IUIEventLogger.Interface
     {
 #pragma warning disable CA1416
-        private RibbonStrip _strip;
+        private RibbonStrip _ribbon;
         private bool _attached;
 
         /// <summary>
@@ -25,9 +25,9 @@ namespace WinForms.Ribbon
         /// </summary>
         public event EventHandler<EventLoggerEventArgs>? LogEvent;
 
-        internal EventLogger(RibbonStrip strip)
+        internal EventLogger(RibbonStrip ribbon)
         {
-            _strip = strip;
+            _ribbon = ribbon;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace WinForms.Ribbon
         {
             if (!_attached)
             {
-                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(_strip.Framework);
+                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(_ribbon.Framework);
                 using ComScope<IUIEventLogger> cpEventLogger = ComHelpers.GetComScope<IUIEventLogger>(this);
                 cpEventingManager.Value->SetEventLogger(cpEventLogger);
                 _attached = true;
@@ -51,7 +51,7 @@ namespace WinForms.Ribbon
         {
             if (_attached)
             {
-                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(_strip.Framework);
+                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(_ribbon.Framework);
                 cpEventingManager.Value->SetEventLogger(null);
                 _attached = false;
             }
@@ -64,7 +64,7 @@ namespace WinForms.Ribbon
         unsafe void IUIEventLogger.Interface.OnUIEvent(UI_EVENTPARAMS* pEventParams)
         {
             EventLoggerEventArgs e = new EventLoggerEventArgs(in *pEventParams);
-            _strip.BeginInvoke((MethodInvoker)delegate
+            _ribbon.BeginInvoke((MethodInvoker)delegate
             {
                 OnUIEvent(e);
             });
