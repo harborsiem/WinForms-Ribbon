@@ -1,0 +1,90 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace></RootNamespace>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Res\Drop32.bmp" />
+    <None Remove="Res\dropA32.bmp" />
+    <None Remove="Res\dropB32.bmp" />
+    <None Remove="Res\dropC32.bmp" />
+    <None Remove="Res\ExitOff32.bmp" />
+    <None Remove="Res\ExitOff48.bmp" />
+    <None Remove="Res\ExitOff64.bmp" />
+    <None Remove="Res\ExitOn32.bmp" />
+    <None Remove="Res\ExitOn48.bmp" />
+    <None Remove="Res\ExitOn64.bmp" />
+    <None Remove="RibbonMarkup.de.ribbon" />
+    <None Remove="RibbonMarkup.ribbon" />
+    <None Remove="RibbonMarkup.shortcuts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Res\Drop32.bmp" >
+          <LogicalName>_19_Localization.Res.Drop32.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\dropA32.bmp" >
+          <LogicalName>_19_Localization.Res.dropA32.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\dropB32.bmp" >
+          <LogicalName>_19_Localization.Res.dropB32.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\dropC32.bmp" >
+          <LogicalName>_19_Localization.Res.dropC32.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\ExitOff32.bmp" >
+          <LogicalName>_19_Localization.Res.ExitOff32.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\ExitOff48.bmp" >
+          <LogicalName>_19_Localization.Res.ExitOff48.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\ExitOff64.bmp" >
+          <LogicalName>_19_Localization.Res.ExitOff64.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\ExitOn32.bmp" >
+          <LogicalName>_19_Localization.Res.ExitOn32.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\ExitOn48.bmp" >
+          <LogicalName>_19_Localization.Res.ExitOn48.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Res\ExitOn64.bmp" >
+          <LogicalName>_19_Localization.Res.ExitOn64.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RibbonMarkup.de.ribbon" />
+    <EmbeddedResource Include="RibbonMarkup.ribbon" />
+    <EmbeddedResource Include="RibbonMarkup.shortcuts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RibbonFramework">
+      <HintPath>..\..\..\ccwSrc\RibbonFramework\bin\Debug\net8.0-windows\RibbonFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

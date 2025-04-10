@@ -106,7 +106,7 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Ctor for a Bitmap. The Bitmap will be converted to a Bitmap with Alpha channel
+        /// Ctor for a Bitmap. The Bitmap will be converted to a Bitmap with Alpha channel if possible.
         /// </summary>
         /// <param name="ribbon"></param>
         /// <param name="bitmap"></param>
@@ -224,6 +224,7 @@ namespace WinForms.Ribbon
                 Height = hBitmap.bmHeight;
                 Width = hBitmap.bmWidth;
                 BitsPerPixel = hBitmap.bmBitsPixel;
+                //Do not call DeleteObject here
             }
         }
 

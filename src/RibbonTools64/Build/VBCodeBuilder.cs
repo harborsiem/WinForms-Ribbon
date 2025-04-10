@@ -44,7 +44,7 @@ namespace UIRibbonTools
             else
             {
                 sw.WriteLine();
-                sw.WriteLine("Namespace WinForms.Ribbon");
+                sw.WriteLine("Namespace Global.WinForms.Ribbon");
             }
             //sw.WriteLine("{");
             sw.WriteLine(Indent(1) + "Partial Class " + ribbonItemsClass);

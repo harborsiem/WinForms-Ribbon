@@ -61,7 +61,6 @@ namespace UIRibbonTools
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
             else
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo(_selectedCulture);
-                //Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture(_selectedCulture);
         }
 
         private void ResetPreviewUiCulture()
@@ -148,7 +147,7 @@ namespace UIRibbonTools
             {
                 SetRibbonResourceName(ribbonResourceFileName);
                 previewEnabled = true;
-                if (Parser == null)
+                if (Parser == null || !Parser.Results.HasHFile)
                     Parser = new RibbonParser(path);
             }
             return previewEnabled;

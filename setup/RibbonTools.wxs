@@ -2,7 +2,7 @@
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
 	 xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
 
-  <Package Name="RibbonTools64" Language="1033" Version="8.0.1.0" Manufacturer="RibbonLib" UpgradeCode="{D6282057-BE7E-4BC4-BBBB-5A1EB73E3858}" InstallerVersion="301" ProductCode="{761B78C4-D4C2-4DED-9346-E34399B8036B}">
+  <Package Name="RibbonTools64" Language="1033" Version="8.0.2.0" Manufacturer="RibbonLib" UpgradeCode="{D6282057-BE7E-4BC4-BBBB-5A1EB73E3858}" InstallerVersion="301" ProductCode="{529A2672-3BA3-489B-8A3C-92B089536C31}">
     <SummaryInformation Description="Design, Build and Preview the Ribbon" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />

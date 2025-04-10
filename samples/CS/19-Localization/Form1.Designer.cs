@@ -58,6 +58,7 @@ namespace _19_Localization
             this._ribbonControl.Location = new System.Drawing.Point(0, 0);
             this._ribbonControl.Name = "_ribbonControl";
             this._ribbonControl.MarkupResource = "_19_Localization.RibbonMarkup.ribbon";
+            this._ribbonControl.ShortcutTableResourceName = "_19_Localization.RibbonMarkup.shortcuts";
             this._ribbonControl.Size = new System.Drawing.Size(501, 116);
             this._ribbonControl.TabIndex = 2;
             // 
