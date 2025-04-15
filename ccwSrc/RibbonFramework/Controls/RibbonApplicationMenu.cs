@@ -25,7 +25,7 @@ namespace WinForms.Ribbon
         public RibbonApplicationMenu(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
         {
-            AddPropertiesProvider(_tooltipPropertiesProvider = new TooltipPropertiesProvider(ribbon, commandId));
+            AddPropertiesProvider(_tooltipPropertiesProvider = new TooltipPropertiesProvider(ribbon, commandId, this));
         }
 
         #region ITooltipPropertiesProvider Members

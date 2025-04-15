@@ -309,5 +309,166 @@ namespace WinForms.Ribbon
                 catch { }
             }
         }
+
+        /// <summary>
+        /// Parse the embedded resource RibbonMarkup.h file which is produced by UICC.exe during build process
+        /// Don't use Symbols for resources because parsing failed
+        /// </summary>
+        /// <param name="markupHeader"></param>
+        /// <param name="executingAssembly"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        internal static Dictionary<ushort, MarkupResIds>? ParseHeader(string? markupHeader, Assembly executingAssembly)
+        {
+            if (markupHeader == null)
+                return null;
+            using Stream? stream = executingAssembly.GetManifestResourceStream(markupHeader);
+            if (stream == null)
+                return null;
+            Dictionary<ushort, MarkupResIds> allMarkupResIds = new Dictionary<ushort, MarkupResIds>();
+            Dictionary<string, ushort> commands = new Dictionary<string, ushort>();
+            StreamReader sr = new StreamReader(stream);
+            try
+            {
+                while (!sr.EndOfStream)
+                {
+                    string? line = sr.ReadLine();
+                    if (line!.StartsWith("#define"))
+                    {
+                        if (!line.Contains("_RESID "))
+                        {
+                            line = line.Remove(0, "#define ".Length).TrimEnd();
+                            string[] lineSplit = line.Split(' ');
+                            if (lineSplit.Length < 2)
+                            {
+                                throw new ArgumentException("Error in .h file");
+                            }
+                            if (lineSplit.Length > 2)
+                            {
+                                string comment = line.Substring(line.IndexOf("/*")).Remove(0, 3);
+                                comment = comment.Substring(0, comment.LastIndexOf(" */"));
+                            }
+                            if (ushort.TryParse(lineSplit[1], out ushort value))
+                            {
+                                MarkupResIds resIds = new MarkupResIds() { CommandId = value, CommandName = lineSplit[0] };
+                                commands[lineSplit[0]] = value;
+                                allMarkupResIds[value] = resIds;
+                            }
+                        }
+                        else
+                        {
+                            line = line.Remove(0, "#define ".Length).TrimEnd();
+                            string[] lineSplit = line.Split(' ');
+                            if (lineSplit.Length < 2)
+                            {
+                                throw new ArgumentException("Error in .h file");
+                            }
+                            if (ushort.TryParse(lineSplit[1], out ushort value))
+                            {
+                                string[] lineSplitComponents = lineSplit[0].Split('_');
+                                string extraName = lineSplitComponents[lineSplitComponents.Length - 2];
+                                int index;
+                                string commandName;
+                                MarkupResIds resIds;
+                                if (string.IsNullOrEmpty(extraName)) //It is a Image with dpi value
+                                {
+                                    extraName = lineSplitComponents[1] + "_" + lineSplitComponents[2];
+                                }
+                                index = lineSplit[0].LastIndexOf(extraName, StringComparison.InvariantCulture);
+                                commandName = lineSplit[0].Remove(index - 1);
+                                if (commands.ContainsKey(commandName))
+                                {
+                                    ushort commandId = commands[commandName];
+                                    resIds = allMarkupResIds[commandId];
+                                    switch (extraName)
+                                    {
+                                        case "LabelTitle":
+                                            resIds.LabelTitleId = value;
+                                            break;
+                                        case "LabelDescription":
+                                            resIds.LabelDescriptionId = value;
+                                            break;
+                                        case "TooltipTitle":
+                                            resIds.TooltipTitleId = value;
+                                            break;
+                                        case "TooltipDescription":
+                                            resIds.TooltipDescriptionId = value;
+                                            break;
+                                        case "Keytip":
+                                            resIds.KeytipId = value;
+                                            break;
+                                        case "SmallImages":
+                                            resIds.SmallImages = value;
+                                            break;
+                                        case "SmallImages_96":
+                                            resIds.SmallImages_96 = value;
+                                            break;
+                                        case "SmallImages_120":
+                                            resIds.SmallImages_120 = value;
+                                            break;
+                                        case "SmallImages_144":
+                                            resIds.SmallImages_144 = value;
+                                            break;
+                                        case "SmallImages_192":
+                                            resIds.SmallImages_192 = value;
+                                            break;
+                                        case "LargeImages":
+                                            resIds.LargeImages = value;
+                                            break;
+                                        case "LargeImages_96":
+                                            resIds.LargeImages_96 = value;
+                                            break;
+                                        case "LargeImages_120":
+                                            resIds.LargeImages_120 = value;
+                                            break;
+                                        case "LargeImages_144":
+                                            resIds.LargeImages_144 = value;
+                                            break;
+                                        case "LargeImages_192":
+                                            resIds.LargeImages_192 = value;
+                                            break;
+                                        case "SmallHighContrastImages":
+                                            resIds.SmallHighContrastImages = value;
+                                            break;
+                                        case "SmallHighContrastImages_96":
+                                            resIds.SmallHighContrastImages_96 = value;
+                                            break;
+                                        case "SmallHighContrastImages_120":
+                                            resIds.SmallHighContrastImages_120 = value;
+                                            break;
+                                        case "SmallHighContrastImages_144":
+                                            resIds.SmallHighContrastImages_144 = value;
+                                            break;
+                                        case "SmallHighContrastImages_192":
+                                            resIds.SmallHighContrastImages_192 = value;
+                                            break;
+                                        case "LargeHighContrastImages":
+                                            resIds.LargeHighContrastImages = value;
+                                            break;
+                                        case "LargeHighContrastImages_96":
+                                            resIds.LargeHighContrastImages_96 = value;
+                                            break;
+                                        case "LargeHighContrastImages_120":
+                                            resIds.LargeHighContrastImages_120 = value;
+                                            break;
+                                        case "LargeHighContrastImages_144":
+                                            resIds.LargeHighContrastImages_144 = value;
+                                            break;
+                                        case "LargeHighContrastImages_192":
+                                            resIds.LargeHighContrastImages_192 = value;
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                sr.Close();
+            }
+            return allMarkupResIds;
+        }
     }
 }

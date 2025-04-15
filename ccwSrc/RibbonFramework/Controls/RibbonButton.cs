@@ -45,11 +45,11 @@ namespace WinForms.Ribbon
             : base(ribbon, commandId)
         {
             AddPropertiesProvider(_enabledPropertiesProvider = new EnabledPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_labelPropertiesProvider = new LabelPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_labelDescriptionPropertiesProvider = new LabelDescriptionPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_imagePropertiesProvider = new ImagePropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_tooltipPropertiesProvider = new TooltipPropertiesProvider(ribbon, commandId));
+            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId, this));
+            AddPropertiesProvider(_labelPropertiesProvider = new LabelPropertiesProvider(ribbon, commandId, this));
+            AddPropertiesProvider(_labelDescriptionPropertiesProvider = new LabelDescriptionPropertiesProvider(ribbon, commandId, this));
+            AddPropertiesProvider(_imagePropertiesProvider = new ImagePropertiesProvider(ribbon, commandId, this));
+            AddPropertiesProvider(_tooltipPropertiesProvider = new TooltipPropertiesProvider(ribbon, commandId, this));
 
             AddEventsProvider(_executeEventsProvider = new ExecuteEventsProvider(this));
         }

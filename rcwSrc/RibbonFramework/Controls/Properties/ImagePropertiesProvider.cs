@@ -49,9 +49,11 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon">parent ribbon</param>
         /// <param name="commandId">ribbon control command id</param>
-        public ImagePropertiesProvider(RibbonStrip ribbon, uint commandId)
+        /// <param name="item">ribbon control</param>
+        public ImagePropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
             : base(ribbon, commandId)
         {
+            _item = item;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.LargeImage);
             _supportedProperties.Add(RibbonProperties.SmallImage);
@@ -59,6 +61,7 @@ namespace WinForms.Ribbon
             _supportedProperties.Add(RibbonProperties.SmallHighContrastImage);
         }
 
+        private readonly RibbonStripItem _item;
         private UIImage? _largeImage;
         private UIImage? _smallImage;
         private UIImage? _largeHighContrastImage;

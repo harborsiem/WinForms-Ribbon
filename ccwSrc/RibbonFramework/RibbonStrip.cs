@@ -75,6 +75,7 @@ namespace WinForms.Ribbon
         private MarkupHandler? _markupHandler;
         private ShortcutHandler? _shortcutHandler;
         private string? _markupResource;
+        private Dictionary<ushort, MarkupResIds>? _allMarkupResIds;
 
         //private EventSet EventSet => _eventSet;
 
@@ -332,6 +333,8 @@ namespace WinForms.Ribbon
 
             var assembly = form.GetType().Assembly;
             _markupHandler = new MarkupHandler(assembly, this);
+            _allMarkupResIds = MarkupHandler.ParseHeader(MarkupHeader, assembly);
+
             InitFramework(_markupHandler.ResourceIdentifier, _markupHandler.MarkupDllHandle);
 
             if (Framework != null && _uIApplication != null)
@@ -441,7 +444,7 @@ namespace WinForms.Ribbon
             PInvoke.CoCreateInstance(
                 &CLSID_UIRibbonImageFromBitmapFactory,
                 null,
-                CLSCTX.CLSCTX_INPROC_SERVER,
+                CLSCTX.CLSCTX_ALL, //.CLSCTX_INPROC_SERVER,
                 IID.Get<IUIImageFromBitmap>(),
                 (void**)ppImageFromBitmap).ThrowOnFailure();
         }
@@ -654,74 +657,6 @@ namespace WinForms.Ribbon
 
             cpPropertyStore.Value->Commit();
         }
-
-        //private static Bitmap TryConvertToAlphaBitmap(Bitmap bitmap)
-        //{
-        //    if (bitmap.PixelFormat == PixelFormat.Format32bppRgb && bitmap.RawFormat.Guid == ImageFormat.Bmp.Guid)
-        //    {
-        //        BitmapData? bmpData = null;
-        //        try
-        //        {
-        //            bmpData = bitmap.LockBits(new Rectangle(new Point(), bitmap.Size), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-        //            if (BitmapHasAlpha(bmpData))
-        //            {
-        //                Bitmap alpha = new Bitmap(bitmap.Width, bitmap.Height, bmpData.Stride, PixelFormat.Format32bppArgb, bmpData.Scan0);
-        //                return alpha;
-        //            }
-        //        }
-        //        finally
-        //        {
-        //            if (bmpData != null)
-        //                bitmap.UnlockBits(bmpData);
-        //        }
-        //    }
-        //    return bitmap;
-        //}
-
-        ////From Microsoft System.Drawing.Icon.cs
-        //private static unsafe bool BitmapHasAlpha(BitmapData bmpData)
-        //{
-        //    bool hasAlpha = false;
-        //    for (int i = 0; i < bmpData.Height; i++)
-        //    {
-        //        for (int j = 3; j < Math.Abs(bmpData.Stride); j += 4)
-        //        {
-        //            // Stride here is fine since we know we're doing this on the whole image.
-        //            unsafe
-        //            {
-        //                byte* candidate = unchecked(((byte*)bmpData.Scan0.ToPointer()) + (i * bmpData.Stride) + j);
-        //                if (*candidate != 0)
-        //                {
-        //                    hasAlpha = true;
-        //                    return hasAlpha;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
-        ///// <summary>
-        ///// Wraps a Bitmap object with IUIImage interface
-        ///// </summary>
-        ///// <param name="bitmap">Bitmap object to wrap</param>
-        ///// <returns>IUIImage wrapper</returns>
-        //public IUIImage ConvertToUIImage(Bitmap bitmap)
-        //{
-        //    if (bitmap == null)
-        //        throw new ArgumentNullException(nameof(bitmap));
-        //    if (_imageFromBitmap == null)
-        //    {
-        //        throw new InvalidOperationException(NotInitialized);
-        //    }
-
-        //    Bitmap bm = TryConvertToAlphaBitmap(bitmap);
-        //    IUIImage uiImage;
-        //    _imageFromBitmap.CreateImage((HBITMAP)bm.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out uiImage);
-
-        //    return uiImage;
-        //}
 
         /// <summary>
         /// Set current application modes
@@ -1027,11 +962,17 @@ namespace WinForms.Ribbon
 
         internal void OnViewCreated()
         {
-            //foreach (KeyValuePair<uint, IRibbonControl> pair in _mapRibbonStripItems)
-            //{
-            //    if (pair.Value is RibbonStripItem item)
-            //        item.OnViewCreated(); //Set the strings like Keytip, LabelTitle, ... if the RESID's are set before
-            //}
+            if (_allMarkupResIds != null)
+            {
+                foreach (var pair in _mapRibbonStripItems)
+                {
+                    RibbonStripItem item = pair.Value;
+                    if (_allMarkupResIds.TryGetValue((ushort)item.CommandId, out var resIds))
+                    {
+                        item.ResourceIds = resIds;
+                    }
+                }
+            }
             _qatSetting?.Load();
 
             //EventSet.Raise((EventKey)EventViewCreated, this, EventArgs.Empty);

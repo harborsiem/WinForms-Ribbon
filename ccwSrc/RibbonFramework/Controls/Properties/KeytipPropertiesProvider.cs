@@ -35,13 +35,16 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon">parent ribbon</param>
         /// <param name="commandId">ribbon control command id</param>
-        public KeytipPropertiesProvider(RibbonStrip ribbon, uint commandId)
+        /// <param name="item">ribbon control</param>
+        public KeytipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
             : base(ribbon, commandId)
         {
+            _item = item;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.Keytip);
         }
 
+        private readonly RibbonStripItem _item;
         private string _keytip;
 
         /// <summary>
@@ -75,6 +78,11 @@ namespace WinForms.Ribbon
         {
             get
             {
+                if (_keytip == null)
+                {
+                    if (_item.ResourceIds != null && _item.ResourceIds.KeytipId >= 2)
+                        _keytip = _ribbon.LoadString(_item.ResourceIds.KeytipId);
+                }
                 return _keytip;
             }
             set
@@ -90,20 +98,5 @@ namespace WinForms.Ribbon
         }
 
         #endregion
-
-        /// <summary>
-        /// RESID in RibbonMarkup.ribbon for the Keytip property.
-        /// Must be set before ViewCreated event
-        /// </summary>
-        public ushort KeytipResId { get; set; } = 0;
-
-        /// <summary>
-        /// Initialize the Keytip property from RibbonMarkup.ribbon
-        /// </summary>
-        /// <param name="keytip"></param>
-        public void InitKeytip(string keytip)
-        {
-            _keytip = keytip;
-        }
     }
 }

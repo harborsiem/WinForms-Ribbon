@@ -35,13 +35,16 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon">parent ribbon</param>
         /// <param name="commandId">ribbon control command id</param>
-        public LabelPropertiesProvider(RibbonStrip ribbon, uint commandId)
+        /// <param name="item">ribbon control</param>
+        public LabelPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
             : base(ribbon, commandId)
         {
+            _item = item;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.Label);
         }
 
+        private readonly RibbonStripItem _item;
         private string _label;
 
         /// <summary>
@@ -75,6 +78,11 @@ namespace WinForms.Ribbon
         {
             get
             {
+                if (_label == null)
+                {
+                    if (_item.ResourceIds != null && _item.ResourceIds.LabelTitleId >= 2)
+                        _label = _ribbon.LoadString(_item.ResourceIds.LabelTitleId);
+                }
                 return _label;
             }
             set
@@ -89,20 +97,5 @@ namespace WinForms.Ribbon
         }
 
         #endregion
-
-        /// <summary>
-        /// RESID in RibbonMarkup.ribbon for the Label property.
-        /// Must be set before ViewCreated event
-        /// </summary>
-        public ushort LabelResId { get; set; } = 0;
-
-        /// <summary>
-        /// Initialize the Label property from RibbonMarkup.ribbon
-        /// </summary>
-        /// <param name="label"></param>
-        public void InitLabel(string label)
-        {
-            _label = label;
-        }
     }
 }

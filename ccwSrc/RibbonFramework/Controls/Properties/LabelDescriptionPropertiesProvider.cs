@@ -35,13 +35,16 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon">parent ribbon</param>
         /// <param name="commandId">ribbon control command id</param>
-        public LabelDescriptionPropertiesProvider(RibbonStrip ribbon, uint commandId)
+        /// <param name="item">ribbon control</param>
+        public LabelDescriptionPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
             : base(ribbon, commandId)
         {
+            _item = item;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.LabelDescription);
         }
 
+        private readonly RibbonStripItem _item;
         private string _labelDescription;
 
         /// <summary>
@@ -75,6 +78,11 @@ namespace WinForms.Ribbon
         {
             get
             {
+                if (_labelDescription == null)
+                {
+                    if (_item.ResourceIds != null && _item.ResourceIds.LabelDescriptionId >= 2)
+                        _labelDescription = _ribbon.LoadString(_item.ResourceIds.LabelDescriptionId);
+                }
                 return _labelDescription;
             }
             set
@@ -90,20 +98,5 @@ namespace WinForms.Ribbon
         }
 
         #endregion
-
-        /// <summary>
-        /// RESID in RibbonMarkup.ribbon for the LabelDescription property.
-        /// Must be set before ViewCreated event
-        /// </summary>
-        public ushort LabelDescriptionResId { get; set; } = 0;
-
-        /// <summary>
-        /// Initialize the LabelDescription property from RibbonMarkup.ribbon
-        /// </summary>
-        /// <param name="labelDescription"></param>
-        public void InitLabelDescription(string labelDescription)
-        {
-            _labelDescription = labelDescription;
-        }
     }
 }

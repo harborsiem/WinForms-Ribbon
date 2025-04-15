@@ -32,9 +32,9 @@ namespace WinForms.Ribbon
             : base(ribbon, commandId)
         {
             AddPropertiesProvider(_contextAvailablePropertiesProvider = new ContextAvailablePropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_labelPropertiesProvider = new LabelPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_tooltipPropertiesProvider = new TooltipPropertiesProvider(ribbon, commandId));
+            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId, this));
+            AddPropertiesProvider(_labelPropertiesProvider = new LabelPropertiesProvider(ribbon, commandId, this));
+            AddPropertiesProvider(_tooltipPropertiesProvider = new TooltipPropertiesProvider(ribbon, commandId, this));
         }
 
         #region IContextAvailablePropertiesProvider Members

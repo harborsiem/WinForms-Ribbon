@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 #### Changed (RibbonFramework)
 
 - UIImage comments
+- MarkupHeader (RibbonStrip) added for Embedded Resource of RibbonMarkup.h
+- Parser for RibbonMarkup.h to get all resource Ids
+- For all string values like Label, LabelDescription, TooltipTitle, TooltipDescription, Keytip in RibbonButton
+ and other controls we can get the displayed values if you use MarkupHeader
 
 #### Changed (RibbonTools64)
 
@@ -16,3 +20,4 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 #### Samples
 
 - Visual Basic samples added
+- C# Localization modified

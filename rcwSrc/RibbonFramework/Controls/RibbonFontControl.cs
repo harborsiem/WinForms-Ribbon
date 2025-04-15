@@ -43,7 +43,7 @@ namespace WinForms.Ribbon
         {
             AddPropertiesProvider(_fontControlPropertiesProvider = new FontControlPropertiesProvider(ribbon, commandId));
             AddPropertiesProvider(_enabledPropertiesProvider = new EnabledPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId));
+            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId, this));
 
             AddEventsProvider(_executeEventsProvider = new ExecuteEventsProvider(this));
             AddEventsProvider(_previewEventsProvider = new PreviewEventsProvider(this));

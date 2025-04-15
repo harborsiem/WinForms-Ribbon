@@ -41,14 +41,17 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon">parent ribbon</param>
         /// <param name="commandId">ribbon control command id</param>
-        public TooltipPropertiesProvider(RibbonStrip ribbon, uint commandId)
+        /// <param name="item">ribbon control</param>
+        public TooltipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
             : base(ribbon, commandId)
         {
+            _item = item;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.TooltipTitle);
             _supportedProperties.Add(RibbonProperties.TooltipDescription);
         }
 
+        private readonly RibbonStripItem _item;
         private string _tooltipTitle;
         private string _tooltipDescription;
 
@@ -91,6 +94,11 @@ namespace WinForms.Ribbon
         {
             get
             {
+                if (_tooltipTitle == null)
+                {
+                    if (_item.ResourceIds != null && _item.ResourceIds.TooltipTitleId >= 2)
+                        _tooltipTitle = _ribbon.LoadString(_item.ResourceIds.TooltipTitleId);
+                }
                 return _tooltipTitle;
             }
             set
@@ -114,6 +122,11 @@ namespace WinForms.Ribbon
         {
             get
             {
+                if (_tooltipDescription == null)
+                {
+                    if (_item.ResourceIds != null && _item.ResourceIds.TooltipDescriptionId >= 2)
+                        _tooltipDescription = _ribbon.LoadString(_item.ResourceIds.TooltipDescriptionId);
+                }
                 return _tooltipDescription;
             }
             set
@@ -131,35 +144,5 @@ namespace WinForms.Ribbon
         }
 
         #endregion
-
-        /// <summary>
-        /// RESID in RibbonMarkup.ribbon for the TooltipTitle property.
-        /// Must be set before ViewCreated event
-        /// </summary>
-        public ushort TooltipTitleResId { get; set; } = 0;
-
-        /// <summary>
-        /// RESID in RibbonMarkup.ribbon for the TooltipDescription property.
-        /// Must be set before ViewCreated event
-        /// </summary>
-        public ushort TooltipDescriptionResId { get; set; } = 0;
-
-        /// <summary>
-        /// Initialize the TooltipTitle property from RibbonMarkup.ribbon
-        /// </summary>
-        /// <param name="title"></param>
-        public void InitTooltipTitle(string title)
-        {
-            _tooltipTitle = title;
-        }
-
-        /// <summary>
-        /// Initialize the TooltipDescription property from RibbonMarkup.ribbon
-        /// </summary>
-        /// <param name="description"></param>
-        public void InitTooltipDescription(string description)
-        {
-            _tooltipDescription = description;
-        }
     }
 }

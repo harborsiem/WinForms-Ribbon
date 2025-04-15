@@ -41,7 +41,7 @@ namespace WinForms.Ribbon
             : base(ribbon, commandId)
         {
             AddPropertiesProvider(_recentItemsPropertiesProvider = new RecentItemsPropertiesProvider(ribbon, commandId));
-            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId));
+            AddPropertiesProvider(_keytipPropertiesProvider = new KeytipPropertiesProvider(ribbon, commandId, this));
 
             AddEventsProvider(_executeEventsProvider = new ExecuteEventsProvider(this));
         }

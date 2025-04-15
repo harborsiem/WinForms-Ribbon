@@ -55,6 +55,8 @@ namespace WinForms.Ribbon
 
         private protected EventSet EventSet => _eventSet;
 
+        internal MarkupResIds ResourceIds;
+
         /// <summary>
         /// RibbonStripItem ctor
         /// </summary>
@@ -236,56 +238,6 @@ namespace WinForms.Ribbon
 
         #endregion
 
-        /// <summary>
-        /// Set the RESID's in ctor to get the strings after view is created.
-        /// For unused parameters 0 must be set.
-        /// </summary>
-        /// <param name="keytip"></param>
-        /// <param name="label"></param>
-        /// <param name="labelDescription"></param>
-        /// <param name="tooltipTitle"></param>
-        /// <param name="tooltipDescription"></param>
-        public void SetResIds(ushort keytip, ushort label, ushort labelDescription, ushort tooltipTitle, ushort tooltipDescription)
-        {
-            bool exist;
-            IPropertiesProvider? iProvider;
-            if (keytip >= 2)
-            {
-                exist = _mapProperties.TryGetValue(RibbonProperties.Keytip, out iProvider);
-                if (exist && iProvider is KeytipPropertiesProvider keytipProvider)
-                {
-                    keytipProvider.KeytipResId = keytip;
-                }
-            }
-            if (label >= 2)
-            {
-                exist = _mapProperties.TryGetValue(RibbonProperties.Label, out iProvider);
-                if (exist && iProvider is LabelPropertiesProvider labelProvider)
-                {
-                    labelProvider.LabelResId = label;
-                }
-            }
-            if (labelDescription >= 2)
-            {
-                exist = _mapProperties.TryGetValue(RibbonProperties.LabelDescription, out iProvider);
-                if (exist && iProvider is LabelDescriptionPropertiesProvider labelDescProvider)
-                {
-                    labelDescProvider.LabelDescriptionResId = labelDescription;
-                }
-            }
-            exist = _mapProperties.TryGetValue(RibbonProperties.TooltipTitle, out iProvider);
-            if (exist && iProvider is TooltipPropertiesProvider provider)
-            {
-                if (tooltipTitle >= 2)
-                {
-                    provider.TooltipTitleResId = tooltipTitle;
-                }
-                if (tooltipDescription >= 2)
-                {
-                    provider.TooltipDescriptionResId = tooltipDescription;
-                }
-            }
-        }
 
         /// <summary>
         /// Method is called by IUIApplication.OnCreateUICommand
@@ -326,44 +278,9 @@ namespace WinForms.Ribbon
             EventSet.Raise(s_DestroyUICommandKey, this, EventArgs.Empty);
         }
 
-        internal void OnViewCreated()
-        {
-            uint resId;
-            bool exist;
-            IPropertiesProvider? iProvider;
-            exist = _mapProperties.TryGetValue(RibbonProperties.Keytip, out iProvider);
-            if (exist && iProvider is KeytipPropertiesProvider keyTipProvider)
-            {
-                resId = keyTipProvider.KeytipResId;
-                if (resId >= 2)
-                    keyTipProvider.InitKeytip(_ribbon.LoadString(resId));
-            }
-            exist = _mapProperties.TryGetValue(RibbonProperties.Label, out iProvider);
-            if (exist && iProvider is LabelPropertiesProvider labelProvider)
-            {
-                resId = labelProvider.LabelResId;
-                if (resId >= 2)
-                    labelProvider.InitLabel(_ribbon.LoadString(resId));
-            }
-            exist = _mapProperties.TryGetValue(RibbonProperties.LabelDescription, out iProvider);
-            if (exist && iProvider is LabelDescriptionPropertiesProvider labelDescProvider)
-            {
-                resId = labelDescProvider.LabelDescriptionResId;
-                if (resId >= 2)
-                    labelDescProvider.InitLabelDescription(_ribbon.LoadString(resId));
-            }
-            exist = _mapProperties.TryGetValue(RibbonProperties.TooltipTitle, out iProvider);
-            if (exist && iProvider is TooltipPropertiesProvider provider)
-            {
-                resId = provider.TooltipTitleResId;
-                if (resId >= 2)
-                    provider.InitTooltipTitle(_ribbon.LoadString(resId));
-
-                resId = provider.TooltipDescriptionResId;
-                if (resId >= 2)
-                    provider.InitTooltipDescription(_ribbon.LoadString(resId));
-            }
-        }
+        //internal void OnViewCreated()
+        //{
+        //}
 
         /// <summary>
         /// Control is created by the Ribbon Framework

@@ -37,9 +37,10 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Resource Id's for a RibbonControl (IRibbonControl)
     /// </summary>
-    internal class HeaderResIds
+    internal class MarkupResIds
     {
         public ushort CommandId;
+        public string CommandName;
         //strings
         public ushort KeytipId;
         public ushort LabelTitleId;
@@ -68,22 +69,22 @@ namespace WinForms.Ribbon
         public ushort SmallHighContrastImages_192;
         public ushort LargeHighContrastImages_192;
 
-        public UIImage? GetSmallImages()
+        public UIImage? GetSmallImages(RibbonStrip ribbon)
         {
             return null;
         }
 
-        public UIImage? GetLargeImages()
+        public UIImage? GetLargeImages(RibbonStrip ribbon)
         {
             return null;
         }
 
-        public UIImage? GetSmallHighContrastImages()
+        public UIImage? GetSmallHighContrastImages(RibbonStrip ribbon)
         {
             return null;
         }
 
-        public UIImage? GetLargeHighContrastImages()
+        public UIImage? GetLargeHighContrastImages(RibbonStrip ribbon)
         {
             return null;
         }
