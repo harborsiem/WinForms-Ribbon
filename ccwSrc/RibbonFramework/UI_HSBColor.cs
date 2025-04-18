@@ -52,8 +52,7 @@ namespace WinForms.Ribbon
         /// a small accuracy lost by rounding.
         /// </summary>
         /// <param name="colorref">RGB Color (COLORREF)</param>
-        /// <param name="dummy">don't care</param>
-        public unsafe UI_HSBCOLOR(uint colorref, bool dummy)
+        public unsafe UI_HSBCOLOR(_COLORREF colorref)
         {
             this.Value = GetHSBValue(colorref);
         }
@@ -127,12 +126,12 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Convert Ribbon HSB Color format to COLORREF
+        /// Convert Ribbon HSB Color format to COLORREF (_COLORREF)
         /// </summary>
-        /// <returns>COLORREF</returns>
-        public uint ToColorRef()
+        /// <returns>_COLORREF</returns>
+        public _COLORREF ToColorRef()
         {
-            return (uint)ToColorRefInternal();
+            return (_COLORREF)(uint)ToColorRefInternal();
         }
 
         /// <summary>

@@ -37,6 +37,9 @@ namespace WinForms.Ribbon
     /// </summary>
     internal sealed unsafe class PreviewEventsProvider : BaseEventsProvider, IPreviewEventsProvider
     {
+        private readonly static EventKey s_PreviewProviderKey = new EventKey();
+        private readonly static EventKey s_CancelPreviewProviderKey = new EventKey();
+
         public PreviewEventsProvider(RibbonStripItem ribbonItem) : base(ribbonItem)
         {
             ((IEventsProvider)this).SupportedEvents.Add(UI_EXECUTIONVERB.UI_EXECUTIONVERB_PREVIEW);
@@ -63,10 +66,11 @@ namespace WinForms.Ribbon
                             _ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, false);
                         });
                         //_ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, false);
-                        if (PreviewEvent != null)
-                        {
-                            PreviewEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                        }
+                        _ribbonItem.EventSet.Raise(s_PreviewProviderKey, _ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                        //if (PreviewEvent != null)
+                        //{
+                        //    PreviewEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                        //}
                     }
                     catch (Exception ex)
                     {
@@ -82,10 +86,11 @@ namespace WinForms.Ribbon
                             _ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, true);
                         });
                         //_ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, true);
-                        if (CancelPreviewEvent != null)
-                        {
-                            CancelPreviewEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                        }
+                        _ribbonItem.EventSet.Raise(s_CancelPreviewProviderKey, _ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                        //if (CancelPreviewEvent != null)
+                        //{
+                        //    CancelPreviewEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                        //}
                     }
                     catch (Exception ex)
                     {
@@ -101,12 +106,20 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Preview event
         /// </summary>
-        public event EventHandler<ExecuteEventArgs>? PreviewEvent;
+        public event EventHandler<ExecuteEventArgs>? PreviewEvent
+        {
+            add { _ribbonItem.EventSet.Add(s_PreviewProviderKey, value); }
+            remove { _ribbonItem.EventSet.Remove(s_PreviewProviderKey, value); }
+        }
 
         /// <summary>
         /// Cancel Preview event
         /// </summary>
-        public event EventHandler<ExecuteEventArgs>? CancelPreviewEvent;
+        public event EventHandler<ExecuteEventArgs>? CancelPreviewEvent
+        {
+            add { _ribbonItem.EventSet.Add(s_CancelPreviewProviderKey, value); }
+            remove { _ribbonItem.EventSet.Remove(s_CancelPreviewProviderKey, value); }
+        }
 
         #endregion
     }

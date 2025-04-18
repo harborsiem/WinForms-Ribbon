@@ -32,6 +32,8 @@ namespace WinForms.Ribbon
     /// </summary>
     internal sealed class ExecuteEventsProvider : BaseEventsProvider, IExecuteEventsProvider
     {
+        private readonly static EventKey s_ExecuteProviderKey = new EventKey();
+
         /// <summary>
         /// Initializes a new instance of the ExecuteEventsProvider
         /// </summary>
@@ -60,10 +62,11 @@ namespace WinForms.Ribbon
                         _ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
                     });
                     //_ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
-                    if (ExecuteEvent != null)
-                    {
-                        ExecuteEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                    }
+                    _ribbonItem.EventSet.Raise(s_ExecuteProviderKey, _ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                    //if (ExecuteEvent != null)
+                    //{
+                    //    ExecuteEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +82,11 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Execute event
         /// </summary>
-        public event EventHandler<ExecuteEventArgs>? ExecuteEvent;
+        public event EventHandler<ExecuteEventArgs>? ExecuteEvent
+        {
+            add { _ribbonItem.EventSet.Add(s_ExecuteProviderKey, value); }
+            remove { _ribbonItem.EventSet.Remove(s_ExecuteProviderKey, value); }
+        }
 
         #endregion
     }

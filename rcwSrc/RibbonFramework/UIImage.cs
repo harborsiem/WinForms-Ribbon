@@ -303,7 +303,9 @@ namespace WinForms.Ribbon
             {
                 if (BitsPerPixel == 32)
                 {
-                    //bitmap = CreatePreMultipliedBitmap(bitmap);
+                    // AlphaBlend requires that the bitmap is pre - multiplied with the Alpha
+                    // values.
+                    hBitmap = CreatePreMultipliedBitmap(hBitmap);
                     if (hBitmap == HBITMAP.Null)
                         return;
                     try
@@ -317,7 +319,6 @@ namespace WinForms.Ribbon
                             AlphaFormat = (byte)PInvoke.AC_SRC_ALPHA
                         };
                         hdc = (HDC)target.GetHdc();
-                        //PInvoke.BitBlt(hdc, xTarget, yTarget, Width, Height, srcDc, 0, 0, ROP_CODE.SRCPAINT);
                         PInvoke.AlphaBlend(hdc, xTarget, yTarget, wTarget, hTarget, srcDc, 0, 0, Width, Height, blendFunction);
                         target.ReleaseHdc(hdc);
                         PInvoke.SelectObject(srcDc, oldHBitmap);
@@ -329,18 +330,11 @@ namespace WinForms.Ribbon
                 }
                 else
                 {
-                    try
-                    {
-                        oldHBitmap = new HBITMAP((nint)PInvoke.SelectObject(srcDc, hBitmap));
-                        hdc = (HDC)target.GetHdc();
-                        PInvoke.BitBlt(hdc, xTarget, yTarget, Width, Height, srcDc, 0, 0, ROP_CODE.SRCCOPY);
-                        target.ReleaseHdc(hdc);
-                        PInvoke.SelectObject(srcDc, oldHBitmap);
-                    }
-                    finally
-                    {
-                        PInvoke.DeleteObject(hBitmap);
-                    }
+                    oldHBitmap = new HBITMAP((nint)PInvoke.SelectObject(srcDc, hBitmap));
+                    hdc = (HDC)target.GetHdc();
+                    PInvoke.BitBlt(hdc, xTarget, yTarget, Width, Height, srcDc, 0, 0, ROP_CODE.SRCCOPY);
+                    target.ReleaseHdc(hdc);
+                    PInvoke.SelectObject(srcDc, oldHBitmap);
                 }
             }
             finally

@@ -53,9 +53,12 @@ namespace WinForms.Ribbon
         /// </summary>
         private protected Dictionary<UI_EXECUTIONVERB, IEventsProvider> _mapEvents = new Dictionary<UI_EXECUTIONVERB, IEventsProvider>();
 
-        private protected EventSet EventSet => _eventSet;
+        internal EventSet EventSet => _eventSet;
 
-        internal MarkupResIds ResourceIds;
+        /// <summary>
+        /// All resource Ids for this control. Only available if RibbonStrip.MarkupHeader is set.
+        /// </summary>
+        public MarkupResIds? ResourceIds { get; internal set; }
 
         /// <summary>
         /// RibbonStripItem ctor

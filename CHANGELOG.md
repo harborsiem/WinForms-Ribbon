@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Parser for RibbonMarkup.h to get all resource Ids
 - For all string values like Label, LabelDescription, TooltipTitle, TooltipDescription, Keytip in RibbonButton
  and other controls we can get the displayed values if you use MarkupHeader
+- bugfixes and internal optimizations
 
 #### Changed (RibbonTools64)
 

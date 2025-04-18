@@ -24,6 +24,7 @@ It also uses some internal classes and structs from Microsoft WinForms project o
   1. One library has Com callable wrappers (CCW) for all COM interfaces for more performance. (Less Garbage collection, ...) 
   2. The other library has Runtime callable wrappers (RCW) for all COM interfaces. This is similar to WindowsRibbon.
 - RibbonStrip property ResourceName changed to MarkupResource
+- Color functions changed.
 
 - Samples for **C#** and **Visual Basic** adapted to the *RibbonFramework*.
 
