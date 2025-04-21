@@ -40,10 +40,10 @@ namespace WinForms.Ribbon
         private const string NotSupported = "Not supported by this Windows version";
         private static readonly Guid IIDGuidIUIContextualUI = typeof(IUIContextualUI).GUID;
 
-        private static readonly object EventRibbonEventException = new object();
-        private static readonly object EventViewCreated = new object();
-        private static readonly object EventViewDestroy = new object();
-        private static readonly object EventRibbonHeight = new object();
+        private static readonly EventKey EventRibbonEventException = new EventKey();
+        private static readonly EventKey s_ViewCreatedKey = new EventKey();
+        private static readonly EventKey s_ViewDestroyKey = new EventKey();
+        private static readonly EventKey s_RibbonHeightKey = new EventKey();
 
         //@ Size for designer
         /// <summary>
@@ -67,7 +67,7 @@ namespace WinForms.Ribbon
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
-        //private readonly EventSet _eventSet = new EventSet();
+        private readonly EventSet _eventSet = new EventSet();
         private Dictionary<uint, RibbonStripItem> _mapRibbonStripItems = new Dictionary<uint, RibbonStripItem>();
         private IPropertyStore? _cpPropertyStore;
         private IUIImageFromBitmap? _cpIUIImageFromBitmap;
@@ -78,7 +78,7 @@ namespace WinForms.Ribbon
         private string? _markupResource;
         private Dictionary<ushort, MarkupResIds>? _allMarkupResIds;
 
-        //private EventSet EventSet => _eventSet;
+        internal EventSet EventSet => _eventSet;
 
         /// <summary>
         /// Get EventLogger object which implements IUIEventLogger.
@@ -921,11 +921,13 @@ namespace WinForms.Ribbon
         {
             add
             {
-                Events.AddHandler(EventViewCreated, value);
+                EventSet.Add(s_ViewCreatedKey, value);
+                //Events.AddHandler(s_ViewCreatedKey, value);
             }
             remove
             {
-                Events.RemoveHandler(EventViewCreated, value);
+                EventSet.Remove(s_ViewCreatedKey, value);
+                //Events.RemoveHandler(s_ViewCreatedKey, value);
             }
         }
 
@@ -944,9 +946,10 @@ namespace WinForms.Ribbon
             }
             _qatSetting!.Load();
 
-            EventHandler? eh = Events[EventViewCreated] as EventHandler;
-            if (eh != null)
-                eh(this, EventArgs.Empty);
+            EventSet.Raise(s_ViewCreatedKey, this, EventArgs.Empty); 
+            //EventHandler? eh = Events[s_ViewCreatedKey] as EventHandler;
+            //if (eh != null)
+            //    eh(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -956,20 +959,23 @@ namespace WinForms.Ribbon
         {
             add
             {
-                Events.AddHandler(EventViewDestroy, value);
+                EventSet.Add(s_ViewDestroyKey, value);
+                //Events.AddHandler(s_ViewDestroyKey, value);
             }
             remove
             {
-                Events.RemoveHandler(EventViewDestroy, value);
+                EventSet.Remove(s_ViewDestroyKey, value);
+                //Events.RemoveHandler(s_ViewDestroyKey, value);
             }
         }
 
         internal void OnViewDestroy()
         {
             _qatSetting!.Save();
-            EventHandler? eh = Events[EventViewDestroy] as EventHandler;
-            if (eh != null)
-                eh(this, EventArgs.Empty);
+            EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
+            //EventHandler? eh = Events[s_ViewDestroyKey] as EventHandler;
+            //if (eh != null)
+            //    eh(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -979,19 +985,22 @@ namespace WinForms.Ribbon
         {
             add
             {
-                Events.AddHandler(EventRibbonHeight, value);
+                EventSet.Add(s_RibbonHeightKey, value);
+                //Events.AddHandler(s_RibbonHeightKey, value);
             }
             remove
             {
-                Events.RemoveHandler(EventRibbonHeight, value);
+                EventSet.Remove(s_RibbonHeightKey, value);
+                //Events.RemoveHandler(s_RibbonHeightKey, value);
             }
         }
 
         internal void OnRibbonHeightChanged()
         {
-            EventHandler? eh = Events[EventRibbonHeight] as EventHandler;
-            if (eh != null)
-                eh(this, EventArgs.Empty);
+            EventSet.Raise(s_RibbonHeightKey, this, EventArgs.Empty);
+            //EventHandler? eh = Events[s_RibbonHeightKey] as EventHandler;
+            //if (eh != null)
+            //    eh(this, EventArgs.Empty);
         }
 
         internal HMODULE MarkupHandleInternal

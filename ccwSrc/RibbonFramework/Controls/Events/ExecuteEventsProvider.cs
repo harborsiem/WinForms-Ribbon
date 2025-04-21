@@ -1,3 +1,4 @@
+#define unusedActivate
 //*****************************************************************************
 //
 //  File:       ExecuteEventsProvider.cs

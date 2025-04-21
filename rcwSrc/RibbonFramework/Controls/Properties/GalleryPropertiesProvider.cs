@@ -92,7 +92,7 @@ namespace WinForms.Ribbon
         private RibbonStripItem _ribbonItem;
         private bool categoriesReadyFired;
         private bool itemsSourceReadyFired;
-        private readonly EventSet _eventSet = new EventSet();
+        private readonly EventSet _eventSet;
         internal GalleryCommandProperties GalleryCommand { get; private set; }
 
         /// <summary>
@@ -105,6 +105,7 @@ namespace WinForms.Ribbon
             : base(ribbon, commandId)
         {
             _ribbonItem = ribbonItem;
+            _eventSet = ribbonItem.EventSet;
 
             // add supported properties
             _supportedProperties.Add(RibbonProperties.Categories);
@@ -134,7 +135,7 @@ namespace WinForms.Ribbon
                     {
                         IUICollection cpCollection;
                         UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, *currentValue, out cpCollection!);
-                        //(*currentValue).Clear(); //PropVariantClear ???
+                        //(*currentValue).Clear(); //PropVariantClear ??? => no
                         GalleryCategories = new UICollection<CategoriesPropertySet>(cpCollection, _ribbonItem, CollectionType.Categories);
                     }
                     //if (CategoriesReady != null)
@@ -160,7 +161,7 @@ namespace WinForms.Ribbon
                     {
                         IUICollection cpCollection;
                         UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, *currentValue, out cpCollection!);
-                        //(*currentValue).Clear(); //PropVariantClear ???
+                        //(*currentValue).Clear(); //PropVariantClear ??? => no
                         UI_COMMANDTYPE itemCommandType = (UI_COMMANDTYPE)_ribbonItem.CommandType;
                         if (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION)
                             GalleryItemItemsSource = new UICollection<GalleryItemPropertySet>(cpCollection, _ribbonItem, CollectionType.ItemsSource);

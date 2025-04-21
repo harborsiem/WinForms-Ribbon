@@ -12,7 +12,6 @@ using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
-using System.ComponentModel.Design;
 
 namespace WinForms.Ribbon
 {
@@ -76,77 +75,16 @@ namespace WinForms.Ribbon
                     IUICollection* cpCollection;
                     UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, currentValueLocal, out cpCollection);
 
-                    //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpPropertyStore)
+                    //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpCollection)
                     //refCount from (native Framework + PROPVARIANT) have to be released by Framework
 
                     ComScope<IUICollection> uICollectionScope = new ComScope<IUICollection>(cpCollection); //don't use using
-                    //(*currentValue).Clear(); //PropVariantClear ???
+                    //(*currentValue).Clear(); //PropVariantClear ??? => no
                     QatItemsSource = new UICollection<QatCommandPropertySet>(uICollectionScope, this, CollectionType.QatItemsSource);
                 }
-                //List<object> items = new List<object>();
-                //if (_itemsSource != null)
-                //{
-                //    IUICollection itemsSource;
-                //    PROPVARIANT currentValueLocal = *currentValue;
-                //    PROPVARIANT.PropVariantToIUnknown<IUICollection>(currentValueLocal, out itemsSource!);
-
-                //    //itemsSource.Clear();
-                //    uint count;
-                //    itemsSource.GetCount(out count);
-                //    for (uint i = 0; i < count; ++i)
-                //    {
-                //        object item;
-                //        itemsSource.GetItem(i, out item);
-                //        items.Add(item);
-                //    }
-                //}
             }
             return HRESULT.S_OK;
         }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //unsafe HRESULT IRibbonControl.Execute(UI_EXECUTIONVERB verb, PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
-        //{
-        //    return HRESULT.S_OK;
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //unsafe HRESULT IRibbonControl.UpdateProperty(in PROPERTYKEY key, PROPVARIANT* currentValue, out PROPVARIANT newValue)
-        //{
-        //    fixed (PROPVARIANT* newValueLocal = &newValue) { }
-        //    if (key == RibbonProperties.ItemsSource)
-        //    {
-        //        if (currentValue is not null)
-        //        {
-        //            PROPVARIANT currentValueLocal = *currentValue;
-        //            IUICollection collection;
-        //            PROPVARIANT.PropVariantToIUnknown<IUICollection>(currentValueLocal, out collection!);
-        //            QatItemsSource = new UICollection<QatCommandPropertySet>(collection, this, CollectionType.QatItemsSource);
-        //        }
-        //        //List<object> items = new List<object>();
-        //        //if (_itemsSource != null)
-        //        //{
-        //        //    IUICollection itemsSource;
-        //        //    PROPVARIANT currentValueLocal = *currentValue;
-        //        //    PROPVARIANT.PropVariantToIUnknown<IUICollection>(currentValueLocal, out itemsSource!);
-
-        //        //    //itemsSource.Clear();
-        //        //    uint count;
-        //        //    itemsSource.GetCount(out count);
-        //        //    for (uint i = 0; i < count; ++i)
-        //        //    {
-        //        //        object item;
-        //        //        itemsSource.GetItem(i, out item);
-        //        //        items.Add(item);
-        //        //    }
-        //        //}
-        //    }
-        //    return HRESULT.S_OK;
-        //}
 
         /// <summary>
         /// Items source property

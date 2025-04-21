@@ -257,7 +257,7 @@ namespace WinForms.Ribbon
         #endregion
 
         /// <summary>
-        /// 
+        /// Event for a click to the button
         /// </summary>
         public event EventHandler<EventArgs>? Click
         {

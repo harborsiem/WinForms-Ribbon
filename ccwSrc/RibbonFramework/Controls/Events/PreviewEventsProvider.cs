@@ -1,3 +1,4 @@
+#define unusedActivate
 //*****************************************************************************
 //
 //  File:       PreviewEventsProvider.cs

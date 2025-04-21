@@ -83,7 +83,7 @@ namespace WinForms.Ribbon
                 //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpPropertyStore)
                 //refCount from (native Framework + PROPVARIANT) have to be released by Framework
 
-                //currentValue.Clear(); //PropVariantClear ???
+                //currentValue.Clear(); //PropVariantClear ??? => no
                 fontStore = new FontPropertyStore(cpPropertyStore);
                 cpPropertyStore->Release();
             }
@@ -124,7 +124,11 @@ namespace WinForms.Ribbon
         //            hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
-        //                changedFontProps.Family = (string)propvar.Value;
+        //                PWSTR pwstr;
+        //                hr = UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
+        //                changedFontProps.Family = new string(pwstr); // pwstr.ToString();
+        //                PInvoke.CoTaskMemFree(pwstr);
+        //                propvar.Clear(); //PropVariantClear
         //            }
         //        }
         //        else if (key == RibbonProperties.FontProperties_Size)
@@ -245,7 +249,11 @@ namespace WinForms.Ribbon
         //            hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
-        //                objValue = (string)propvar.Value;
+        //                PWSTR pwstr;
+        //                hr = UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
+        //                objValue = new string(pwstr); // pwstr.ToString();
+        //                PInvoke.CoTaskMemFree(pwstr);
+        //                propvar.Clear(); //PropVariantClear
         //                keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Family), objValue);
         //            }
         //        }
@@ -551,7 +559,11 @@ namespace WinForms.Ribbon
         //    hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
-        //        objValue = (string)propvar.Value;
+        //        PWSTR pwstr;
+        //        hr = UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
+        //        objValue = new string(pwstr); // pwstr.ToString();
+        //        PInvoke.CoTaskMemFree(pwstr);
+        //        propvar.Clear(); //PropVariantClear
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Family), objValue);
         //    }
         //    hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColor, out propvar);

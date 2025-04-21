@@ -74,73 +74,12 @@ namespace WinForms.Ribbon
                     PROPVARIANT currentValueLocal = *currentValue;
                     IUICollection cpCollection;
                     UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, currentValueLocal, out cpCollection!);
-                    //(*currentValue).Clear(); //PropVariantClear ???
+                    //(*currentValue).Clear(); //PropVariantClear ??? => no
                     QatItemsSource = new UICollection<QatCommandPropertySet>(cpCollection, this, CollectionType.QatItemsSource);
                 }
-                //List<object> items = new List<object>();
-                //if (_itemsSource != null)
-                //{
-                //    IUICollection itemsSource;
-                //    PROPVARIANT currentValueLocal = *currentValue;
-                //    PROPVARIANT.PropVariantToIUnknown<IUICollection>(currentValueLocal, out itemsSource!);
-
-                //    //itemsSource.Clear();
-                //    uint count;
-                //    itemsSource.GetCount(out count);
-                //    for (uint i = 0; i < count; ++i)
-                //    {
-                //        object item;
-                //        itemsSource.GetItem(i, out item);
-                //        items.Add(item);
-                //    }
-                //}
             }
             return HRESULT.S_OK;
         }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //unsafe HRESULT IRibbonControl.Execute(UI_EXECUTIONVERB verb, PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
-        //{
-        //    return HRESULT.S_OK;
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //unsafe HRESULT IRibbonControl.UpdateProperty(in PROPERTYKEY key, PROPVARIANT* currentValue, out PROPVARIANT newValue)
-        //{
-        //    fixed (PROPVARIANT* newValueLocal = &newValue) { }
-        //    if (key == RibbonProperties.ItemsSource)
-        //    {
-        //        if (currentValue is not null)
-        //        {
-        //            PROPVARIANT currentValueLocal = *currentValue;
-        //            IUICollection collection;
-        //            PROPVARIANT.PropVariantToIUnknown<IUICollection>(currentValueLocal, out collection!);
-        //            QatItemsSource = new UICollection<QatCommandPropertySet>(collection, this, CollectionType.QatItemsSource);
-        //        }
-        //        //List<object> items = new List<object>();
-        //        //if (_itemsSource != null)
-        //        //{
-        //        //    IUICollection itemsSource;
-        //        //    PROPVARIANT currentValueLocal = *currentValue;
-        //        //    PROPVARIANT.PropVariantToIUnknown<IUICollection>(currentValueLocal, out itemsSource!);
-
-        //        //    //itemsSource.Clear();
-        //        //    uint count;
-        //        //    itemsSource.GetCount(out count);
-        //        //    for (uint i = 0; i < count; ++i)
-        //        //    {
-        //        //        object item;
-        //        //        itemsSource.GetItem(i, out item);
-        //        //        items.Add(item);
-        //        //    }
-        //        //}
-        //    }
-        //    return HRESULT.S_OK;
-        //}
 
         /// <summary>
         /// Items source property

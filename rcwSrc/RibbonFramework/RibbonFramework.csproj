@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.RCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>0.9.1</Version>
+    <Version>1.0.0</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>

@@ -93,7 +93,7 @@ namespace WinForms.Ribbon
         private RibbonStripItem _ribbonItem;
         private bool categoriesReadyFired;
         private bool itemsSourceReadyFired;
-        private readonly EventSet _eventSet = new EventSet();
+        private readonly EventSet _eventSet;
         internal GalleryCommandProperties GalleryCommand { get; private set; }
 
         /// <summary>
@@ -106,6 +106,7 @@ namespace WinForms.Ribbon
             : base(ribbon, commandId)
         {
             _ribbonItem = ribbonItem;
+            _eventSet = ribbonItem.EventSet;
 
             // add supported properties
             _supportedProperties.Add(RibbonProperties.Categories);
@@ -140,7 +141,7 @@ namespace WinForms.Ribbon
                         //refCount from (native Framework + PROPVARIANT) have to be released by Framework
 
                         ComScope<IUICollection> pCollection = new ComScope<IUICollection>(cpCollection);
-                        //(*currentValue).Clear(); //PropVariantClear ???
+                        //(*currentValue).Clear(); //PropVariantClear ??? => no
                         GalleryCategories = new UICollection<CategoriesPropertySet>(pCollection, _ribbonItem, CollectionType.Categories);
                     }
                     //if (CategoriesReady != null)
@@ -172,7 +173,7 @@ namespace WinForms.Ribbon
                         //cpCollection is released in UICollection.Destroy from OnDestroyUICommand
 
                         ComScope<IUICollection> pCollection = new ComScope<IUICollection>(cpCollection);
-                        //(*currentValue).Clear(); //PropVariantClear ???
+                        //(*currentValue).Clear(); //PropVariantClear ??? => no
                         UI_COMMANDTYPE itemCommandType = (UI_COMMANDTYPE)_ribbonItem.CommandType;
                         if (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION)
                             GalleryItemItemsSource = new UICollection<GalleryItemPropertySet>(pCollection, _ribbonItem, CollectionType.ItemsSource);
@@ -345,7 +346,6 @@ namespace WinForms.Ribbon
             add { _eventSet.Add(s_ItemsSourceReadyKey, value); }
             remove { _eventSet.Remove(s_ItemsSourceReadyKey, value); }
         }
-
 
         #endregion
     }
