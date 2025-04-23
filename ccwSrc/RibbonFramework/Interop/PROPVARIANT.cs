@@ -1,3 +1,4 @@
+//#define Unused
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
     /// <inheritdoc cref="PROPVARIANT"/>
     unsafe partial struct PROPVARIANT : IDisposable
     {
-        // PInvoke functions InitPropVariantxxx with Vectors (C# Arrays) or Strings do a copy in the CoTaskMem memory.
+        // PInvoke functions InitPropVariantxxx with Vectors (C# Arrays) or Strings do a copy to the CoTaskMem memory.
         // I have tested this feature by the input and output pointer values.
         // So one have no trouble with fixed or GCHandle pinned variable in C# after the call InitPropVariantxxx.
         // That means that one can call GCHandle.Free() or end the fixed statement direct after PInvoke.InitPropVariantxxx
@@ -243,7 +244,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                     //IStream* (VT_STREAM), IStorage* (VT_STORAGE), VERSIONEDSTREAM* (VT_STREAMED_OBJECT ?)
             }
 
-            throw new ArgumentException(type.ToString()); // string.Format(SR.COM2UnhandledVT, type)); @@@
+            throw new ArgumentException(string.Format(SR.COM2UnhandledVT, type));
         }
 
         private static Array? ToArray(SAFEARRAY* psa, VARENUM vt)
@@ -258,7 +259,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             if (arrayType == VT_RECORD)
             {
                 // Exit early so we don't have to consider this in the helper methods.
-                throw new ArgumentException(arrayType.ToString()); // string.Format(SR.COM2UnhandledVT, arrayType)); @@@
+                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
             }
 
             Array array = CreateArrayFromSafeArray(psa, arrayType);
@@ -411,7 +412,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                             }
 
                         default:
-                            throw new ArgumentException(vt.ToString()); // string.Format(SR.COM2UnhandledVT, vt)); @@@
+                            throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
                     }
                 }
                 else if (array.Length != 0)
@@ -616,7 +617,7 @@ BeginMainLoop:
                     }
 
                 default:
-                    throw new ArgumentException(arrayType.ToString()); // string.Format(SR.COM2UnhandledVT, arrayType)); @@@
+                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
             }
         }
 
@@ -667,7 +668,7 @@ BeginMainLoop:
                 VT_DATE => typeof(DateTime),
                 VT_BSTR => typeof(string),
                 VT_DISPATCH or VT_UNKNOWN or VT_VARIANT => typeof(object),
-                _ => throw new ArgumentException(vt.ToString()), //string.Format(SR.COM2UnhandledVT, vt)), @@@
+                _ => throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt)),
             };
 
             if (psa->cDims == 1 && psa->GetBounds().lLbound == 0)
@@ -862,7 +863,7 @@ BeginMainLoop:
                 case VT_CF: // Not implemented.
                 case VT_BSTR_BLOB: // System use only.
                 default: // Documentation does not specify any other types that are supported.
-                    throw new ArgumentException(vt.ToString()); // string.Format(SR.COM2UnhandledVT, vt)); @@@
+                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
             }
         }
 
@@ -1096,6 +1097,48 @@ BeginMainLoop:
         }
 
 
+        /// <summary>
+        /// Converts a string array to a PROPVARIANT
+        /// with pinned strings, so the GC can't move the strings in memory till PInvoke function is called
+        /// used in ColorPickerPropertiesProvider
+        /// </summary>
+        /// <param name="strings"></param>
+        /// <param name="propVar"></param>
+        /// <returns></returns>
+        internal static unsafe HRESULT InitPropVariantFromStringVector(string[] strings, out PROPVARIANT propVar)
+        {
+            if (strings == null || strings.Length == 0)
+                throw new ArgumentNullException(nameof(strings));
+            HRESULT hr = HRESULT.E_FAIL;
+            PCWSTR[] array = new PCWSTR[strings.Length];
+            GCHandle[] pins = new GCHandle[strings.Length];
+            try
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (strings[i] != null)
+                        pins[i] = GCHandle.Alloc(strings[i], GCHandleType.Pinned);
+                    else
+                        pins[i] = GCHandle.Alloc(string.Empty, GCHandleType.Pinned);
+                    array[i] = (char*)pins[i].AddrOfPinnedObject();
+                }
+                PROPVARIANT propVarLocal;
+                fixed (PCWSTR* parray = array)
+                    hr = PInvoke.InitPropVariantFromStringVector(parray, (uint)strings.Length, &propVarLocal);
+                propVar = propVarLocal;
+            }
+            finally
+            {
+                for (int i = 0; i < pins.Length; i++)
+                {
+                    if (pins[i].IsAllocated)
+                        pins[i].Free();
+                }
+            }
+            return hr;
+        }
+
+#if Unused
         /// <summary>
         /// Clone the PROPVARIANT
         /// </summary>
@@ -1340,47 +1383,6 @@ BeginMainLoop:
             }
         }
 
-        /// <summary>
-        /// Converts a string array to a PROPVARIANT
-        /// with pinned strings, so the GC can't move the strings in memory till PInvoke function is called
-        /// used in ColorPickerPropertiesProvider
-        /// </summary>
-        /// <param name="strings"></param>
-        /// <param name="propVar"></param>
-        /// <returns></returns>
-        internal static unsafe HRESULT InitPropVariantFromStringVector(string[] strings, out PROPVARIANT propVar)
-        {
-            if (strings == null || strings.Length == 0)
-                throw new ArgumentNullException(nameof(strings));
-            HRESULT hr = HRESULT.E_FAIL;
-            PCWSTR[] array = new PCWSTR[strings.Length];
-            GCHandle[] pins = new GCHandle[strings.Length];
-            try
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    if (strings[i] != null)
-                        pins[i] = GCHandle.Alloc(strings[i], GCHandleType.Pinned);
-                    else
-                        pins[i] = GCHandle.Alloc(string.Empty, GCHandleType.Pinned);
-                    array[i] = (char*)pins[i].AddrOfPinnedObject();
-                }
-                PROPVARIANT propVarLocal;
-                fixed (PCWSTR* parray = array)
-                    hr = PInvoke.InitPropVariantFromStringVector(parray, (uint)strings.Length, &propVarLocal);
-                propVar = propVarLocal;
-            }
-            finally
-            {
-                for (int i = 0; i < pins.Length; i++)
-                {
-                    if (pins[i].IsAllocated)
-                        pins[i].Free();
-                }
-            }
-            return hr;
-        }
-
         private unsafe UInt32[] GetUInt32Vector()
         {
             uint count;
@@ -1448,5 +1450,6 @@ BeginMainLoop:
             }
             return array;
         }
+#endif
     }
 }
