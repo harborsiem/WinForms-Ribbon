@@ -147,12 +147,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WindowsRibbon">
-      <Version>2.16.1</Version>
-      <!--	  
-	  <HintPath>"..\..\..\Visual Studio 2017\Projects\RibbonLibNew\Ribbon\bin\Release\WindowsRibbon.2.16.0.nupkg"</HintPath>
-	  -->
-	</PackageReference>
+    <PackageReference Include="RibbonFramework.CCW" Version="1.0.0" />
+    <PackageReference Include="Svg" Version="3.4.7" />
   </ItemGroup>
 
 </Project>

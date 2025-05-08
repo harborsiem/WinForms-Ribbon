@@ -35,6 +35,8 @@ namespace UIRibbonTools
                 CheckListBoxModes.SetItemChecked(i, (_appModes & (1 << i)) != 0);
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public uint AppModes
         {
             get { return _appModes; }

@@ -60,6 +60,10 @@ namespace UIRibbonTools
                         XamlConverter xamlConverter = new XamlConverter(outPathTextBox.Text, _outputSelected);
                         xamlConverter.Convert(_inFileNames);
                         break;
+                    case InputSelector.Svg:
+                        SvgConverter svgConverter = new SvgConverter(outPathTextBox.Text, _outputSelected);
+                        svgConverter.Convert(_inFileNames);
+                        break;
                 }
             }
             finally
@@ -92,6 +96,9 @@ namespace UIRibbonTools
                 case InputSelector.Xaml:
                     inIgnoreAlphaCheck.Enabled = false;
                     break;
+                case InputSelector.Svg:
+                    inIgnoreAlphaCheck.Enabled = false;
+                    break;
                 case InputSelector.ShowInfos:
                     inIgnoreAlphaCheck.Enabled = false;
                     break;
@@ -117,6 +124,9 @@ namespace UIRibbonTools
                     break;
                 case InputSelector.Xaml:
                     dialog.Filter = "XAML (*.xaml)|*.xaml";
+                    break;
+                case InputSelector.Svg:
+                    dialog.Filter = "Svg (*.svg)|*.svg";
                     break;
                 case InputSelector.ShowInfos:
                     dialog.Multiselect = false;
@@ -227,6 +237,7 @@ namespace UIRibbonTools
         Icon,
         IconsGif,
         Xaml,
+        Svg,
     }
 
     public enum OutputSelector

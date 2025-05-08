@@ -1,3 +1,4 @@
+#define editFrame
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -53,29 +54,6 @@ namespace UIRibbonTools
                 InitAddon();
         }
 
-        public void InitMargins()
-        {
-            EditName.Margin = new Padding(3);
-            EditId.Margin = new Padding(3);
-            EditSymbol.Margin = new Padding(3);
-            EditCaption.Margin = new Padding(3);
-            EditCaptionId.Margin = new Padding(3);
-            EditCaptionSymbol.Margin = new Padding(3);
-            EditDescription.Margin = new Padding(3);
-            EditDescriptionId.Margin = new Padding(3);
-            EditDescriptionSymbol.Margin = new Padding(3);
-            EditTooltipTitle.Margin = new Padding(3);
-            EditTooltipTitleId.Margin = new Padding(3);
-            EditTooltipTitleSymbol.Margin = new Padding(3);
-            EditTooltipDescription.Margin = new Padding(3);
-            EditTooltipDescriptionId.Margin = new Padding(3);
-            EditTooltipDescriptionSymbol.Margin = new Padding(3);
-            EditKeytip.Margin = new Padding(3);
-            EditKeytipId.Margin = new Padding(3);
-            EditKeytipSymbol.Margin = new Padding(3);
-            EditComment.Margin = new Padding(3);
-        }
-
         //@ Why we have to do it ? This Width are set by Designercode already
         public void InitSplitter()
         {
@@ -86,10 +64,14 @@ namespace UIRibbonTools
 
         public void SetBoldFonts()
         {
+#if editFrame
+            _editFrame.SetBoldFonts();
+#else
             labelProperty.Font = new Font(labelProperty.Font, FontStyle.Bold);
             labelValue.Font = new Font(labelValue.Font, FontStyle.Bold);
             labelID.Font = new Font(labelID.Font, FontStyle.Bold);
             labelSymbol.Font = new Font(labelSymbol.Font, FontStyle.Bold);
+#endif
             labelSmallImages.Font = new Font(labelSmallImages.Font, FontStyle.Bold);
             labelLargeImages.Font = new Font(labelLargeImages.Font, FontStyle.Bold);
             labelSmallHCImages.Font = new Font(labelSmallHCImages.Font, FontStyle.Bold);
@@ -180,7 +162,11 @@ namespace UIRibbonTools
 
             InitMenuActions();
             InitEvents();
+#if editFrame
+            _editFrame.InitAddon();
+#else
             InitToolTips();
+#endif
         }
 
         private void InitEvents()
@@ -188,6 +174,7 @@ namespace UIRibbonTools
             ListViewCommands.ColumnClick += ListViewCommandsColumnClick;
             ListViewCommands.ItemSelectionChanged += ListViewCommandsSelectItem;
             _listViewTimer.Tick += ListViewTimer_Tick;
+#if !editFrame
             EditName.TextChanged += EditNameChange;
             EditName.KeyPress += EditNameKeyPress;
             EditId.TextChanged += EditIdChange;
@@ -221,8 +208,10 @@ namespace UIRibbonTools
             EditKeytipSymbol.TextChanged += EditKeyTipSymbolChange;
 
             EditComment.TextChanged += EditCommentChange;
+#endif
         }
 
+#if !editFrame
         private void InitToolTips()
         {
             ToolTip commandsTip = new ToolTip(components);
@@ -285,6 +274,7 @@ namespace UIRibbonTools
                 "This text is placed as a comment in the *.h file" + Environment.NewLine +
                 "containing the constant for this command.");
         }
+#endif
 
         private void CommandsTip_Popup(object sender, PopupEventArgs e)
         {
@@ -306,7 +296,11 @@ namespace UIRibbonTools
             ListViewCommands.Items[item.Index].Selected = true;
             ListViewCommands.Items[item.Index].Focused = true;
             ListViewCommands.Items[item.Index].EnsureVisible();
+#if editFrame
+            _editFrame.EditNameSelect();
+#else
             EditName.Select();
+#endif
             BtnGenerateIDClick(sender, EventArgs.Empty);
             Modified();
         }
@@ -462,7 +456,12 @@ namespace UIRibbonTools
             minID = minID + 2;
 
             // By using at least the index of the item, we mimic the behavior of the ribbon compiler's ID auto generation as closely as possible.
-            EditId.Text = FindSmallestUnusedID(minID).ToString();
+            string idText = FindSmallestUnusedID(minID).ToString();
+#if editFrame
+            _editFrame.EditIdText(idText);
+#else
+            EditId.Text = idText;
+#endif
         }
 
         public void DeactivateFrame()
@@ -474,6 +473,7 @@ namespace UIRibbonTools
             //_actionMoveDown.Shortcut = 0;
         }
 
+#if !editFrame
         private void EditCaptionChange(object sender, EventArgs e)
         {
             //if (_command != null && (_command.LabelTitle.Content != EditCaption.Text))
@@ -703,8 +703,9 @@ namespace UIRibbonTools
                 Modified();
             }
         }
+#endif
 
-        private void EnableControls(bool enable)
+        public void EnableControls(bool enable)
         {
             for (int i = 0; i < _panel2Layout.Controls.Count; i++)
                 _panel2Layout.Controls[i].Enabled = enable;
@@ -773,7 +774,7 @@ namespace UIRibbonTools
             ShowSelection();
         }
 
-        private void Modified()
+        internal void Modified()
         {
             if (!_updating)
                 Program.ApplicationForm.Modified();
@@ -891,6 +892,9 @@ namespace UIRibbonTools
             _updating = true;
             try
             {
+#if editFrame
+                _editFrame.ShowSelection(this, _command);
+#else
                 if (_command != null)
                 {
                     EnableControls(true);
@@ -947,6 +951,7 @@ namespace UIRibbonTools
                     EditKeytipId.Value = 0;
                     EditKeytipSymbol.Text = string.Empty;
                 }
+#endif
                 _smallImagesFrame.ShowImages(_command, ImageFlags.None);
                 _largeImagesFrame.ShowImages(_command, ImageFlags.Large);
                 _smallHCImagesFrame.ShowImages(_command, ImageFlags.HighContrast);

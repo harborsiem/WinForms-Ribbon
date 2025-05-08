@@ -28,8 +28,6 @@ namespace UIRibbonTools
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommandsFrame));
             labelProperty = new System.Windows.Forms.Label();
             labelValue = new System.Windows.Forms.Label();
             labelID = new System.Windows.Forms.Label();
@@ -135,7 +133,7 @@ namespace UIRibbonTools
             labelLabelTitle.AutoSize = true;
             labelLabelTitle.Location = new System.Drawing.Point(3, 50);
             labelLabelTitle.Name = "labelLabelTitle";
-            labelLabelTitle.Size = new System.Drawing.Size(60, 29);
+            labelLabelTitle.Size = new System.Drawing.Size(61, 29);
             labelLabelTitle.TabIndex = 8;
             labelLabelTitle.Text = "Label Title";
             labelLabelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -157,7 +155,7 @@ namespace UIRibbonTools
             labelTooltipTitle.AutoSize = true;
             labelTooltipTitle.Location = new System.Drawing.Point(3, 108);
             labelTooltipTitle.Name = "labelTooltipTitle";
-            labelTooltipTitle.Size = new System.Drawing.Size(68, 29);
+            labelTooltipTitle.Size = new System.Drawing.Size(70, 29);
             labelTooltipTitle.TabIndex = 16;
             labelTooltipTitle.Text = "Tooltip Title";
             labelTooltipTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -168,7 +166,7 @@ namespace UIRibbonTools
             labelTooltipDescription.AutoSize = true;
             labelTooltipDescription.Location = new System.Drawing.Point(3, 137);
             labelTooltipDescription.Name = "labelTooltipDescription";
-            labelTooltipDescription.Size = new System.Drawing.Size(106, 29);
+            labelTooltipDescription.Size = new System.Drawing.Size(107, 29);
             labelTooltipDescription.TabIndex = 20;
             labelTooltipDescription.Text = "Tooltip Description";
             labelTooltipDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -198,58 +196,58 @@ namespace UIRibbonTools
             // EditName
             // 
             EditName.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            EditName.Location = new System.Drawing.Point(115, 24);
+            EditName.Location = new System.Drawing.Point(116, 24);
             EditName.Name = "EditName";
-            EditName.Size = new System.Drawing.Size(309, 23);
+            EditName.Size = new System.Drawing.Size(308, 23);
             EditName.TabIndex = 5;
             // 
             // EditCaption
             // 
             EditCaption.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            EditCaption.Location = new System.Drawing.Point(115, 53);
+            EditCaption.Location = new System.Drawing.Point(116, 53);
             EditCaption.Name = "EditCaption";
-            EditCaption.Size = new System.Drawing.Size(309, 23);
+            EditCaption.Size = new System.Drawing.Size(308, 23);
             EditCaption.TabIndex = 9;
             // 
             // EditDescription
             // 
             EditDescription.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            EditDescription.Location = new System.Drawing.Point(115, 82);
+            EditDescription.Location = new System.Drawing.Point(116, 82);
             EditDescription.Name = "EditDescription";
-            EditDescription.Size = new System.Drawing.Size(309, 23);
+            EditDescription.Size = new System.Drawing.Size(308, 23);
             EditDescription.TabIndex = 13;
             // 
             // EditTooltipTitle
             // 
             EditTooltipTitle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            EditTooltipTitle.Location = new System.Drawing.Point(115, 111);
+            EditTooltipTitle.Location = new System.Drawing.Point(116, 111);
             EditTooltipTitle.Name = "EditTooltipTitle";
-            EditTooltipTitle.Size = new System.Drawing.Size(309, 23);
+            EditTooltipTitle.Size = new System.Drawing.Size(308, 23);
             EditTooltipTitle.TabIndex = 17;
             // 
             // EditTooltipDescription
             // 
             EditTooltipDescription.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            EditTooltipDescription.Location = new System.Drawing.Point(115, 140);
+            EditTooltipDescription.Location = new System.Drawing.Point(116, 140);
             EditTooltipDescription.Name = "EditTooltipDescription";
-            EditTooltipDescription.Size = new System.Drawing.Size(309, 23);
+            EditTooltipDescription.Size = new System.Drawing.Size(308, 23);
             EditTooltipDescription.TabIndex = 21;
             // 
             // EditKeytip
             // 
             EditKeytip.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            EditKeytip.Location = new System.Drawing.Point(115, 169);
+            EditKeytip.Location = new System.Drawing.Point(116, 169);
             EditKeytip.Name = "EditKeytip";
-            EditKeytip.Size = new System.Drawing.Size(309, 23);
+            EditKeytip.Size = new System.Drawing.Size(308, 23);
             EditKeytip.TabIndex = 25;
             // 
             // EditComment
             // 
             EditComment.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _propertiesPanel.SetColumnSpan(EditComment, 3);
-            EditComment.Location = new System.Drawing.Point(115, 198);
+            EditComment.Location = new System.Drawing.Point(116, 198);
             EditComment.Name = "EditComment";
-            EditComment.Size = new System.Drawing.Size(584, 23);
+            EditComment.Size = new System.Drawing.Size(583, 23);
             EditComment.TabIndex = 29;
             // 
             // EditId
@@ -414,7 +412,7 @@ namespace UIRibbonTools
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             Controls.Add(_propertiesPanel);
             Margin = new System.Windows.Forms.Padding(0);
-			Name = "EditFrame";
+            Name = "EditFrame";
             Size = new System.Drawing.Size(702, 224);
             ((System.ComponentModel.ISupportInitialize)EditId).EndInit();
             ((System.ComponentModel.ISupportInitialize)EditCaptionId).EndInit();
@@ -425,6 +423,7 @@ namespace UIRibbonTools
             _propertiesPanel.ResumeLayout(false);
             _propertiesPanel.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

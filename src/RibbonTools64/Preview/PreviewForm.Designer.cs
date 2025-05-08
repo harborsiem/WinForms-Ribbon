@@ -28,717 +28,670 @@ namespace UIRibbonTools
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabSheetAppModes = new System.Windows.Forms.TabPage();
-            this.checkedListBoxAppModes = new System.Windows.Forms.CheckedListBox();
-            this.labelAppModes = new System.Windows.Forms.Label();
-            this.tabSheetContextTabs = new System.Windows.Forms.TabPage();
-            this.checkedListBoxContextTabs = new System.Windows.Forms.CheckedListBox();
-            this.labelContextTabs = new System.Windows.Forms.Label();
-            this.tabSheetContextPopups = new System.Windows.Forms.TabPage();
-            this.listBoxContextPopups = new System.Windows.Forms.ListBox();
-            this.labelContextPopups = new System.Windows.Forms.Label();
-            this.tabSheetColorize = new System.Windows.Forms.TabPage();
-            this.HSBPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.hsbText = new System.Windows.Forms.TextBox();
-            this.hsbHighlight = new System.Windows.Forms.TextBox();
-            this.hsbBackground = new System.Windows.Forms.TextBox();
-            this.setColorsButton = new System.Windows.Forms.Button();
-            this.colorizeLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.backgroundColorPanel = new System.Windows.Forms.Panel();
-            this.backgroundButton = new System.Windows.Forms.Button();
-            this.highlightGroup = new System.Windows.Forms.GroupBox();
-            this.highlightLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numericUpDownH_R = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDownH_G = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericUpDownH_B = new System.Windows.Forms.NumericUpDown();
-            this.highlightColorPanel = new System.Windows.Forms.Panel();
-            this.highlightButton = new System.Windows.Forms.Button();
-            this.textColorGroup = new System.Windows.Forms.GroupBox();
-            this.textLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.numericUpDownT_R = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
-            this.numericUpDownT_G = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.numericUpDownT_B = new System.Windows.Forms.NumericUpDown();
-            this.textColorPanel = new System.Windows.Forms.Panel();
-            this.textButton = new System.Windows.Forms.Button();
-            this.backgroundGroupBox1 = new System.Windows.Forms.GroupBox();
-            this.backgroundLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDownB_R = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDownB_G = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.numericUpDownB_B = new System.Windows.Forms.NumericUpDown();
-            this.getColorsButton = new System.Windows.Forms.Button();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabSheetAppModes.SuspendLayout();
-            this.tabSheetContextTabs.SuspendLayout();
-            this.tabSheetContextPopups.SuspendLayout();
-            this.tabSheetColorize.SuspendLayout();
-            this.HSBPanel.SuspendLayout();
-            this.colorizeLayout.SuspendLayout();
-            this.highlightGroup.SuspendLayout();
-            this.highlightLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH_R)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH_G)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH_B)).BeginInit();
-            this.textColorGroup.SuspendLayout();
-            this.textLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownT_R)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownT_G)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownT_B)).BeginInit();
-            this.backgroundGroupBox1.SuspendLayout();
-            this.backgroundLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB_R)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB_G)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB_B)).BeginInit();
-            this.tabControl.SuspendLayout();
-            this.SuspendLayout();
+            tabSheetAppModes = new System.Windows.Forms.TabPage();
+            checkedListBoxAppModes = new System.Windows.Forms.CheckedListBox();
+            labelAppModes = new System.Windows.Forms.Label();
+            tabSheetContextTabs = new System.Windows.Forms.TabPage();
+            checkedListBoxContextTabs = new System.Windows.Forms.CheckedListBox();
+            labelContextTabs = new System.Windows.Forms.Label();
+            tabSheetContextPopups = new System.Windows.Forms.TabPage();
+            listBoxContextPopups = new System.Windows.Forms.ListBox();
+            labelContextPopups = new System.Windows.Forms.Label();
+            tabSheetColorize = new System.Windows.Forms.TabPage();
+            colorizeLayout = new System.Windows.Forms.TableLayoutPanel();
+            backgroundGroupBox1 = new System.Windows.Forms.GroupBox();
+            backgroundLayout = new System.Windows.Forms.TableLayoutPanel();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            numericUpDownB_R = new System.Windows.Forms.NumericUpDown();
+            numericUpDownB_G = new System.Windows.Forms.NumericUpDown();
+            numericUpDownB_B = new System.Windows.Forms.NumericUpDown();
+            backgroundColorPanel = new System.Windows.Forms.Panel();
+            backgroundButton = new System.Windows.Forms.Button();
+            highlightGroup = new System.Windows.Forms.GroupBox();
+            highlightLayout = new System.Windows.Forms.TableLayoutPanel();
+            label4 = new System.Windows.Forms.Label();
+            label5 = new System.Windows.Forms.Label();
+            label6 = new System.Windows.Forms.Label();
+            numericUpDownH_R = new System.Windows.Forms.NumericUpDown();
+            numericUpDownH_G = new System.Windows.Forms.NumericUpDown();
+            numericUpDownH_B = new System.Windows.Forms.NumericUpDown();
+            highlightColorPanel = new System.Windows.Forms.Panel();
+            highlightButton = new System.Windows.Forms.Button();
+            textColorGroup = new System.Windows.Forms.GroupBox();
+            textLayout = new System.Windows.Forms.TableLayoutPanel();
+            label7 = new System.Windows.Forms.Label();
+            label8 = new System.Windows.Forms.Label();
+            label9 = new System.Windows.Forms.Label();
+            numericUpDownT_R = new System.Windows.Forms.NumericUpDown();
+            numericUpDownT_G = new System.Windows.Forms.NumericUpDown();
+            numericUpDownT_B = new System.Windows.Forms.NumericUpDown();
+            textColorPanel = new System.Windows.Forms.Panel();
+            textButton = new System.Windows.Forms.Button();
+            setColorsButton = new System.Windows.Forms.Button();
+            setDefaultColorsButton = new System.Windows.Forms.Button();
+            HSBPanel = new System.Windows.Forms.TableLayoutPanel();
+            hsbBackground = new System.Windows.Forms.TextBox();
+            hsbHighlight = new System.Windows.Forms.TextBox();
+            hsbText = new System.Windows.Forms.TextBox();
+            tabControl = new System.Windows.Forms.TabControl();
+            tabSheetAppModes.SuspendLayout();
+            tabSheetContextTabs.SuspendLayout();
+            tabSheetContextPopups.SuspendLayout();
+            tabSheetColorize.SuspendLayout();
+            colorizeLayout.SuspendLayout();
+            backgroundGroupBox1.SuspendLayout();
+            backgroundLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownB_R).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownB_G).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownB_B).BeginInit();
+            highlightGroup.SuspendLayout();
+            highlightLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownH_R).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownH_G).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownH_B).BeginInit();
+            textColorGroup.SuspendLayout();
+            textLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownT_R).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownT_G).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownT_B).BeginInit();
+            HSBPanel.SuspendLayout();
+            tabControl.SuspendLayout();
+            SuspendLayout();
             // 
             // tabSheetAppModes
             // 
-            this.tabSheetAppModes.Controls.Add(this.checkedListBoxAppModes);
-            this.tabSheetAppModes.Controls.Add(this.labelAppModes);
-            this.tabSheetAppModes.Location = new System.Drawing.Point(4, 24);
-            this.tabSheetAppModes.Name = "tabSheetAppModes";
-            this.tabSheetAppModes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSheetAppModes.Size = new System.Drawing.Size(925, 325);
-            this.tabSheetAppModes.TabIndex = 0;
-            this.tabSheetAppModes.Text = "Application Modes";
-            this.tabSheetAppModes.UseVisualStyleBackColor = true;
+            tabSheetAppModes.Controls.Add(checkedListBoxAppModes);
+            tabSheetAppModes.Controls.Add(labelAppModes);
+            tabSheetAppModes.Location = new System.Drawing.Point(4, 24);
+            tabSheetAppModes.Name = "tabSheetAppModes";
+            tabSheetAppModes.Padding = new System.Windows.Forms.Padding(3);
+            tabSheetAppModes.Size = new System.Drawing.Size(925, 325);
+            tabSheetAppModes.TabIndex = 0;
+            tabSheetAppModes.Text = "Application Modes";
+            tabSheetAppModes.UseVisualStyleBackColor = true;
             // 
             // checkedListBoxAppModes
             // 
-            this.checkedListBoxAppModes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkedListBoxAppModes.CheckOnClick = true;
-            this.checkedListBoxAppModes.ColumnWidth = 200;
-            this.checkedListBoxAppModes.FormattingEnabled = true;
-            this.checkedListBoxAppModes.Location = new System.Drawing.Point(9, 22);
-            this.checkedListBoxAppModes.MultiColumn = true;
-            this.checkedListBoxAppModes.Name = "checkedListBoxAppModes";
-            this.checkedListBoxAppModes.Size = new System.Drawing.Size(905, 292);
-            this.checkedListBoxAppModes.TabIndex = 1;
+            checkedListBoxAppModes.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            checkedListBoxAppModes.CheckOnClick = true;
+            checkedListBoxAppModes.ColumnWidth = 200;
+            checkedListBoxAppModes.FormattingEnabled = true;
+            checkedListBoxAppModes.Location = new System.Drawing.Point(9, 22);
+            checkedListBoxAppModes.MultiColumn = true;
+            checkedListBoxAppModes.Name = "checkedListBoxAppModes";
+            checkedListBoxAppModes.Size = new System.Drawing.Size(905, 292);
+            checkedListBoxAppModes.TabIndex = 1;
             // 
             // labelAppModes
             // 
-            this.labelAppModes.AutoSize = true;
-            this.labelAppModes.Location = new System.Drawing.Point(10, 3);
-            this.labelAppModes.Name = "labelAppModes";
-            this.labelAppModes.Size = new System.Drawing.Size(224, 15);
-            this.labelAppModes.TabIndex = 0;
-            this.labelAppModes.Text = "* There are no application modes defined";
+            labelAppModes.AutoSize = true;
+            labelAppModes.Location = new System.Drawing.Point(10, 3);
+            labelAppModes.Name = "labelAppModes";
+            labelAppModes.Size = new System.Drawing.Size(225, 15);
+            labelAppModes.TabIndex = 0;
+            labelAppModes.Text = "* There are no application modes defined";
             // 
             // tabSheetContextTabs
             // 
-            this.tabSheetContextTabs.Controls.Add(this.checkedListBoxContextTabs);
-            this.tabSheetContextTabs.Controls.Add(this.labelContextTabs);
-            this.tabSheetContextTabs.Location = new System.Drawing.Point(4, 24);
-            this.tabSheetContextTabs.Name = "tabSheetContextTabs";
-            this.tabSheetContextTabs.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSheetContextTabs.Size = new System.Drawing.Size(925, 325);
-            this.tabSheetContextTabs.TabIndex = 1;
-            this.tabSheetContextTabs.Text = "Contextual Tabs";
-            this.tabSheetContextTabs.UseVisualStyleBackColor = true;
+            tabSheetContextTabs.Controls.Add(checkedListBoxContextTabs);
+            tabSheetContextTabs.Controls.Add(labelContextTabs);
+            tabSheetContextTabs.Location = new System.Drawing.Point(4, 24);
+            tabSheetContextTabs.Name = "tabSheetContextTabs";
+            tabSheetContextTabs.Padding = new System.Windows.Forms.Padding(3);
+            tabSheetContextTabs.Size = new System.Drawing.Size(925, 325);
+            tabSheetContextTabs.TabIndex = 1;
+            tabSheetContextTabs.Text = "Contextual Tabs";
+            tabSheetContextTabs.UseVisualStyleBackColor = true;
             // 
             // checkedListBoxContextTabs
             // 
-            this.checkedListBoxContextTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkedListBoxContextTabs.CheckOnClick = true;
-            this.checkedListBoxContextTabs.ColumnWidth = 500;
-            this.checkedListBoxContextTabs.FormattingEnabled = true;
-            this.checkedListBoxContextTabs.Location = new System.Drawing.Point(9, 22);
-            this.checkedListBoxContextTabs.MultiColumn = true;
-            this.checkedListBoxContextTabs.Name = "checkedListBoxContextTabs";
-            this.checkedListBoxContextTabs.Size = new System.Drawing.Size(905, 292);
-            this.checkedListBoxContextTabs.TabIndex = 1;
+            checkedListBoxContextTabs.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            checkedListBoxContextTabs.CheckOnClick = true;
+            checkedListBoxContextTabs.ColumnWidth = 500;
+            checkedListBoxContextTabs.FormattingEnabled = true;
+            checkedListBoxContextTabs.Location = new System.Drawing.Point(9, 22);
+            checkedListBoxContextTabs.MultiColumn = true;
+            checkedListBoxContextTabs.Name = "checkedListBoxContextTabs";
+            checkedListBoxContextTabs.Size = new System.Drawing.Size(905, 292);
+            checkedListBoxContextTabs.TabIndex = 1;
             // 
             // labelContextTabs
             // 
-            this.labelContextTabs.AutoSize = true;
-            this.labelContextTabs.Location = new System.Drawing.Point(10, 3);
-            this.labelContextTabs.Name = "labelContextTabs";
-            this.labelContextTabs.Size = new System.Drawing.Size(207, 15);
-            this.labelContextTabs.TabIndex = 0;
-            this.labelContextTabs.Text = "* There are no contextual tabs defined";
+            labelContextTabs.AutoSize = true;
+            labelContextTabs.Location = new System.Drawing.Point(10, 3);
+            labelContextTabs.Name = "labelContextTabs";
+            labelContextTabs.Size = new System.Drawing.Size(207, 15);
+            labelContextTabs.TabIndex = 0;
+            labelContextTabs.Text = "* There are no contextual tabs defined";
             // 
             // tabSheetContextPopups
             // 
-            this.tabSheetContextPopups.Controls.Add(this.listBoxContextPopups);
-            this.tabSheetContextPopups.Controls.Add(this.labelContextPopups);
-            this.tabSheetContextPopups.Location = new System.Drawing.Point(4, 24);
-            this.tabSheetContextPopups.Name = "tabSheetContextPopups";
-            this.tabSheetContextPopups.Size = new System.Drawing.Size(925, 325);
-            this.tabSheetContextPopups.TabIndex = 2;
-            this.tabSheetContextPopups.Text = "Context Popups";
-            this.tabSheetContextPopups.UseVisualStyleBackColor = true;
+            tabSheetContextPopups.Controls.Add(listBoxContextPopups);
+            tabSheetContextPopups.Controls.Add(labelContextPopups);
+            tabSheetContextPopups.Location = new System.Drawing.Point(4, 24);
+            tabSheetContextPopups.Name = "tabSheetContextPopups";
+            tabSheetContextPopups.Size = new System.Drawing.Size(925, 325);
+            tabSheetContextPopups.TabIndex = 2;
+            tabSheetContextPopups.Text = "Context Popups";
+            tabSheetContextPopups.UseVisualStyleBackColor = true;
             // 
             // listBoxContextPopups
             // 
-            this.listBoxContextPopups.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBoxContextPopups.FormattingEnabled = true;
-            this.listBoxContextPopups.ItemHeight = 15;
-            this.listBoxContextPopups.Location = new System.Drawing.Point(9, 22);
-            this.listBoxContextPopups.Name = "listBoxContextPopups";
-            this.listBoxContextPopups.Size = new System.Drawing.Size(905, 289);
-            this.listBoxContextPopups.TabIndex = 1;
+            listBoxContextPopups.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            listBoxContextPopups.FormattingEnabled = true;
+            listBoxContextPopups.ItemHeight = 15;
+            listBoxContextPopups.Location = new System.Drawing.Point(9, 22);
+            listBoxContextPopups.Name = "listBoxContextPopups";
+            listBoxContextPopups.Size = new System.Drawing.Size(905, 289);
+            listBoxContextPopups.TabIndex = 1;
             // 
             // labelContextPopups
             // 
-            this.labelContextPopups.AutoSize = true;
-            this.labelContextPopups.Location = new System.Drawing.Point(10, 3);
-            this.labelContextPopups.Name = "labelContextPopups";
-            this.labelContextPopups.Size = new System.Drawing.Size(209, 15);
-            this.labelContextPopups.TabIndex = 0;
-            this.labelContextPopups.Text = "* There are no context popups defined";
+            labelContextPopups.AutoSize = true;
+            labelContextPopups.Location = new System.Drawing.Point(10, 3);
+            labelContextPopups.Name = "labelContextPopups";
+            labelContextPopups.Size = new System.Drawing.Size(209, 15);
+            labelContextPopups.TabIndex = 0;
+            labelContextPopups.Text = "* There are no context popups defined";
             // 
             // tabSheetColorize
             // 
-            this.tabSheetColorize.Controls.Add(this.HSBPanel);
-            this.tabSheetColorize.Controls.Add(this.setColorsButton);
-            this.tabSheetColorize.Controls.Add(this.colorizeLayout);
-            this.tabSheetColorize.Controls.Add(this.getColorsButton);
-            this.tabSheetColorize.Location = new System.Drawing.Point(4, 24);
-            this.tabSheetColorize.Name = "tabSheetColorize";
-            this.tabSheetColorize.Size = new System.Drawing.Size(925, 325);
-            this.tabSheetColorize.TabIndex = 3;
-            this.tabSheetColorize.Text = "Colorize";
-            this.tabSheetColorize.UseVisualStyleBackColor = true;
-            // 
-            // HSBPanel
-            // 
-            this.HSBPanel.AutoSize = true;
-            this.HSBPanel.ColumnCount = 3;
-            this.HSBPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.HSBPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.HSBPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.HSBPanel.Controls.Add(this.hsbText, 2, 0);
-            this.HSBPanel.Controls.Add(this.hsbHighlight, 1, 0);
-            this.HSBPanel.Controls.Add(this.hsbBackground, 0, 0);
-            this.HSBPanel.Location = new System.Drawing.Point(8, 241);
-            this.HSBPanel.Name = "HSBPanel";
-            this.HSBPanel.RowCount = 1;
-            this.HSBPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.HSBPanel.Size = new System.Drawing.Size(456, 29);
-            this.HSBPanel.TabIndex = 3;
-            // 
-            // hsbText
-            // 
-            this.hsbText.Dock = System.Windows.Forms.DockStyle.Left;
-            this.hsbText.Location = new System.Drawing.Point(307, 3);
-            this.hsbText.Name = "hsbText";
-            this.hsbText.ReadOnly = true;
-            this.hsbText.Size = new System.Drawing.Size(100, 23);
-            this.hsbText.TabIndex = 2;
-            // 
-            // hsbHighlight
-            // 
-            this.hsbHighlight.Dock = System.Windows.Forms.DockStyle.Left;
-            this.hsbHighlight.Location = new System.Drawing.Point(155, 3);
-            this.hsbHighlight.Name = "hsbHighlight";
-            this.hsbHighlight.ReadOnly = true;
-            this.hsbHighlight.Size = new System.Drawing.Size(100, 23);
-            this.hsbHighlight.TabIndex = 1;
-            // 
-            // hsbBackground
-            // 
-            this.hsbBackground.Dock = System.Windows.Forms.DockStyle.Left;
-            this.hsbBackground.Location = new System.Drawing.Point(3, 3);
-            this.hsbBackground.Name = "hsbBackground";
-            this.hsbBackground.ReadOnly = true;
-            this.hsbBackground.Size = new System.Drawing.Size(100, 23);
-            this.hsbBackground.TabIndex = 0;
-            // 
-            // setColorsButton
-            // 
-            this.setColorsButton.Location = new System.Drawing.Point(105, 208);
-            this.setColorsButton.Name = "setColorsButton";
-            this.setColorsButton.Size = new System.Drawing.Size(88, 27);
-            this.setColorsButton.TabIndex = 2;
-            this.setColorsButton.Text = "Set Colors";
-            this.setColorsButton.UseVisualStyleBackColor = true;
+            tabSheetColorize.Controls.Add(colorizeLayout);
+            tabSheetColorize.Controls.Add(setColorsButton);
+            tabSheetColorize.Controls.Add(setDefaultColorsButton);
+            tabSheetColorize.Controls.Add(HSBPanel);
+            tabSheetColorize.Location = new System.Drawing.Point(4, 24);
+            tabSheetColorize.Name = "tabSheetColorize";
+            tabSheetColorize.Size = new System.Drawing.Size(925, 325);
+            tabSheetColorize.TabIndex = 3;
+            tabSheetColorize.Text = "Colorize";
+            tabSheetColorize.UseVisualStyleBackColor = true;
             // 
             // colorizeLayout
             // 
-            this.colorizeLayout.ColumnCount = 3;
-            this.colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.colorizeLayout.Controls.Add(this.backgroundColorPanel, 0, 1);
-            this.colorizeLayout.Controls.Add(this.backgroundButton, 0, 2);
-            this.colorizeLayout.Controls.Add(this.highlightGroup, 1, 0);
-            this.colorizeLayout.Controls.Add(this.highlightColorPanel, 1, 1);
-            this.colorizeLayout.Controls.Add(this.highlightButton, 1, 2);
-            this.colorizeLayout.Controls.Add(this.textColorGroup, 2, 0);
-            this.colorizeLayout.Controls.Add(this.textColorPanel, 2, 1);
-            this.colorizeLayout.Controls.Add(this.textButton, 2, 2);
-            this.colorizeLayout.Controls.Add(this.backgroundGroupBox1, 0, 0);
-            this.colorizeLayout.Location = new System.Drawing.Point(8, 5);
-            this.colorizeLayout.Name = "colorizeLayout";
-            this.colorizeLayout.RowCount = 3;
-            this.colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.colorizeLayout.Size = new System.Drawing.Size(456, 197);
-            this.colorizeLayout.TabIndex = 1;
-            // 
-            // backgroundColorPanel
-            // 
-            this.backgroundColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backgroundColorPanel.Location = new System.Drawing.Point(3, 137);
-            this.backgroundColorPanel.Name = "backgroundColorPanel";
-            this.backgroundColorPanel.Size = new System.Drawing.Size(146, 22);
-            this.backgroundColorPanel.TabIndex = 3;
-            // 
-            // backgroundButton
-            // 
-            this.backgroundButton.AutoSize = true;
-            this.backgroundButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.backgroundButton.Location = new System.Drawing.Point(3, 165);
-            this.backgroundButton.Name = "backgroundButton";
-            this.backgroundButton.Size = new System.Drawing.Size(117, 29);
-            this.backgroundButton.TabIndex = 6;
-            this.backgroundButton.Text = "Set Background";
-            this.backgroundButton.UseVisualStyleBackColor = true;
-            // 
-            // highlightGroup
-            // 
-            this.highlightGroup.Controls.Add(this.highlightLayout);
-            this.highlightGroup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.highlightGroup.Location = new System.Drawing.Point(155, 3);
-            this.highlightGroup.Name = "highlightGroup";
-            this.highlightGroup.Size = new System.Drawing.Size(146, 128);
-            this.highlightGroup.TabIndex = 1;
-            this.highlightGroup.TabStop = false;
-            this.highlightGroup.Text = "HighlightColor";
-            // 
-            // highlightLayout
-            // 
-            this.highlightLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.highlightLayout.AutoSize = true;
-            this.highlightLayout.ColumnCount = 2;
-            this.highlightLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.highlightLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.highlightLayout.Controls.Add(this.label4, 0, 0);
-            this.highlightLayout.Controls.Add(this.numericUpDownH_R, 1, 0);
-            this.highlightLayout.Controls.Add(this.label5, 0, 1);
-            this.highlightLayout.Controls.Add(this.numericUpDownH_G, 1, 1);
-            this.highlightLayout.Controls.Add(this.label6, 0, 2);
-            this.highlightLayout.Controls.Add(this.numericUpDownH_B, 1, 2);
-            this.highlightLayout.Location = new System.Drawing.Point(3, 22);
-            this.highlightLayout.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.highlightLayout.Name = "highlightLayout";
-            this.highlightLayout.RowCount = 3;
-            this.highlightLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.highlightLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.highlightLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.highlightLayout.Size = new System.Drawing.Size(140, 87);
-            this.highlightLayout.TabIndex = 0;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label4.Location = new System.Drawing.Point(3, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(27, 29);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Red";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownH_R
-            // 
-            this.numericUpDownH_R.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownH_R.Location = new System.Drawing.Point(52, 3);
-            this.numericUpDownH_R.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownH_R.Name = "numericUpDownH_R";
-            this.numericUpDownH_R.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownH_R.TabIndex = 4;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label5.Location = new System.Drawing.Point(3, 29);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 29);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Green";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownH_G
-            // 
-            this.numericUpDownH_G.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownH_G.Location = new System.Drawing.Point(52, 32);
-            this.numericUpDownH_G.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownH_G.Name = "numericUpDownH_G";
-            this.numericUpDownH_G.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownH_G.TabIndex = 5;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label6.Location = new System.Drawing.Point(3, 58);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(30, 29);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Blue";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownH_B
-            // 
-            this.numericUpDownH_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownH_B.Location = new System.Drawing.Point(52, 61);
-            this.numericUpDownH_B.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownH_B.Name = "numericUpDownH_B";
-            this.numericUpDownH_B.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownH_B.TabIndex = 6;
-            // 
-            // highlightColorPanel
-            // 
-            this.highlightColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.highlightColorPanel.Location = new System.Drawing.Point(155, 137);
-            this.highlightColorPanel.Name = "highlightColorPanel";
-            this.highlightColorPanel.Size = new System.Drawing.Size(146, 22);
-            this.highlightColorPanel.TabIndex = 4;
-            // 
-            // highlightButton
-            // 
-            this.highlightButton.AutoSize = true;
-            this.highlightButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.highlightButton.Location = new System.Drawing.Point(155, 165);
-            this.highlightButton.Name = "highlightButton";
-            this.highlightButton.Size = new System.Drawing.Size(110, 29);
-            this.highlightButton.TabIndex = 7;
-            this.highlightButton.Text = "Set Highlight";
-            this.highlightButton.UseVisualStyleBackColor = true;
-            // 
-            // textColorGroup
-            // 
-            this.textColorGroup.Controls.Add(this.textLayout);
-            this.textColorGroup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textColorGroup.Location = new System.Drawing.Point(307, 3);
-            this.textColorGroup.Name = "textColorGroup";
-            this.textColorGroup.Size = new System.Drawing.Size(146, 128);
-            this.textColorGroup.TabIndex = 2;
-            this.textColorGroup.TabStop = false;
-            this.textColorGroup.Text = "TextColor";
-            // 
-            // textLayout
-            // 
-            this.textLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textLayout.AutoSize = true;
-            this.textLayout.ColumnCount = 2;
-            this.textLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.textLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.textLayout.Controls.Add(this.label7, 0, 0);
-            this.textLayout.Controls.Add(this.numericUpDownT_R, 1, 0);
-            this.textLayout.Controls.Add(this.label8, 0, 1);
-            this.textLayout.Controls.Add(this.numericUpDownT_G, 1, 1);
-            this.textLayout.Controls.Add(this.label9, 0, 2);
-            this.textLayout.Controls.Add(this.numericUpDownT_B, 1, 2);
-            this.textLayout.Location = new System.Drawing.Point(3, 22);
-            this.textLayout.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.textLayout.Name = "textLayout";
-            this.textLayout.RowCount = 3;
-            this.textLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.textLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.textLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.textLayout.Size = new System.Drawing.Size(140, 87);
-            this.textLayout.TabIndex = 0;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label7.Location = new System.Drawing.Point(3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(27, 29);
-            this.label7.TabIndex = 1;
-            this.label7.Text = "Red";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownT_R
-            // 
-            this.numericUpDownT_R.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownT_R.Location = new System.Drawing.Point(52, 3);
-            this.numericUpDownT_R.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownT_R.Name = "numericUpDownT_R";
-            this.numericUpDownT_R.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownT_R.TabIndex = 4;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label8.Location = new System.Drawing.Point(3, 29);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(38, 29);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "Green";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownT_G
-            // 
-            this.numericUpDownT_G.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownT_G.Location = new System.Drawing.Point(52, 32);
-            this.numericUpDownT_G.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownT_G.Name = "numericUpDownT_G";
-            this.numericUpDownT_G.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownT_G.TabIndex = 5;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label9.Location = new System.Drawing.Point(3, 58);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(30, 29);
-            this.label9.TabIndex = 3;
-            this.label9.Text = "Blue";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownT_B
-            // 
-            this.numericUpDownT_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownT_B.Location = new System.Drawing.Point(52, 61);
-            this.numericUpDownT_B.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownT_B.Name = "numericUpDownT_B";
-            this.numericUpDownT_B.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownT_B.TabIndex = 6;
-            // 
-            // textColorPanel
-            // 
-            this.textColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textColorPanel.Location = new System.Drawing.Point(307, 137);
-            this.textColorPanel.Name = "textColorPanel";
-            this.textColorPanel.Size = new System.Drawing.Size(146, 22);
-            this.textColorPanel.TabIndex = 5;
-            // 
-            // textButton
-            // 
-            this.textButton.AutoSize = true;
-            this.textButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.textButton.Location = new System.Drawing.Point(307, 165);
-            this.textButton.Name = "textButton";
-            this.textButton.Size = new System.Drawing.Size(110, 29);
-            this.textButton.TabIndex = 8;
-            this.textButton.Text = "Set Text";
-            this.textButton.UseVisualStyleBackColor = true;
+            colorizeLayout.ColumnCount = 3;
+            colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            colorizeLayout.Controls.Add(backgroundGroupBox1, 0, 0);
+            colorizeLayout.Controls.Add(backgroundColorPanel, 0, 1);
+            colorizeLayout.Controls.Add(backgroundButton, 0, 2);
+            colorizeLayout.Controls.Add(highlightGroup, 1, 0);
+            colorizeLayout.Controls.Add(highlightColorPanel, 1, 1);
+            colorizeLayout.Controls.Add(highlightButton, 1, 2);
+            colorizeLayout.Controls.Add(textColorGroup, 2, 0);
+            colorizeLayout.Controls.Add(textColorPanel, 2, 1);
+            colorizeLayout.Controls.Add(textButton, 2, 2);
+            colorizeLayout.Location = new System.Drawing.Point(8, 5);
+            colorizeLayout.Name = "colorizeLayout";
+            colorizeLayout.RowCount = 3;
+            colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            colorizeLayout.Size = new System.Drawing.Size(456, 197);
+            colorizeLayout.TabIndex = 0;
             // 
             // backgroundGroupBox1
             // 
-            this.backgroundGroupBox1.Controls.Add(this.backgroundLayout);
-            this.backgroundGroupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backgroundGroupBox1.Location = new System.Drawing.Point(3, 3);
-            this.backgroundGroupBox1.Name = "backgroundGroupBox1";
-            this.backgroundGroupBox1.Size = new System.Drawing.Size(146, 128);
-            this.backgroundGroupBox1.TabIndex = 0;
-            this.backgroundGroupBox1.TabStop = false;
-            this.backgroundGroupBox1.Text = "BackgroundColor";
+            backgroundGroupBox1.Controls.Add(backgroundLayout);
+            backgroundGroupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            backgroundGroupBox1.Location = new System.Drawing.Point(3, 3);
+            backgroundGroupBox1.Name = "backgroundGroupBox1";
+            backgroundGroupBox1.Size = new System.Drawing.Size(146, 128);
+            backgroundGroupBox1.TabIndex = 0;
+            backgroundGroupBox1.TabStop = false;
+            backgroundGroupBox1.Text = "BackgroundColor";
             // 
             // backgroundLayout
             // 
-            this.backgroundLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.backgroundLayout.AutoSize = true;
-            this.backgroundLayout.ColumnCount = 2;
-            this.backgroundLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.backgroundLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.backgroundLayout.Controls.Add(this.label1, 0, 0);
-            this.backgroundLayout.Controls.Add(this.numericUpDownB_R, 1, 0);
-            this.backgroundLayout.Controls.Add(this.label2, 0, 1);
-            this.backgroundLayout.Controls.Add(this.numericUpDownB_G, 1, 1);
-            this.backgroundLayout.Controls.Add(this.label3, 0, 2);
-            this.backgroundLayout.Controls.Add(this.numericUpDownB_B, 1, 2);
-            this.backgroundLayout.Location = new System.Drawing.Point(3, 22);
-            this.backgroundLayout.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.backgroundLayout.Name = "backgroundLayout";
-            this.backgroundLayout.RowCount = 3;
-            this.backgroundLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.backgroundLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.backgroundLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.backgroundLayout.Size = new System.Drawing.Size(140, 87);
-            this.backgroundLayout.TabIndex = 0;
+            backgroundLayout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            backgroundLayout.AutoSize = true;
+            backgroundLayout.ColumnCount = 2;
+            backgroundLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            backgroundLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            backgroundLayout.Controls.Add(label1, 0, 0);
+            backgroundLayout.Controls.Add(label2, 0, 1);
+            backgroundLayout.Controls.Add(label3, 0, 2);
+            backgroundLayout.Controls.Add(numericUpDownB_R, 1, 0);
+            backgroundLayout.Controls.Add(numericUpDownB_G, 1, 1);
+            backgroundLayout.Controls.Add(numericUpDownB_B, 1, 2);
+            backgroundLayout.Location = new System.Drawing.Point(3, 22);
+            backgroundLayout.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            backgroundLayout.Name = "backgroundLayout";
+            backgroundLayout.RowCount = 3;
+            backgroundLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            backgroundLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            backgroundLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            backgroundLayout.Size = new System.Drawing.Size(140, 87);
+            backgroundLayout.TabIndex = 0;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 29);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Red";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownB_R
-            // 
-            this.numericUpDownB_R.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownB_R.Location = new System.Drawing.Point(52, 3);
-            this.numericUpDownB_R.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownB_R.Name = "numericUpDownB_R";
-            this.numericUpDownB_R.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownB_R.TabIndex = 4;
+            label1.AutoSize = true;
+            label1.Dock = System.Windows.Forms.DockStyle.Left;
+            label1.Location = new System.Drawing.Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(27, 29);
+            label1.TabIndex = 1;
+            label1.Text = "Red";
+            label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label2.Location = new System.Drawing.Point(3, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 29);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Green";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // numericUpDownB_G
-            // 
-            this.numericUpDownB_G.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownB_G.Location = new System.Drawing.Point(52, 32);
-            this.numericUpDownB_G.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownB_G.Name = "numericUpDownB_G";
-            this.numericUpDownB_G.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownB_G.TabIndex = 5;
+            label2.AutoSize = true;
+            label2.Dock = System.Windows.Forms.DockStyle.Left;
+            label2.Location = new System.Drawing.Point(3, 29);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(38, 29);
+            label2.TabIndex = 2;
+            label2.Text = "Green";
+            label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label3.Location = new System.Drawing.Point(3, 58);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(30, 29);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Blue";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            label3.AutoSize = true;
+            label3.Dock = System.Windows.Forms.DockStyle.Left;
+            label3.Location = new System.Drawing.Point(3, 58);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(30, 29);
+            label3.TabIndex = 3;
+            label3.Text = "Blue";
+            label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // numericUpDownB_R
+            // 
+            numericUpDownB_R.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownB_R.Location = new System.Drawing.Point(52, 3);
+            numericUpDownB_R.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownB_R.Name = "numericUpDownB_R";
+            numericUpDownB_R.Size = new System.Drawing.Size(85, 23);
+            numericUpDownB_R.TabIndex = 4;
+            // 
+            // numericUpDownB_G
+            // 
+            numericUpDownB_G.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownB_G.Location = new System.Drawing.Point(52, 32);
+            numericUpDownB_G.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownB_G.Name = "numericUpDownB_G";
+            numericUpDownB_G.Size = new System.Drawing.Size(85, 23);
+            numericUpDownB_G.TabIndex = 5;
             // 
             // numericUpDownB_B
             // 
-            this.numericUpDownB_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDownB_B.Location = new System.Drawing.Point(52, 61);
-            this.numericUpDownB_B.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDownB_B.Name = "numericUpDownB_B";
-            this.numericUpDownB_B.Size = new System.Drawing.Size(85, 23);
-            this.numericUpDownB_B.TabIndex = 6;
+            numericUpDownB_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownB_B.Location = new System.Drawing.Point(52, 61);
+            numericUpDownB_B.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownB_B.Name = "numericUpDownB_B";
+            numericUpDownB_B.Size = new System.Drawing.Size(85, 23);
+            numericUpDownB_B.TabIndex = 6;
             // 
-            // getColorsButton
+            // backgroundColorPanel
             // 
-            this.getColorsButton.Location = new System.Drawing.Point(11, 208);
-            this.getColorsButton.Name = "getColorsButton";
-            this.getColorsButton.Size = new System.Drawing.Size(88, 27);
-            this.getColorsButton.TabIndex = 0;
-            this.getColorsButton.Text = "Get Colors";
-            this.getColorsButton.UseVisualStyleBackColor = true;
+            backgroundColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            backgroundColorPanel.Location = new System.Drawing.Point(3, 137);
+            backgroundColorPanel.Name = "backgroundColorPanel";
+            backgroundColorPanel.Size = new System.Drawing.Size(146, 22);
+            backgroundColorPanel.TabIndex = 1;
+            // 
+            // backgroundButton
+            // 
+            backgroundButton.AutoSize = true;
+            backgroundButton.Dock = System.Windows.Forms.DockStyle.Left;
+            backgroundButton.Location = new System.Drawing.Point(3, 165);
+            backgroundButton.Name = "backgroundButton";
+            backgroundButton.Size = new System.Drawing.Size(117, 29);
+            backgroundButton.TabIndex = 4;
+            backgroundButton.Text = "Set Background";
+            backgroundButton.UseVisualStyleBackColor = true;
+            // 
+            // highlightGroup
+            // 
+            highlightGroup.Controls.Add(highlightLayout);
+            highlightGroup.Dock = System.Windows.Forms.DockStyle.Fill;
+            highlightGroup.Location = new System.Drawing.Point(155, 3);
+            highlightGroup.Name = "highlightGroup";
+            highlightGroup.Size = new System.Drawing.Size(146, 128);
+            highlightGroup.TabIndex = 1;
+            highlightGroup.TabStop = false;
+            highlightGroup.Text = "HighlightColor";
+            // 
+            // highlightLayout
+            // 
+            highlightLayout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            highlightLayout.AutoSize = true;
+            highlightLayout.ColumnCount = 2;
+            highlightLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            highlightLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            highlightLayout.Controls.Add(label4, 0, 0);
+            highlightLayout.Controls.Add(label5, 0, 1);
+            highlightLayout.Controls.Add(label6, 0, 2);
+            highlightLayout.Controls.Add(numericUpDownH_R, 1, 0);
+            highlightLayout.Controls.Add(numericUpDownH_G, 1, 1);
+            highlightLayout.Controls.Add(numericUpDownH_B, 1, 2);
+            highlightLayout.Location = new System.Drawing.Point(3, 22);
+            highlightLayout.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            highlightLayout.Name = "highlightLayout";
+            highlightLayout.RowCount = 3;
+            highlightLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            highlightLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            highlightLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            highlightLayout.Size = new System.Drawing.Size(140, 87);
+            highlightLayout.TabIndex = 0;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Dock = System.Windows.Forms.DockStyle.Left;
+            label4.Location = new System.Drawing.Point(3, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(27, 29);
+            label4.TabIndex = 1;
+            label4.Text = "Red";
+            label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Dock = System.Windows.Forms.DockStyle.Left;
+            label5.Location = new System.Drawing.Point(3, 29);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(38, 29);
+            label5.TabIndex = 2;
+            label5.Text = "Green";
+            label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Dock = System.Windows.Forms.DockStyle.Left;
+            label6.Location = new System.Drawing.Point(3, 58);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(30, 29);
+            label6.TabIndex = 3;
+            label6.Text = "Blue";
+            label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // numericUpDownH_R
+            // 
+            numericUpDownH_R.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownH_R.Location = new System.Drawing.Point(52, 3);
+            numericUpDownH_R.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownH_R.Name = "numericUpDownH_R";
+            numericUpDownH_R.Size = new System.Drawing.Size(85, 23);
+            numericUpDownH_R.TabIndex = 4;
+            // 
+            // numericUpDownH_G
+            // 
+            numericUpDownH_G.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownH_G.Location = new System.Drawing.Point(52, 32);
+            numericUpDownH_G.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownH_G.Name = "numericUpDownH_G";
+            numericUpDownH_G.Size = new System.Drawing.Size(85, 23);
+            numericUpDownH_G.TabIndex = 5;
+            // 
+            // numericUpDownH_B
+            // 
+            numericUpDownH_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownH_B.Location = new System.Drawing.Point(52, 61);
+            numericUpDownH_B.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownH_B.Name = "numericUpDownH_B";
+            numericUpDownH_B.Size = new System.Drawing.Size(85, 23);
+            numericUpDownH_B.TabIndex = 6;
+            // 
+            // highlightColorPanel
+            // 
+            highlightColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            highlightColorPanel.Location = new System.Drawing.Point(155, 137);
+            highlightColorPanel.Name = "highlightColorPanel";
+            highlightColorPanel.Size = new System.Drawing.Size(146, 22);
+            highlightColorPanel.TabIndex = 2;
+            // 
+            // highlightButton
+            // 
+            highlightButton.AutoSize = true;
+            highlightButton.Dock = System.Windows.Forms.DockStyle.Left;
+            highlightButton.Location = new System.Drawing.Point(155, 165);
+            highlightButton.Name = "highlightButton";
+            highlightButton.Size = new System.Drawing.Size(110, 29);
+            highlightButton.TabIndex = 5;
+            highlightButton.Text = "Set Highlight";
+            highlightButton.UseVisualStyleBackColor = true;
+            // 
+            // textColorGroup
+            // 
+            textColorGroup.Controls.Add(textLayout);
+            textColorGroup.Dock = System.Windows.Forms.DockStyle.Fill;
+            textColorGroup.Location = new System.Drawing.Point(307, 3);
+            textColorGroup.Name = "textColorGroup";
+            textColorGroup.Size = new System.Drawing.Size(146, 128);
+            textColorGroup.TabIndex = 2;
+            textColorGroup.TabStop = false;
+            textColorGroup.Text = "TextColor";
+            // 
+            // textLayout
+            // 
+            textLayout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            textLayout.AutoSize = true;
+            textLayout.ColumnCount = 2;
+            textLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            textLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            textLayout.Controls.Add(label7, 0, 0);
+            textLayout.Controls.Add(label8, 0, 1);
+            textLayout.Controls.Add(label9, 0, 2);
+            textLayout.Controls.Add(numericUpDownT_R, 1, 0);
+            textLayout.Controls.Add(numericUpDownT_G, 1, 1);
+            textLayout.Controls.Add(numericUpDownT_B, 1, 2);
+            textLayout.Location = new System.Drawing.Point(3, 22);
+            textLayout.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            textLayout.Name = "textLayout";
+            textLayout.RowCount = 3;
+            textLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            textLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            textLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            textLayout.Size = new System.Drawing.Size(140, 87);
+            textLayout.TabIndex = 0;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Dock = System.Windows.Forms.DockStyle.Left;
+            label7.Location = new System.Drawing.Point(3, 0);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(27, 29);
+            label7.TabIndex = 1;
+            label7.Text = "Red";
+            label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Dock = System.Windows.Forms.DockStyle.Left;
+            label8.Location = new System.Drawing.Point(3, 29);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(38, 29);
+            label8.TabIndex = 2;
+            label8.Text = "Green";
+            label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Dock = System.Windows.Forms.DockStyle.Left;
+            label9.Location = new System.Drawing.Point(3, 58);
+            label9.Name = "label9";
+            label9.Size = new System.Drawing.Size(30, 29);
+            label9.TabIndex = 3;
+            label9.Text = "Blue";
+            label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // numericUpDownT_R
+            // 
+            numericUpDownT_R.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownT_R.Location = new System.Drawing.Point(52, 3);
+            numericUpDownT_R.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownT_R.Name = "numericUpDownT_R";
+            numericUpDownT_R.Size = new System.Drawing.Size(85, 23);
+            numericUpDownT_R.TabIndex = 4;
+            // 
+            // numericUpDownT_G
+            // 
+            numericUpDownT_G.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownT_G.Location = new System.Drawing.Point(52, 32);
+            numericUpDownT_G.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownT_G.Name = "numericUpDownT_G";
+            numericUpDownT_G.Size = new System.Drawing.Size(85, 23);
+            numericUpDownT_G.TabIndex = 5;
+            // 
+            // numericUpDownT_B
+            // 
+            numericUpDownT_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            numericUpDownT_B.Location = new System.Drawing.Point(52, 61);
+            numericUpDownT_B.Maximum = new decimal(new int[] { 255, 0, 0, 0 });
+            numericUpDownT_B.Name = "numericUpDownT_B";
+            numericUpDownT_B.Size = new System.Drawing.Size(85, 23);
+            numericUpDownT_B.TabIndex = 6;
+            // 
+            // textColorPanel
+            // 
+            textColorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            textColorPanel.Location = new System.Drawing.Point(307, 137);
+            textColorPanel.Name = "textColorPanel";
+            textColorPanel.Size = new System.Drawing.Size(146, 22);
+            textColorPanel.TabIndex = 3;
+            // 
+            // textButton
+            // 
+            textButton.AutoSize = true;
+            textButton.Dock = System.Windows.Forms.DockStyle.Left;
+            textButton.Location = new System.Drawing.Point(307, 165);
+            textButton.Name = "textButton";
+            textButton.Size = new System.Drawing.Size(110, 29);
+            textButton.TabIndex = 6;
+            textButton.Text = "Set Text";
+            textButton.UseVisualStyleBackColor = true;
+            // 
+            // setColorsButton
+            // 
+            setColorsButton.Location = new System.Drawing.Point(11, 208);
+            setColorsButton.Name = "setColorsButton";
+            setColorsButton.Size = new System.Drawing.Size(88, 27);
+            setColorsButton.TabIndex = 1;
+            setColorsButton.Text = "Set Colors";
+            setColorsButton.UseVisualStyleBackColor = true;
+            // 
+            // setDefaultColorsButton
+            // 
+            setDefaultColorsButton.Location = new System.Drawing.Point(105, 208);
+            setDefaultColorsButton.Name = "setDefaultColorsButton";
+            setDefaultColorsButton.Size = new System.Drawing.Size(88, 27);
+            setDefaultColorsButton.TabIndex = 2;
+            setDefaultColorsButton.Text = "Set Defaults";
+            setDefaultColorsButton.UseVisualStyleBackColor = true;
+            // 
+            // HSBPanel
+            // 
+            HSBPanel.AutoSize = true;
+            HSBPanel.ColumnCount = 3;
+            HSBPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            HSBPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            HSBPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            HSBPanel.Controls.Add(hsbBackground, 0, 0);
+            HSBPanel.Controls.Add(hsbHighlight, 1, 0);
+            HSBPanel.Controls.Add(hsbText, 2, 0);
+            HSBPanel.Location = new System.Drawing.Point(8, 241);
+            HSBPanel.Name = "HSBPanel";
+            HSBPanel.RowCount = 1;
+            HSBPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            HSBPanel.Size = new System.Drawing.Size(456, 29);
+            HSBPanel.TabIndex = 3;
+            // 
+            // hsbBackground
+            // 
+            hsbBackground.Dock = System.Windows.Forms.DockStyle.Left;
+            hsbBackground.Location = new System.Drawing.Point(3, 3);
+            hsbBackground.Name = "hsbBackground";
+            hsbBackground.ReadOnly = true;
+            hsbBackground.Size = new System.Drawing.Size(100, 23);
+            hsbBackground.TabIndex = 0;
+            // 
+            // hsbHighlight
+            // 
+            hsbHighlight.Dock = System.Windows.Forms.DockStyle.Left;
+            hsbHighlight.Location = new System.Drawing.Point(155, 3);
+            hsbHighlight.Name = "hsbHighlight";
+            hsbHighlight.ReadOnly = true;
+            hsbHighlight.Size = new System.Drawing.Size(100, 23);
+            hsbHighlight.TabIndex = 1;
+            // 
+            // hsbText
+            // 
+            hsbText.Dock = System.Windows.Forms.DockStyle.Left;
+            hsbText.Location = new System.Drawing.Point(307, 3);
+            hsbText.Name = "hsbText";
+            hsbText.ReadOnly = true;
+            hsbText.Size = new System.Drawing.Size(100, 23);
+            hsbText.TabIndex = 2;
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Controls.Add(this.tabSheetAppModes);
-            this.tabControl.Controls.Add(this.tabSheetContextTabs);
-            this.tabControl.Controls.Add(this.tabSheetContextPopups);
-            this.tabControl.Controls.Add(this.tabSheetColorize);
-            this.tabControl.Location = new System.Drawing.Point(0, 170);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(933, 353);
-            this.tabControl.TabIndex = 1;
+            tabControl.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            tabControl.Controls.Add(tabSheetAppModes);
+            tabControl.Controls.Add(tabSheetContextTabs);
+            tabControl.Controls.Add(tabSheetContextPopups);
+            tabControl.Controls.Add(tabSheetColorize);
+            tabControl.Location = new System.Drawing.Point(0, 170);
+            tabControl.Margin = new System.Windows.Forms.Padding(0);
+            tabControl.Name = "tabControl";
+            tabControl.SelectedIndex = 0;
+            tabControl.Size = new System.Drawing.Size(933, 353);
+            tabControl.TabIndex = 1;
             // 
             // PreviewForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(933, 533);
-            this.Controls.Add(this.tabControl);
-            this.Name = "PreviewForm";
-            this.ShowInTaskbar = false;
-            this.Text = "Ribbon Preview";
-            this.tabSheetAppModes.ResumeLayout(false);
-            this.tabSheetAppModes.PerformLayout();
-            this.tabSheetContextTabs.ResumeLayout(false);
-            this.tabSheetContextTabs.PerformLayout();
-            this.tabSheetContextPopups.ResumeLayout(false);
-            this.tabSheetContextPopups.PerformLayout();
-            this.tabSheetColorize.ResumeLayout(false);
-            this.tabSheetColorize.PerformLayout();
-            this.HSBPanel.ResumeLayout(false);
-            this.HSBPanel.PerformLayout();
-            this.colorizeLayout.ResumeLayout(false);
-            this.colorizeLayout.PerformLayout();
-            this.highlightGroup.ResumeLayout(false);
-            this.highlightGroup.PerformLayout();
-            this.highlightLayout.ResumeLayout(false);
-            this.highlightLayout.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH_R)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH_G)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownH_B)).EndInit();
-            this.textColorGroup.ResumeLayout(false);
-            this.textColorGroup.PerformLayout();
-            this.textLayout.ResumeLayout(false);
-            this.textLayout.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownT_R)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownT_G)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownT_B)).EndInit();
-            this.backgroundGroupBox1.ResumeLayout(false);
-            this.backgroundGroupBox1.PerformLayout();
-            this.backgroundLayout.ResumeLayout(false);
-            this.backgroundLayout.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB_R)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB_G)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB_B)).EndInit();
-            this.tabControl.ResumeLayout(false);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(933, 533);
+            Controls.Add(tabControl);
+            Name = "PreviewForm";
+            ShowInTaskbar = false;
+            Text = "Ribbon Preview";
+            tabSheetAppModes.ResumeLayout(false);
+            tabSheetAppModes.PerformLayout();
+            tabSheetContextTabs.ResumeLayout(false);
+            tabSheetContextTabs.PerformLayout();
+            tabSheetContextPopups.ResumeLayout(false);
+            tabSheetContextPopups.PerformLayout();
+            tabSheetColorize.ResumeLayout(false);
+            tabSheetColorize.PerformLayout();
+            colorizeLayout.ResumeLayout(false);
+            colorizeLayout.PerformLayout();
+            backgroundGroupBox1.ResumeLayout(false);
+            backgroundGroupBox1.PerformLayout();
+            backgroundLayout.ResumeLayout(false);
+            backgroundLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownB_R).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownB_G).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownB_B).EndInit();
+            highlightGroup.ResumeLayout(false);
+            highlightGroup.PerformLayout();
+            highlightLayout.ResumeLayout(false);
+            highlightLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownH_R).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownH_G).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownH_B).EndInit();
+            textColorGroup.ResumeLayout(false);
+            textColorGroup.PerformLayout();
+            textLayout.ResumeLayout(false);
+            textLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownT_R).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownT_G).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDownT_B).EndInit();
+            HSBPanel.ResumeLayout(false);
+            HSBPanel.PerformLayout();
+            tabControl.ResumeLayout(false);
+            ResumeLayout(false);
 
         }
 
@@ -755,7 +708,6 @@ namespace UIRibbonTools
         private System.Windows.Forms.Label labelContextTabs;
         private System.Windows.Forms.Label labelContextPopups;
         private System.Windows.Forms.ListBox listBoxContextPopups;
-        private System.Windows.Forms.Button getColorsButton;
         private System.Windows.Forms.TableLayoutPanel colorizeLayout;
         private System.Windows.Forms.GroupBox textColorGroup;
         private System.Windows.Forms.TableLayoutPanel textLayout;
@@ -785,6 +737,7 @@ namespace UIRibbonTools
         private System.Windows.Forms.Panel highlightColorPanel;
         private System.Windows.Forms.Panel backgroundColorPanel;
         private System.Windows.Forms.Button setColorsButton;
+        private System.Windows.Forms.Button setDefaultColorsButton;
         private System.Windows.Forms.Button textButton;
         private System.Windows.Forms.Button highlightButton;
         private System.Windows.Forms.Button backgroundButton;

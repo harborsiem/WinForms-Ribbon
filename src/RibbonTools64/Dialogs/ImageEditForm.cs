@@ -14,7 +14,6 @@ using System.IO;
 //using WinForms.Ribbon;
 #endif
 using Windows.Win32.Graphics.Gdi;
-using RibbonLib;
 
 namespace UIRibbonTools
 {

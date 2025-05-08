@@ -65,6 +65,7 @@ namespace WinForms.Actions
         Localizable(true),
         Description("The text used in controls associated to this MenuAction.")
         ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string Text
         {
             get
@@ -298,6 +299,7 @@ namespace WinForms.Actions
         #endregion
         #region implementation
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal ImageList ImageList
         {
             set
@@ -357,6 +359,7 @@ namespace WinForms.Actions
         /// The MenuActionList to which this action belongs
         /// </summary>
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal bool ShowTextOnToolBar
         {
             set

@@ -48,6 +48,8 @@ namespace UIRibbonTools
                 return string.Empty;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public new Form Owner
         {
             set

@@ -14,8 +14,6 @@ using System.Diagnostics;
 using System.Reflection;
 using WinForms.Actions;
 using Windows.Win32;
-//using WinForms.Ribbon;
-using RibbonLib;
 
 namespace UIRibbonTools
 {
@@ -63,6 +61,9 @@ namespace UIRibbonTools
         //private PreviewForm  _previewForm;
         private BuildPreviewHelper _buildPreviewHelper;
         private ImageList _imageListMain;
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public ShortCutKeysHandler ShortCutKeysHandler { get; private set; }
 
         public MainForm()
@@ -287,7 +288,12 @@ namespace UIRibbonTools
             _actionDotnetWebSite.Execute += ActionDotnetWebSiteExecute;
             _actionDotnetWebSite.Hint = "C#, VB Ribbon Framework";
             _actionDotnetWebSite.ImageIndex = 7;
-            _actionDotnetWebSite.Text = "Website for .NET Windows Ribbon";
+            string webText;
+            if (Settings.Instance.RibbonFramework)
+                webText = "Website for .NET WinForms-Ribbon";
+            else
+                webText = "Website for .NET Windows Ribbon";
+            _actionDotnetWebSite.Text = webText;
             _actionList.SetAction(menuDotnetWebSite, _actionDotnetWebSite);
 
             _actionMSDN.Execute += ActionMSDNExecute;
@@ -770,7 +776,6 @@ namespace UIRibbonTools
         private void FormClose(object sender, FormClosedEventArgs e)
         {
             Settings.Instance.Write();
-            UIImage.Destroy();
             Application.Exit();
         }
 

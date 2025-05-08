@@ -1,3 +1,4 @@
+#define editFrame
 namespace UIRibbonTools
 {
     partial class CommandsFrame
@@ -47,6 +48,7 @@ namespace UIRibbonTools
             menuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             LabelHeader = new System.Windows.Forms.ToolStripLabel();
+#if !editFrame
             labelProperty = new System.Windows.Forms.Label();
             labelValue = new System.Windows.Forms.Label();
             labelID = new System.Windows.Forms.Label();
@@ -78,6 +80,9 @@ namespace UIRibbonTools
             EditTooltipDescriptionSymbol = new System.Windows.Forms.TextBox();
             EditKeytipSymbol = new System.Windows.Forms.TextBox();
             _propertiesPanel = new System.Windows.Forms.TableLayoutPanel();
+#else
+            _editFrame = new EditFrame();
+#endif
             _smallImagesPanel = new System.Windows.Forms.Panel();
             labelSmallImages = new System.Windows.Forms.Label();
             _largeImagesPanel = new System.Windows.Forms.Panel();
@@ -96,6 +101,9 @@ namespace UIRibbonTools
             toolBarCommands.SuspendLayout();
             popupMenuList.SuspendLayout();
             toolStrip1.SuspendLayout();
+#if editFrame
+            _editFrame.SuspendLayout();
+#else
             ((System.ComponentModel.ISupportInitialize)EditId).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EditCaptionId).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EditDescriptionId).BeginInit();
@@ -103,6 +111,7 @@ namespace UIRibbonTools
             ((System.ComponentModel.ISupportInitialize)EditTooltipDescriptionId).BeginInit();
             ((System.ComponentModel.ISupportInitialize)EditKeytipId).BeginInit();
             _propertiesPanel.SuspendLayout();
+#endif
             _smallImagesPanel.SuspendLayout();
             _largeImagesPanel.SuspendLayout();
             _highContrastImagesPanel.SuspendLayout();
@@ -240,6 +249,7 @@ namespace UIRibbonTools
             LabelHeader.Name = "LabelHeader";
             LabelHeader.Size = new System.Drawing.Size(126, 22);
             LabelHeader.Text = "  Command Properties";
+#if !editFrame
             // 
             // labelProperty
             // 
@@ -578,6 +588,17 @@ namespace UIRibbonTools
             _propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             _propertiesPanel.Size = new System.Drawing.Size(702, 224);
             _propertiesPanel.TabIndex = 0;
+#else
+            // 
+            // _editFrame
+            //
+            _editFrame.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _editFrame.Location = new System.Drawing.Point(0, 0);
+            _editFrame.Margin = new System.Windows.Forms.Padding(0);
+            _editFrame.Name = "_editFrame";
+            _editFrame.Size = new System.Drawing.Size(702, 224);
+            _editFrame.TabIndex = 0;
+#endif
             // 
             // _smallImagesPanel
             // 
@@ -729,7 +750,11 @@ namespace UIRibbonTools
             _panel2Layout.AutoScroll = true;
             _panel2Layout.ColumnCount = 1;
             _panel2Layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+#if editFrame
+            _panel2Layout.Controls.Add(_editFrame, 0, 0);
+#else
             _panel2Layout.Controls.Add(_propertiesPanel, 0, 0);
+#endif
             _panel2Layout.Controls.Add(imagesPanel, 0, 1);
             _panel2Layout.Dock = System.Windows.Forms.DockStyle.Fill;
             _panel2Layout.Location = new System.Drawing.Point(0, 25);
@@ -774,6 +799,10 @@ namespace UIRibbonTools
             popupMenuList.ResumeLayout(false);
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+#if editFrame
+            _editFrame.ResumeLayout(false);
+            _editFrame.PerformLayout();
+#else
             ((System.ComponentModel.ISupportInitialize)EditId).EndInit();
             ((System.ComponentModel.ISupportInitialize)EditCaptionId).EndInit();
             ((System.ComponentModel.ISupportInitialize)EditDescriptionId).EndInit();
@@ -782,6 +811,7 @@ namespace UIRibbonTools
             ((System.ComponentModel.ISupportInitialize)EditKeytipId).EndInit();
             _propertiesPanel.ResumeLayout(false);
             _propertiesPanel.PerformLayout();
+#endif
             _smallImagesPanel.ResumeLayout(false);
             _largeImagesPanel.ResumeLayout(false);
             _highContrastImagesPanel.ResumeLayout(false);
@@ -798,7 +828,7 @@ namespace UIRibbonTools
             ResumeLayout(false);
         }
 
-        #endregion
+#endregion
 
         private System.Windows.Forms.SplitContainer SplitterCommands;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -809,7 +839,10 @@ namespace UIRibbonTools
         private System.Windows.Forms.ToolStripButton toolButtonMoveUp;
         private System.Windows.Forms.ToolStripButton toolButtonMoveDown;
         private System.Windows.Forms.ToolStripButton toolButtonSearchCommand;
+#if !editFrame
         private System.Windows.Forms.TableLayoutPanel _propertiesPanel;
+        private System.Windows.Forms.Label labelProperty;
+        private System.Windows.Forms.Label labelValue;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label labelLabelTitle;
         private System.Windows.Forms.Label labelLabelDescription;
@@ -838,6 +871,9 @@ namespace UIRibbonTools
         private System.Windows.Forms.NumericUpDown EditTooltipTitleId;
         private System.Windows.Forms.NumericUpDown EditTooltipDescriptionId;
         private System.Windows.Forms.NumericUpDown EditKeytipId;
+#else
+        private EditFrame _editFrame;
+#endif
         internal System.Windows.Forms.ListView ListViewCommands;
         private System.Windows.Forms.ContextMenuStrip popupMenuList;
         private System.Windows.Forms.ToolStripMenuItem menuAddCommand;
@@ -849,8 +885,6 @@ namespace UIRibbonTools
         private System.Windows.Forms.ToolStripLabel LabelHeader;
         internal System.Windows.Forms.TableLayoutPanel _panel2Layout;
         private ImageListFrame _smallImagesFrame;
-        private System.Windows.Forms.Label labelProperty;
-        private System.Windows.Forms.Label labelValue;
         private ImageListFrame _largeImagesFrame;
         private System.Windows.Forms.Panel _largeHCImagesPanel;
         private System.Windows.Forms.Label labelLargeHCImages;
@@ -863,5 +897,6 @@ namespace UIRibbonTools
         private ImageListFrame _largeHCImagesFrame;
         private ImageListFrame _smallHCImagesFrame;
         private System.Windows.Forms.TableLayoutPanel imagesPanel;
+
     }
 }

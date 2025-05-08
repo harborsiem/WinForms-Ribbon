@@ -253,8 +253,9 @@ namespace UIRibbonTools
                 throw new ArgumentException("File does not exist", nameof(filename));
             byte[] bytes = new byte[2];
             FileStream stream = File.OpenRead(filename);
+            int count;
             if (stream.Length > 54) //minimum length of a bitmap file
-                stream.Read(bytes, 0, 2);
+                count = stream.Read(bytes, 0, 2);
             stream.Close();
             if (bytes[0] == 0x42 && bytes[1] == 0x4d) //"BM"
             {

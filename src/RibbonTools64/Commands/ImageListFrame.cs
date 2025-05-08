@@ -1,4 +1,4 @@
-#define UI
+//#define UI
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,6 @@ using WinForms.Actions;
 #if UI
 //using WinForms.Ribbon;
 #endif
-using RibbonLib;
 
 namespace UIRibbonTools
 {

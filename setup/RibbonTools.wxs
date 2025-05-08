@@ -2,7 +2,7 @@
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
 	 xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
 
-  <Package Name="RibbonTools64" Language="1033" Version="8.0.2.0" Manufacturer="RibbonLib" UpgradeCode="{D6282057-BE7E-4BC4-BBBB-5A1EB73E3858}" InstallerVersion="301" ProductCode="{529A2672-3BA3-489B-8A3C-92B089536C31}">
+  <Package Name="RibbonTools64" Language="1033" Version="8.1.0.0" Manufacturer="RibbonLib" UpgradeCode="{D6282057-BE7E-4BC4-BBBB-5A1EB73E3858}" InstallerVersion="301" ProductCode="{E63499D8-CF0C-4C08-B06C-CEF53295CDF9}">
     <SummaryInformation Description="Design, Build and Preview the Ribbon" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -25,9 +25,9 @@
     <UIRef Id="WixUI_ErrorProgressText" />
     <Icon Id="MainIcon.ico" SourceFile="Ribbon.ico" />
     <Property Id="ARPPRODUCTICON" Value="MainIcon.ico" />
-    <Property Id="ARPHELPLINK" Value="https://github.com/harborsiem/WindowsRibbon/wiki" />
-    <Property Id="ARPCOMMENTS" Value="Design, Build and Preview Windows Ribbon" />
-    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/harborsiem/WindowsRibbon/releases" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/harborsiem/WinForms-Ribbon/wiki" />
+    <Property Id="ARPCOMMENTS" Value="Design, Build and Preview WinForms-Ribbon" />
+    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/harborsiem/WinForms-Ribbon/releases" />
     <Property Id="ARPNOREPAIR" Value="yes" />
     <WixVariable Id="WixUILicenseRtf" Value="MIT_License.rtf" />
   </Package>
@@ -47,7 +47,9 @@
         <Environment Id="PATH" Name="Path" Value="[Di.INSTALLFOLDER]" Permanent="no" Part="last" Action="set" System="yes" />
         <File Id="Fi.RibbonToolsExe" Name="RibbonTools64.exe" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\RibbonTools64.exe" KeyPath="yes" />
 		<File Id="Fi.RibbonToolsDll" Name="RibbonTools64.dll" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\RibbonTools64.dll" Checksum="yes" />
-		  <File Id="Fi.RibbonDll" Name="Ribbon.dll" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\Ribbon.dll" Checksum="yes" />
+		  <File Id="Fi.RibbonFrameworkDll" Name="RibbonFramework.dll" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\RibbonFramework.dll" Checksum="yes" />
+		  <File Id="Fi.SvgDll" Name="Svg.dll" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\Svg.dll" Checksum="yes" />
+		  <File Id="Fi.ExCSSDll" Name="ExCSS.dll" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\ExCSS.dll" Checksum="yes" />
 		  <File Id="Fi.RibbonToolsDeps" Name="RibbonTools64.deps.json" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\RibbonTools64.deps.json" Checksum="yes" />
 		  <File Id="Fi.RibbonToolsRuntimeconfig" Name="RibbonTools64.runtimeconfig.json" Source="..\src\RibbonTools64\bin\x64\Release\net8.0-windows\RibbonTools64.runtimeconfig.json" Checksum="yes" />
 	  </Component>

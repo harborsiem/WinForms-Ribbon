@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-//using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RibbonLib.Controls;
-using RibbonLib;
+using WinForms.Ribbon;
 
 namespace UIRibbonTools
 {
     class RibbonClassBuilder
     {
-        private Ribbon _ribbon;
+        private RibbonStrip _ribbon;
 
         public KeyValuePair<string, RibbonQuickAccessToolbar> Qat;
         public KeyValuePair<string, RibbonApplicationMenu> ApplicationMenu;
@@ -34,7 +32,7 @@ namespace UIRibbonTools
         public Dictionary<string, RibbonToggleButton> ToggleButtons;
         //Dictionary's and KeyValuePairs with getter, private setter ?
 
-        public RibbonClassBuilder(Ribbon ribbon)
+        public RibbonClassBuilder(RibbonStrip ribbon)
         {
             this._ribbon = ribbon;
         }

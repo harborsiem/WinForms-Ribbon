@@ -109,7 +109,7 @@ namespace UIRibbonTools
                     //buildEnabled = true;
                     _setLanguages(FindLanguages(path));
                     _selectedCulture = BuildPreviewHelper.Neutral;
-                    previewEnabled = CheckRibbonResource(path);
+                    previewEnabled = CheckMarkupResource(path);
                 }
                 else
                 {
@@ -139,13 +139,13 @@ namespace UIRibbonTools
             return languages;
         }
 
-        private bool CheckRibbonResource(string path)
+        private bool CheckMarkupResource(string path)
         {
             bool previewEnabled = false;
-            string ribbonResourceFileName = Path.ChangeExtension(path, "ribbon");
-            if (File.Exists(ribbonResourceFileName))
+            string markupResourceFileName = Path.ChangeExtension(path, "ribbon");
+            if (File.Exists(markupResourceFileName))
             {
-                SetRibbonResourceName(ribbonResourceFileName);
+                SetMarkupResource(markupResourceFileName);
                 previewEnabled = true;
                 if (Parser == null || !Parser.Results.HasHFile)
                     Parser = new RibbonParser(path);
@@ -153,16 +153,16 @@ namespace UIRibbonTools
             return previewEnabled;
         }
 
-        private void SetRibbonResourceName(string path)
+        private void SetMarkupResource(string path)
         {
-            RibbonResourceName = "file://" + path;
+            MarkupResource = "file://" + path;
         }
 
         /// <summary>
-        /// MainForm sets the name, PreviewForm uses it for Ribbon.ResourceName
-        /// ResourceName starts with "file://". It's a file based resource
+        /// MainForm sets the name, PreviewForm uses it for RibbonStrip.MarkupResource
+        /// MarkupResource starts with "file://". It's a file based resource
         /// </summary>
-        public string RibbonResourceName { get; private set; }
+        public string MarkupResource { get; private set; }
 
         public string XmlRibbonFile { get; private set; }
 
@@ -196,7 +196,7 @@ namespace UIRibbonTools
                     var buffer = manager.CreateRibbon(target, resourceIdentifier);
                     File.WriteAllBytes(target.RibbonFilename, buffer);
                 }
-                bool validResource = CheckRibbonResource(path);
+                bool validResource = CheckMarkupResource(path);
                 _previewActionEnabled(validResource);
 
                 // create the C#, VB file RibbonItems.Designer.cs
