@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace UIRibbonTools
 {
@@ -17,6 +18,33 @@ namespace UIRibbonTools
             InitializeComponent();
             if (components == null)
                 components = new Container();
+            Load += EditFrame_Load;
+        }
+
+        private void EditFrame_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Size thisSize = this.Size;
+                Padding upDownMargin = EditId.Margin;
+                Padding margin = EditName.Margin;
+                int diffHeight = (upDownMargin.Top + upDownMargin.Bottom - margin.Top - margin.Bottom) * 5;
+                int diffWidth = (upDownMargin.Left + upDownMargin.Right - margin.Left - margin.Right) * 5;
+                _propertiesPanel.SuspendLayout();
+                this.SuspendLayout();
+                EditId.Margin = margin;
+                EditCaptionId.Margin = margin;
+                EditDescriptionId.Margin = margin;
+                EditTooltipTitleId.Margin = margin;
+                EditTooltipDescriptionId.Margin = margin;
+                EditKeytipId.Margin = margin;
+                _propertiesPanel.ResumeLayout(false);
+                _propertiesPanel.PerformLayout();
+                int endPositionY = EditComment.Location.Y + EditComment.Size.Height;
+                this.Size = new Size(thisSize.Width - diffWidth, endPositionY + margin.Bottom);
+                this.ResumeLayout(false);
+                this.PerformLayout();
+            }
         }
 
         //    public void InitMargins()

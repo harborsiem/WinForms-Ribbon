@@ -30,6 +30,17 @@ namespace UIRibbonTools
             bool designtime = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             if (designtime)
                 InitializeComponent();
+            Load += ApplicationMenuFrame_Load;
+        }
+
+        private void ApplicationMenuFrame_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Padding upDownMargin = _upDownMaxCount.Margin;
+                Padding margin = _checkBoxEnablePinning.Margin;
+                _upDownMaxCount.Margin = margin;
+            }
         }
 
         protected override void InitComponentStep1()
@@ -66,6 +77,7 @@ namespace UIRibbonTools
             this.groupLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupLayout.AutoSize = true;
+            this.groupLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             this.groupLayout.ColumnCount = 3;
             this.groupLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 144F));
             this.groupLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));

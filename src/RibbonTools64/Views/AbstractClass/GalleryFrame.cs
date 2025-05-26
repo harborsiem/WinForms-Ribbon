@@ -52,6 +52,20 @@ namespace UIRibbonTools
             bool designtime = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             if (designtime)
                 InitializeComponent();
+            Load += GalleryFrame_Load;
+        }
+
+        private void GalleryFrame_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Padding upDownMargin = _upDownItemHeight.Margin;
+                Padding margin = _comboBoxGalleryType.Margin;
+                _upDownItemHeight.Margin = margin;
+                _upDownItemWidth.Margin = margin;
+                _upDownRows.Margin = margin;
+                _upDownColumns.Margin = margin;
+            }
         }
 
         private void AppMenuConstraint()
@@ -291,6 +305,7 @@ namespace UIRibbonTools
             this.groupLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupLayout.AutoSize = true;
+            this.groupLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             this.groupLayout.ColumnCount = 3;
             this.groupLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 144F));
             this.groupLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));
@@ -469,8 +484,8 @@ namespace UIRibbonTools
             // 
             // _groupBox1
             // 
-            this._groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this._groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this._groupBox1.AutoSize = true;
             this.LayoutPanel.SetColumnSpan(this._groupBox1, 4);

@@ -356,6 +356,7 @@ namespace UIRibbonTools
             // 
             _propertiesPanel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _propertiesPanel.AutoSize = true;
+            _propertiesPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             _propertiesPanel.ColumnCount = 4;
             _propertiesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             _propertiesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));

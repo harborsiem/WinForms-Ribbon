@@ -37,6 +37,20 @@ namespace UIRibbonTools
             bool designtime = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             if (designtime)
                 InitializeComponent();
+            Load += DropDownColorPickerFrame_Load;
+        }
+
+        private void DropDownColorPickerFrame_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Padding upDownMargin = UpDownColumns.Margin;
+                Padding margin = ComboBoxChipSize.Margin;
+                UpDownColumns.Margin = margin;
+                UpDownRecentRows.Margin = margin;
+                UpDownStandardRows.Margin = margin;
+                UpDownThemeRows.Margin = margin;
+            }
         }
 
         protected override void InitComponentStep1()

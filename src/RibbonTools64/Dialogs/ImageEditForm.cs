@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+
 #if UI
 //using WinForms.Ribbon;
 #endif
@@ -36,7 +37,18 @@ namespace UIRibbonTools
             RightButton.ImageIndex = 0;
             RightButton.MouseEnter += RightButton_MouseEnter;
             RightButton.MouseLeave += RightButton_MouseLeave;
+            Load += ImageEditForm_Load;
             InitializeEvents();
+        }
+
+        private void ImageEditForm_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Padding idMargin = EditResourceId.Margin;
+                Padding margin = EditSymbol.Margin;
+                EditResourceId.Margin = margin;
+            }
         }
 
         private void RightButton_MouseLeave(object sender, EventArgs e)

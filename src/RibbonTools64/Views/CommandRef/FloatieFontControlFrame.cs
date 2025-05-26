@@ -29,6 +29,18 @@ namespace UIRibbonTools
             bool designtime = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             if (designtime)
                 InitializeComponent();
+            Load += FloatieFontControlFrame_Load;
+        }
+
+        private void FloatieFontControlFrame_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Padding upDownMargin = UpDownMinFontSize.Margin;
+                Padding margin = CheckBoxTrueTypeOnly.Margin;
+                UpDownMinFontSize.Margin = margin;
+                UpDownMaxFontSize.Margin = margin;
+            }
         }
 
         protected override void InitComponentStep1()

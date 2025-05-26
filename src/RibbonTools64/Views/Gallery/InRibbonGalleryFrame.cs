@@ -38,6 +38,21 @@ namespace UIRibbonTools
             bool designtime = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
             if (designtime)
                 InitializeComponent();
+            Load += InRibbonGalleryFrame_Load;
+        }
+
+        private void InRibbonGalleryFrame_Load(object sender, EventArgs e)
+        {
+            if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            {
+                Padding upDownMargin = _upDownMinColumnsLarge.Margin;
+                Padding margin = ComboBoxGalleryType.Margin;
+                _upDownMinColumnsLarge.Margin = margin;
+                _upDownMinColumnsMedium.Margin = margin;
+                _upDownMaxColumnsMedium.Margin = margin;
+                _upDownMaxColumns.Margin = margin;
+                _upDownMaxRows.Margin = margin;
+            }
         }
 
         protected override void InitComponentStep1()

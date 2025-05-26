@@ -8,8 +8,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 #### Changed (RibbonTools64)
 
-- Image conversion from Svg files added
+- Image conversion from Svg files added. [Svg, version 3.4.7](https://www.nuget.org/packages/svg)
 - Preview function now uses RibbonFramework.CCW package
+- High Dpi support
+- Advanced color choosing
 - Internal optimizations
 
 ### RibbonFramework V1.0.0, RibbonTools64 V8.0.2
