@@ -1,4 +1,4 @@
-<Project Sdk="WixToolset.Sdk/5.0.2">
+<Project Sdk="WixToolset.Sdk/6.0.1">
   <PropertyGroup>
     <OutputName>RibbonTools</OutputName>
   </PropertyGroup>
@@ -6,7 +6,7 @@
     <OutputPath>msi\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="5.*" />
-    <PackageReference Include="WixToolset.NetFx.wixext" Version="5.*" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.*" />
+    <PackageReference Include="WixToolset.NetFx.wixext" Version="6.*" />
   </ItemGroup>
 </Project>

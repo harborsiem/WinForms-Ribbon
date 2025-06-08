@@ -36,7 +36,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon FontControl
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonFontControl(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -273,7 +273,7 @@ namespace WinForms.Ribbon
         /// However, if you want more control over the keytips used, you can specify them yourself.
         /// A keytip is not limited to a single character.
         /// </summary>
-        public string Keytip
+        public string? Keytip
         {
             get
             {
@@ -371,14 +371,14 @@ namespace WinForms.Ribbon
 
         internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
-            FontControlEventArgs? eventArgs = FontControlEventArgs.Create(*key, *currentValue, commandExecutionProperties);
+            FontControlEventArgs eventArgs = FontControlEventArgs.Create(*key, *currentValue, commandExecutionProperties)!;
             EventSet.Raise(s_FontChangedKey, this, eventArgs);
             return HRESULT.S_OK;
         }
 
         internal override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
         {
-            FontControlEventArgs? eventArgs = FontControlEventArgs.Create(*key, *currentValue, commandExecutionProperties);
+            FontControlEventArgs eventArgs = FontControlEventArgs.Create(*key, *currentValue, commandExecutionProperties)!;
             if (cancel)
             {
                 EventSet.Raise(s_CancelPreviewKey, this, eventArgs);

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-#pragma warning disable CA1050, CS1591
+#pragma warning disable CA1050, CS1591, CS8600
 
 ///////////////////////////////////////////////////////////////////////////////
 

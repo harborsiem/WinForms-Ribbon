@@ -47,7 +47,7 @@ namespace WinForms.Ribbon
         /// However, if you want more control over the keytips used, you can specify them yourself.
         /// A keytip is not limited to a single character.
         /// </summary>
-        public string Keytip
+        public string? Keytip
         {
             get
             {
@@ -66,7 +66,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// This is the label of the command as it will appear on the ribbon.
         /// </summary>
-        public string Label
+        public string? Label
         {
             get
             {
@@ -154,7 +154,7 @@ namespace WinForms.Ribbon
         /// The title of the tooltip (hint) that appear when the user hovers the mouse over the command.
         /// This title is displayed in bold at the top of the tooltip.
         /// </summary>
-        public string TooltipTitle
+        public string? TooltipTitle
         {
             get
             {
@@ -169,7 +169,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The description of the tooltip as it appears below the title.
         /// </summary>
-        public string TooltipDescription
+        public string? TooltipDescription
         {
             get
             {

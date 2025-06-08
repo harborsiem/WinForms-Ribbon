@@ -62,6 +62,8 @@ namespace WinForms.Ribbon
         private UICollectionChangedEvent<T>? _changedEvent;
         private PropertySetEnumerator _propset;
 
+        internal IUICollection* CpIUICollection => _cpIUICollection;
+
         /// <summary>
         /// 
         /// </summary>
@@ -81,7 +83,7 @@ namespace WinForms.Ribbon
             if (item == null || !(itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION || itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION))
                 throw new ArgumentException("Ribbon control is not a Collection or CommandCollection", nameof(item));
             if (cpIUICollection.IsNull)
-                throw new ArgumentException("Not an IUICollection ComObject", nameof(cpIUICollection));
+                throw new ArgumentException("Not a IUICollection ComObject", nameof(cpIUICollection));
             else
                 _cpIUICollection = cpIUICollection;
             _typeofT = typeof(T);

@@ -25,7 +25,7 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed unsafe class UICollectionChangedEvent<T> : IUICollectionChangedEvent.Interface where T : AbstractPropertySet, new()
     {
-        private static readonly EventKey ChangedEventKey = new EventKey();
+        private static readonly EventKey s_ChangedEventKey = new EventKey();
         private IUICollection* _cpIUICollection;
         private readonly CollectionItem _sender;
         private readonly UICollection<T> _collection;
@@ -65,7 +65,9 @@ namespace WinForms.Ribbon
             if (_cookie != 0)
             {
                 UnregisterComEvent(_cpIUICollection, _cookie);
-                //uint refCount = _cpIUICollection->Release();
+                //uint refCount;
+                //_cpIUICollection->AddRef();
+                //refCount = _cpIUICollection->Release();
                 _cookie = 0;
             }
         }
@@ -75,8 +77,8 @@ namespace WinForms.Ribbon
         /// </summary>
         public event EventHandler<CollectionChangedEventArgs>? ChangedEvent
         {
-            add { _eventSet.Add(ChangedEventKey, value); }
-            remove { _eventSet.Remove(ChangedEventKey, value); }
+            add { _eventSet.Add(s_ChangedEventKey, value); }
+            remove { _eventSet.Remove(s_ChangedEventKey, value); }
         }
 
         private ComScope<IConnectionPoint> GetConnectionPoint(IUICollection* cpIUICollection)
@@ -131,7 +133,7 @@ namespace WinForms.Ribbon
                 OnChanged(e);
             });
 
-            //_eventSet.Raise(ChangedEventKey, _sender, e);
+            //_eventSet.Raise(s_ChangedEventKey, _sender, e);
 
             return HRESULT.S_OK;
         }
@@ -140,7 +142,7 @@ namespace WinForms.Ribbon
 
         private void OnChanged(CollectionChangedEventArgs e)
         {
-            _eventSet.Raise(ChangedEventKey, _sender, e);
+            _eventSet.Raise(s_ChangedEventKey, _sender, e);
         }
     }
 }

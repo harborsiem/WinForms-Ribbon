@@ -11,12 +11,12 @@
       "IUICommandHandler",
       "IUIContextualUI",
       "IUIFramework",
+      "IUIImage",
+      "IUIImageFromBitmap",
       "IUIRibbon",
       "IUISimplePropertySet",
       "IPropertyStore",
-      "IStream",
-      "IUIImage",
-      "IUIImageFromBitmap"
+      "IStream"
     ]
   },
   "useSafeHandles": false,

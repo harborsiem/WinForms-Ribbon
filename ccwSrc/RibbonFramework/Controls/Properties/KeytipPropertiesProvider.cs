@@ -22,7 +22,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Keytip property
         /// </summary>
-        string Keytip { get; set; }
+        string? Keytip { get; set; }
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// KeytipPropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         /// <param name="item">ribbon control</param>
         public KeytipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
@@ -45,7 +45,7 @@ namespace WinForms.Ribbon
         }
 
         private readonly RibbonStripItem _item;
-        private string _keytip;
+        private string? _keytip;
 
         /// <summary>
         /// Handles IUICommandHandler.UpdateProperty function for the supported properties
@@ -74,7 +74,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Keytip property
         /// </summary>
-        public string Keytip
+        public string? Keytip
         {
             get
             {

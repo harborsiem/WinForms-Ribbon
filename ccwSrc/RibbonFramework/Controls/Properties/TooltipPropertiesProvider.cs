@@ -23,12 +23,12 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Tooltip title property
         /// </summary>
-        string TooltipTitle { get; set; }
+        string? TooltipTitle { get; set; }
 
         /// <summary>
         /// Tooltip description property
         /// </summary>
-        string TooltipDescription { get; set; }
+        string? TooltipDescription { get; set; }
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// TooltipPropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         /// <param name="item">ribbon control</param>
         public TooltipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
@@ -52,8 +52,8 @@ namespace WinForms.Ribbon
         }
 
         private readonly RibbonStripItem _item;
-        private string _tooltipTitle;
-        private string _tooltipDescription;
+        private string? _tooltipTitle;
+        private string? _tooltipDescription;
 
         /// <summary>
         /// Handles IUICommandHandler.UpdateProperty function for the supported properties
@@ -90,7 +90,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Tooltip title property
         /// </summary>
-        public unsafe string TooltipTitle
+        public unsafe string? TooltipTitle
         {
             get
             {
@@ -118,7 +118,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Tooltip description property
         /// </summary>
-        public unsafe string TooltipDescription
+        public unsafe string? TooltipDescription
         {
             get
             {

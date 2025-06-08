@@ -48,7 +48,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// ImagePropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         /// <param name="item">ribbon control</param>
         public ImagePropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)

@@ -110,7 +110,7 @@ namespace WinForms.Ribbon
             }
             else
             {
-                return null;
+                return null!;
             }
 
             //We need this part for a RibbonComboBox with markup IsEditable

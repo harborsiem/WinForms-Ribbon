@@ -26,9 +26,11 @@ namespace Windows.Win32.Foundation
                 this.Value = (uint)ColorTranslator.ToWin32(color);
         }
 
-        public Color ToColor() { 
+        public Color ToColor()
+        {
             if (this.Value == uint.MaxValue)
                 return Color.Transparent;
-            return ColorTranslator.FromWin32((int)Value); }
+            return ColorTranslator.FromWin32((int)Value);
+        }
     }
 }

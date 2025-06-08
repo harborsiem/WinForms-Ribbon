@@ -35,7 +35,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon RecentItems
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonRecentItems(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -140,7 +140,7 @@ namespace WinForms.Ribbon
         /// However, if you want more control over the keytips used, you can specify them yourself.
         /// A keytip is not limited to a single character.
         /// </summary>
-        public string Keytip
+        public string? Keytip
         {
             get
             {

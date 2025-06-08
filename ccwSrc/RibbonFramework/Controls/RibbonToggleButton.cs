@@ -41,7 +41,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon ToggleButton
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonToggleButton(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -104,7 +104,7 @@ namespace WinForms.Ribbon
         /// However, if you want more control over the keytips used, you can specify them yourself.
         /// A keytip is not limited to a single character.
         /// </summary>
-        public string Keytip
+        public string? Keytip
         {
             get
             {
@@ -123,7 +123,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// This is the label of the command as it will appear on the ribbon or context popups.
         /// </summary>
-        public string Label
+        public string? Label
         {
             get
             {
@@ -142,7 +142,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// A longer description of the command. This description is only used when the command is used in the right side of the application menu
         /// </summary>
-        public string LabelDescription
+        public string? LabelDescription
         {
             get
             {
@@ -230,7 +230,7 @@ namespace WinForms.Ribbon
         /// The title of the tooltip (hint) that appear when the user hovers the mouse over the command.
         /// This title is displayed in bold at the top of the tooltip.
         /// </summary>
-        public string TooltipTitle
+        public string? TooltipTitle
         {
             get
             {
@@ -245,7 +245,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The description of the tooltip as it appears below the title.
         /// </summary>
-        public string TooltipDescription
+        public string? TooltipDescription
         {
             get
             {

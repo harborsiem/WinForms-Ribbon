@@ -24,7 +24,7 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed class UICollectionChangedEvent<T> : IUICollectionChangedEvent where T : AbstractPropertySet, new()
     {
-        private static readonly EventKey ChangedEventKey = new EventKey();
+        private static readonly EventKey s_ChangedEventKey = new EventKey();
         private static readonly Guid IIDGuidIUICollectionChangedEvent = typeof(IUICollectionChangedEvent).GUID;
         private IUICollection? _cpIUICollection;
         private readonly CollectionItem _sender;
@@ -75,8 +75,8 @@ namespace WinForms.Ribbon
         /// </summary>
         public event EventHandler<CollectionChangedEventArgs>? ChangedEvent
         {
-            add { _eventSet.Add(ChangedEventKey, value); }
-            remove { _eventSet.Remove(ChangedEventKey, value); }
+            add { _eventSet.Add(s_ChangedEventKey, value); }
+            remove { _eventSet.Remove(s_ChangedEventKey, value); }
         }
 
         private IConnectionPoint? GetConnectionPoint(IUICollection cpIUICollection)
@@ -129,7 +129,7 @@ namespace WinForms.Ribbon
 
         private void OnChanged(CollectionChangedEventArgs e)
         {
-            _eventSet.Raise(ChangedEventKey, _sender, e);
+            _eventSet.Raise(s_ChangedEventKey, _sender, e);
         }
     }
 }

@@ -51,6 +51,7 @@ namespace WinForms.Ribbon
         {
             if (cpIUIImage == null)
                 throw new ArgumentNullException(nameof(cpIUIImage));
+            _ribbon = null!;
             _suppressRelease = true;
             _cpIUIImage = cpIUIImage;
             fixed (HBITMAP* phbitmap = &_hbitmap)
@@ -498,6 +499,7 @@ namespace WinForms.Ribbon
             Bitmap? bmp = null;
             try
             {
+                bmp = new Bitmap(filename);
                 bmp = TryGetArgbBitmap(bmp);
                 if (!highContrast)
                     ConvertToArgbBitmap(bmp);
@@ -516,7 +518,7 @@ namespace WinForms.Ribbon
             }
             finally
             {
-                bmp?.Dispose();
+                //bmp?.Dispose();
             }
         }
 
@@ -545,7 +547,7 @@ namespace WinForms.Ribbon
             }
             finally
             {
-                ; // bmp?.Dispose();
+                // bmp?.Dispose();
             }
         }
 

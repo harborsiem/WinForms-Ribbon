@@ -70,7 +70,7 @@ namespace WinForms.Ribbon
         private Dictionary<uint, RibbonStripItem> _mapRibbonStripItems = new Dictionary<uint, RibbonStripItem>();
         private IUIFramework* _cpIUIFramework;
         private IUIImageFromBitmap* _cpIUIImageFromBitmap;
-        private UIApplication _uIApplication;
+        private UIApplication? _uIApplication;
         private QatSetting? _qatSetting;
         private MarkupHandler? _markupHandler;
         private ShortcutHandler? _shortcutHandler;
@@ -95,6 +95,8 @@ namespace WinForms.Ribbon
         /// shortcut keys.
         /// </summary>
         [Category("RibbonBehavior"), Description("The embedded resource (xml)-file contains shortcut keys.")]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(null)]
         public string? ShortcutTableResourceName
         {
@@ -107,7 +109,7 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Initializes a new instance of the Ribbon
+        /// Initializes a new instance of the RibbonStrip
         /// </summary>
         public RibbonStrip()
         {
@@ -260,6 +262,9 @@ namespace WinForms.Ribbon
         /// A settings name like qat.xml is welcome
         /// </summary>
         [Category("RibbonBehavior"), Description("Stores the QuickAccess settings to the app specific LocalAppData.")]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue(null)]
         public string? QatSettingsFile { get; set; }
 
         /// <summary>
@@ -267,6 +272,8 @@ namespace WinForms.Ribbon
         /// Default value is APPLICATION or leave it empty.
         /// </summary>
         [Category("RibbonBehavior"), Description("This is the Name parameter used for the UICC Compiler. Default value is APPLICATION or leave it empty.")]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(null)]
         public string? ResourceIdentifier
         {
@@ -279,6 +286,8 @@ namespace WinForms.Ribbon
         /// in the application assembly. The RibbonMarkup.ribbon file.
         /// </summary>
         [Category("RibbonBehavior"), Description("Is a reference to an embedded resource file in the application assembly. The RibbonMarkup.ribbon file.")]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string? MarkupResource
         {
             get { return _markupResource; }
@@ -296,6 +305,8 @@ namespace WinForms.Ribbon
         /// In a later version we want to get informations from MarkupResource by parsing the header file for Id's and find strings and UIImage.
         /// </summary>
         [Category("RibbonBehavior"), Description("Is a reference to an embedded resource header file in the application assembly. The RibbonMarkup.h file.")]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [DefaultValue(null)]
         public string? MarkupHeader { get; set; }
 
@@ -369,7 +380,14 @@ namespace WinForms.Ribbon
 
         internal HRESULT SaveSettingsToStreamInternal(Stream stream)
         {
-            return _uIApplication.SaveSettingsToStream(stream);
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                using var pStream = ComHelpers.GetComScope<IStream>(new ComManagedStream(stream));
+                HRESULT hr = uiRibbonScope.Value->SaveSettingsToStream(pStream);
+                return hr;
+            }
+            return HRESULT.E_POINTER;
         }
 
         /// <summary>
@@ -388,7 +406,14 @@ namespace WinForms.Ribbon
 
         internal HRESULT LoadSettingsFromStreamInternal(Stream stream)
         {
-            return _uIApplication.LoadSettingsFromStream(stream);
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                using var pStream = ComHelpers.GetComScope<IStream>(new ComManagedStream(stream));
+                HRESULT hr = uiRibbonScope.Value->LoadSettingsFromStream(pStream);
+                return hr;
+            }
+            return HRESULT.E_POINTER;
         }
 
         /// <summary>
@@ -704,18 +729,14 @@ namespace WinForms.Ribbon
             }
 
             HRESULT hr;
-            void* voidPtr;
-            hr = Framework->GetView(contextPopupID, IID.Get<IUIContextualUI>(), &voidPtr);
+            IUIContextualUI* cpContextualUI;
+            hr = Framework->GetView(contextPopupID, IID.Get<IUIContextualUI>(), (void**)&cpContextualUI);
             if (hr.Succeeded)
             {
-                //if (voidPtr is not null)
+                using var contextualUIScope = new ComScope<IUIContextualUI>(cpContextualUI);
+                if (!contextualUIScope.IsNull)
                 {
-                    IUIContextualUI* cpContextualUI = (IUIContextualUI*)voidPtr;
-                    if (cpContextualUI != null)
-                    {
-                        cpContextualUI->ShowAtLocation(x, y);
-                        cpContextualUI->Release();
-                    }
+                    contextualUIScope.Value->ShowAtLocation(x, y);
                 }
             }
             else
@@ -752,6 +773,9 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Set color of application button
         /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public bool SetApplicationButtonColor(UI_HSBCOLOR value)
         {
             // check that ribbon is initialized
@@ -842,7 +866,7 @@ namespace WinForms.Ribbon
                 {
                     return false;
                 }
-                return _uIApplication.GetMinimized();
+                return GetMinimized();
             }
             set
             {
@@ -851,7 +875,7 @@ namespace WinForms.Ribbon
                 {
                     return;
                 }
-                _uIApplication.SetMinimized(value);
+                SetMinimized(value);
             }
         }
 
@@ -868,7 +892,7 @@ namespace WinForms.Ribbon
                 {
                     return false;
                 }
-                return _uIApplication.GetViewable();
+                return GetViewable();
             }
             set
             {
@@ -877,7 +901,7 @@ namespace WinForms.Ribbon
                 {
                     return;
                 }
-                _uIApplication.SetViewable(value);
+                SetViewable(value);
             }
         }
 
@@ -894,7 +918,7 @@ namespace WinForms.Ribbon
                 {
                     return (ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
                 }
-                return (ControlDock)_uIApplication.GetQuickAccessToolbarDock();
+                return (ControlDock)GetQuickAccessToolbarDock();
             }
             set
             {
@@ -903,7 +927,7 @@ namespace WinForms.Ribbon
                 {
                     return;
                 }
-                _uIApplication.SetQuickAccessToolbarDock((UI_CONTROLDOCK)value);
+                SetQuickAccessToolbarDock((UI_CONTROLDOCK)value);
             }
         }
 #pragma warning restore CS8602
@@ -931,7 +955,8 @@ namespace WinForms.Ribbon
         /// <summary>
         /// User can handle untrapped Exceptions in the other events of the Ribbon
         /// </summary>
-        public event EventHandler<ThreadExceptionEventArgs> RibbonEventException
+        [Category("RibbonEvent"), Description("User can handle untrapped Exceptions in the other events of the Ribbon")]
+        public event EventHandler<ThreadExceptionEventArgs>? RibbonEventException
         {
             add
             {
@@ -946,7 +971,8 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Event fires when the View is created
         /// </summary>
-        public event EventHandler ViewCreated
+        [Category("RibbonEvent"), Description("Event fires when the View is created")]
+        public event EventHandler? ViewCreated
         {
             add
             {
@@ -984,7 +1010,8 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Event fires when the View is in destroy
         /// </summary>
-        public event EventHandler ViewDestroy
+        [Category("RibbonEvent"), Description("Event fires when the View is in destroy")]
+        public event EventHandler? ViewDestroy
         {
             add
             {
@@ -1031,7 +1058,8 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Event fires when the Ribbon height changed
         /// </summary>
-        public event EventHandler RibbonHeightChanged
+        [Category("RibbonEvent"), Description("Event fires when the Ribbon height changed")]
+        public event EventHandler? RibbonHeightChanged
         {
             add
             {
@@ -1121,246 +1149,136 @@ namespace WinForms.Ribbon
             }
             char[] buffer = ArrayPool<char>.Shared.Rent(length + 1);
             fixed (char* bufferlocal = buffer)
-                length = PInvoke.LoadString(MarkupHandleInternal, id, bufferlocal, stackBuffer.Length);
+                length = PInvoke.LoadString(MarkupHandleInternal, id, bufferlocal, buffer.Length);
             result = new string(buffer, 0, length);
             ArrayPool<char>.Shared.Return(buffer);
             return result;
         }
 
-        ///// <summary>
-        ///// Get a Bitmap from an IUIImage
-        ///// </summary>
-        ///// <param name="uiImage"></param>
-        ///// <returns></returns>
-        //public static unsafe Bitmap GetBitmap(IUIImage uiImage)
-        //{
-        //    if (uiImage == null)
-        //        throw new ArgumentNullException(nameof(uiImage));
-        //    HBITMAP hBitmap;
-        //    uiImage.GetBitmap(&hBitmap);
-        //    // Create the BITMAP structure and get info from our nativeHBitmap
-        //    //this is a workaround because GDI+ did it not correct for 32 bit Bitmaps
-        //    BITMAP bitmapStruct = new BITMAP();
-        //    int bitmapSize = Marshal.SizeOf(bitmapStruct);
-        //    int size = PInvoke.GetObject(hBitmap, bitmapSize, &bitmapStruct);
-        //    //if (size != bitmapSize)
-        //    //    return null;
-        //    Bitmap managedBitmap;
-        //    if (bitmapStruct.bmBitsPixel == 32)
-        //    {
-        //        // Create the managed bitmap using the pointer to the pixel data of the native HBitmap
-        //        managedBitmap = new Bitmap(
-        //            bitmapStruct.bmWidth, bitmapStruct.bmHeight, bitmapStruct.bmWidthBytes, PixelFormat.Format32bppArgb, (IntPtr)bitmapStruct.bmBits);
-        //        if (bitmapStruct.bmHeight > 0)
-        //            managedBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-        //    }
-        //    else
-        //    {
-        //        managedBitmap = Bitmap.FromHbitmap(hBitmap);
-        //    }
-        //    return managedBitmap;
-        //}
+        /// <summary>
+        /// Specifies whether the ribbon is in a collapsed or expanded state
+        /// </summary>
+        private unsafe bool GetMinimized()
+        {
+            using var uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+                HRESULT hr;
+                PROPVARIANT propvar;
+                fixed (PROPERTYKEY* pMinimized = &RibbonProperties.Minimized)
+                    hr = cpPropertyStore.Value->GetValue(pMinimized, &propvar);
+                bool result = (bool)propvar; //PropVariantToBoolean
+                return result;
+            }
+            else
+                return false;
+        }
 
-        //public static unsafe Bitmap? GetBitmap1(IUIImage uiImage)
-        //{
-        //    if (uiImage == null)
-        //        throw new ArgumentNullException(nameof(uiImage));
-        //    HBITMAP hBitmap;
-        //    uiImage.GetBitmap(&hBitmap);
-        //    Bitmap? managedBitmap = null;
-        //    IWICImagingFactory? factory = new PInvoke.WICImagingFactory() as IWICImagingFactory;
-        //    if (factory != null)
-        //    {
-        //        factory.CreateBitmapFromHBITMAP(hBitmap, HPALETTE.Null, WICBitmapAlphaChannelOption.WICBitmapUseAlpha, out IWICBitmap wicBitmap);
-        //        wicBitmap.GetSize(out uint width1, out uint height1);
-        //        WICRect rect = new WICRect() { X = 0, Y = 0, Width = (int)width1, Height = (int)height1 };
-        //        wicBitmap.Lock(null, (uint)WICBitmapLockFlags.WICBitmapLockRead, out IWICBitmapLock ppILock);
-        //        ppILock.GetStride(out uint stride);
-        //        ppILock.GetPixelFormat(out Guid format);
-        //        ppILock.GetSize(out uint width, out uint height);
-        //        byte* pData;
-        //        ppILock.GetDataPointer(out uint bufferSize, &pData);
-        //        factory.CreateComponentInfo(format, out IWICComponentInfo ppIInfo);
-        //        IWICPixelFormatInfo formatInfo = ppIInfo as IWICPixelFormatInfo;
-        //        IWICPixelFormatInfo2 formatInfo2 = ppIInfo as IWICPixelFormatInfo2;
-        //        if (formatInfo != null)
-        //        {
-        //            formatInfo.GetBitsPerPixel(out uint bpp);
-        //            formatInfo.GetChannelCount(out uint channelCount);
-        //            BOOL pfSupportsTransparency = false;
-        //            if (formatInfo2 != null)
-        //            {
-        //                formatInfo2.SupportsTransparency(out pfSupportsTransparency);
-        //            }
-        //            //formatInfo.GetChannelMask((200, friendly, out uint chActual);
-        //            managedBitmap = new Bitmap((int)width, (int)height, (int)stride, PixelFormat.Format32bppArgb, (IntPtr)pData);
-        //            //PixelFormat pf = PixelFormat.
-        //        }
+        /// <summary>
+        /// Specifies whether the ribbon is in a collapsed or expanded state
+        /// </summary>
+        private void SetMinimized(bool value)
+        {
+            using var uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                HRESULT hr;
+                PROPVARIANT propvar;
+                propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+                fixed (PROPERTYKEY* pMinimized = &RibbonProperties.Minimized)
+                    hr = cpPropertyStore.Value->SetValue(pMinimized, &propvar);
+                if (hr.Succeeded)
+                    hr = cpPropertyStore.Value->Commit();
+            }
+        }
 
-        //    }
-        //    return managedBitmap;
-        //}
+        /// <summary>
+        /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
+        /// </summary>
+        private unsafe bool GetViewable()
+        {
+            using var uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+                HRESULT hr;
+                PROPVARIANT propvar;
+                fixed (PROPERTYKEY* pViewable = &RibbonProperties.Viewable)
+                    hr = cpPropertyStore.Value->GetValue(pViewable, &propvar);
+                bool result = (bool)propvar; //PropVariantToBoolean
+                return result;
+            }
+            else
+                return false;
+        }
 
-        //public static unsafe Bitmap? GetBitmap2(HBITMAP hBitmap)
-        //{
-        //    //if (uiImage == null)
-        //    //    throw new ArgumentNullException(nameof(uiImage));
-        //    //HBITMAP hBitmap;
-        //    //uiImage.GetBitmap(&hBitmap);
-        //    Bitmap? managedBitmap = null;
-        //    IWICImagingFactory? factory = new PInvoke.WICImagingFactory() as IWICImagingFactory;
-        //    if (factory != null)
-        //    {
-        //        factory.CreateBitmapFromHBITMAP(hBitmap, HPALETTE.Null, WICBitmapAlphaChannelOption.WICBitmapUsePremultipliedAlpha, out IWICBitmap wicBitmap);
-        //        wicBitmap.GetSize(out uint width1, out uint height1);
-        //        WICRect rect = new WICRect() { X = 0, Y = 0, Width = (int)width1, Height = (int)height1 };
-        //        wicBitmap.Lock(null, (uint)WICBitmapLockFlags.WICBitmapLockRead, out IWICBitmapLock ppILock);
-        //        ppILock.GetStride(out uint stride);
-        //        ppILock.GetPixelFormat(out Guid format);
-        //        ppILock.GetSize(out uint width, out uint height);
-        //        byte* pData;
-        //        ppILock.GetDataPointer(out uint bufferSize, &pData);
-        //        factory.CreateComponentInfo(format, out IWICComponentInfo ppIInfo);
-        //        IWICPixelFormatInfo formatInfo = ppIInfo as IWICPixelFormatInfo;
-        //        IWICPixelFormatInfo2 formatInfo2 = ppIInfo as IWICPixelFormatInfo2;
-        //        if (formatInfo != null)
-        //        {
-        //            formatInfo.GetBitsPerPixel(out uint bpp);
-        //            formatInfo.GetChannelCount(out uint channelCount);
-        //            BOOL pfSupportsTransparency = false;
-        //            if (formatInfo2 != null)
-        //            {
-        //                formatInfo2.SupportsTransparency(out pfSupportsTransparency);
-        //            }
-        //            string friendlyName = null;
-        //            char[] chars = new char[200];
-        //            fixed (char* charsLocal = chars)
-        //            {
-        //                PWSTR friendly = new PWSTR(charsLocal);
-        //                formatInfo.GetFriendlyName(200, friendly, out uint chActual);
-        //                if (chActual > 0)
-        //                    friendlyName = new string(charsLocal, 0, (int)chActual - 1);
-        //            }
-        //            PixelFormat pf = GetPixelFormat(format);
-        //            managedBitmap = new Bitmap((int)width, (int)height, (int)stride, pf, (IntPtr)pData);
-        //        }
+        /// <summary>
+        /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
+        /// </summary>
+        private void SetViewable(bool value)
+        {
+            using var uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                HRESULT hr;
+                PROPVARIANT propvar;
+                propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+                fixed (PROPERTYKEY* pViewable = &RibbonProperties.Viewable)
+                    hr = cpPropertyStore.Value->SetValue(pViewable, &propvar);
+                if (hr.Succeeded)
+                    hr = cpPropertyStore.Value->Commit();
+            }
+        }
 
-        //    }
-        //    return managedBitmap;
-        //}
-        ////Format1bppIndexed  DEFINE_GUID(GUID_WICPixelFormat1bppIndexed, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x01);
-        ////Format4bppIndexed  DEFINE_GUID(GUID_WICPixelFormat4bppIndexed, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x03);
-        ////Format8bppIndexed  DEFINE_GUID(GUID_WICPixelFormat8bppIndexed, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x04);
-        ////Format16bppArgb1555  DEFINE_GUID(GUID_WICPixelFormat16bppBGRA5551, 0x05ec7c2b, 0xf1e6, 0x4961, 0xad, 0x46, 0xe1, 0xcc, 0x81, 0x0a, 0x87, 0xd2);
-        ////Format16bppGrayScale  DEFINE_GUID(GUID_WICPixelFormat16bppGray,   0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0b);
-        ////Format16bppRgb555  DEFINE_GUID(GUID_WICPixelFormat16bppBGR555, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x09);
-        ////Format16bppRgb565  DEFINE_GUID(GUID_WICPixelFormat16bppBGR565, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0a);
-        ////Format24bppRgb  DEFINE_GUID(GUID_WICPixelFormat24bppBGR, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0c);
-        ////Format32bppRgb  DEFINE_GUID(GUID_WICPixelFormat32bppBGR,   0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0e);
-        ////Format32bppArgb  DEFINE_GUID(GUID_WICPixelFormat32bppBGRA,  0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0f);
-        ////Format32bppPArgb  DEFINE_GUID(GUID_WICPixelFormat32bppPBGRA, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x10);
-        ////Format48bppRgb  DEFINE_GUID(GUID_WICPixelFormat48bppBGR, 0xe605a384, 0xb468, 0x46ce, 0xbb, 0x2e, 0x36, 0xf1, 0x80, 0xe6, 0x43, 0x13);
-        ////Format64bppArgb  DEFINE_GUID(GUID_WICPixelFormat64bppRGBA,  0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x16);
-        ////DEFINE_GUID(GUID_WICPixelFormat64bppBGRA,  0x1562ff7c, 0xd352, 0x46f9, 0x97, 0x9e, 0x42, 0x97, 0x6b, 0x79, 0x22, 0x46);
+        /// <summary>
+        /// Specifies whether the quick access toolbar is docked at the top or at the bottom
+        /// </summary>
+        private unsafe UI_CONTROLDOCK GetQuickAccessToolbarDock()
+        {
+            using var uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+                HRESULT hr;
+                PROPVARIANT propvar;
+                fixed (PROPERTYKEY* pQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
+                    hr = cpPropertyStore.Value->GetValue(pQuickAccessToolbarDock, &propvar);
+                uint result = (uint)propvar; //PropVariantToUInt32
+                UI_CONTROLDOCK retResult = (UI_CONTROLDOCK)result;
+                return retResult;
+            }
+            else
+                return UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
+        }
 
-        ////Format64bppPArgb  DEFINE_GUID(GUID_WICPixelFormat64bppPRGBA, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x17);
-        ////DEFINE_GUID(GUID_WICPixelFormat64bppPBGRA, 0x8c518e8e, 0xa4ec, 0x468b, 0xae, 0x70, 0xc9, 0xa3, 0x5a, 0x9c, 0x55, 0x30);
+        /// <summary>
+        /// Specifies whether the quick access toolbar is docked at the top or at the bottom
+        /// </summary>
+        private void SetQuickAccessToolbarDock(UI_CONTROLDOCK value)
+        {
+            using var uiRibbonScope = GetIUIRibbon();
+            if (!uiRibbonScope.IsNull)
+            {
+                HRESULT hr;
+                PROPVARIANT propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
+                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+                fixed (PROPERTYKEY* pQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
+                    hr = cpPropertyStore.Value->SetValue(pQuickAccessToolbarDock, &propvar);
+                if (hr.Succeeded)
+                    hr = cpPropertyStore.Value->Commit();
+            }
+        }
 
-        //private static PixelFormat GetPixelFormat(in Guid guid)
-        //{
-        //    if (PInvoke.GUID_WICPixelFormat32bppBGR == guid)
-        //        return PixelFormat.Format32bppRgb;
-        //    if (PInvoke.GUID_WICPixelFormat32bppBGRA == guid)
-        //        return PixelFormat.Format32bppArgb;
-        //    if (PInvoke.GUID_WICPixelFormat32bppPBGRA == guid)
-        //        return PixelFormat.Format32bppPArgb;
-        //    if (PInvoke.GUID_WICPixelFormat1bppIndexed == guid)
-        //        return PixelFormat.Format1bppIndexed;
-        //    if (PInvoke.GUID_WICPixelFormat4bppIndexed == guid)
-        //        return PixelFormat.Format4bppIndexed;
-        //    if (PInvoke.GUID_WICPixelFormat8bppIndexed == guid)
-        //        return PixelFormat.Format8bppIndexed;
-        //    if (PInvoke.GUID_WICPixelFormat24bppBGR == guid)
-        //        return PixelFormat.Format24bppRgb;
-        //    if (PInvoke.GUID_WICPixelFormat16bppGray == guid)
-        //        return PixelFormat.Format16bppGrayScale;
-        //    if (PInvoke.GUID_WICPixelFormat16bppBGR555 == guid)
-        //        return PixelFormat.Format16bppRgb555;
-        //    if (PInvoke.GUID_WICPixelFormat16bppBGR565 == guid)
-        //        return PixelFormat.Format16bppRgb565;
-        //    if (PInvoke.GUID_WICPixelFormat48bppBGR == guid)
-        //        return PixelFormat.Format48bppRgb;
-        //    if (PInvoke.GUID_WICPixelFormat64bppBGRA == guid)
-        //        return PixelFormat.Format64bppArgb;
-        //    if (PInvoke.GUID_WICPixelFormat64bppPBGRA == guid)
-        //        return PixelFormat.Format64bppPArgb;
-        //    if (PInvoke.GUID_WICPixelFormat16bppBGRA5551 == guid)
-        //        return PixelFormat.Format16bppArgb1555;
-        //    return PixelFormat.Undefined;
-        //}
+        private ComScope<IUIRibbon> GetIUIRibbon()
+        {
+            HRESULT hr;
+            ComScope<IUIRibbon> uiRibbonScope = new ComScope<IUIRibbon>(null);
+            hr = Framework->GetView(0, IID.Get<IUIRibbon>(), (void**)&uiRibbonScope);
+            return uiRibbonScope;
+        }
 
-        //public unsafe IUIImage Dummy(string filename)
-        //{
-        //    HBITMAP hbm = HBITMAP.Null;
-        //    HRESULT hr;
-        //    PCWSTR pCWSTR = new PCWSTR();
-        //    string path = Path.GetFullPath(filename);
-        //    //only Bitmap files possible, no V5 Bitmap
-        //    hbm = (HBITMAP)(IntPtr)PInvoke.LoadImage(PInvoke.GetModuleHandle(pCWSTR), path, GDI_IMAGE_TYPE.IMAGE_BITMAP, 0, 0, IMAGE_FLAGS.LR_CREATEDIBSECTION | IMAGE_FLAGS.LR_LOADFROMFILE);
-        //    if (hbm == HBITMAP.Null)
-        //    {
-        //        hr = PInvoke.HRESULT_FROM_WIN32((WIN32_ERROR)Marshal.GetLastWin32Error());
-        //        return null;
-        //    }
-        //    IUIImage uiImage;
-        //    _imageFromBitmap.CreateImage(hbm, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out uiImage);
-
-        //    return uiImage;
-
-        //}
-
-        //public unsafe void dummy2()
-        //{
-        //    int cx, cy;
-        //    cx = cy = 16;
-
-        //    BITMAPINFO bmi = new BITMAPINFO();
-        //    bmi.bmiHeader = new BITMAPINFOHEADER();
-        //    bmi.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
-        //    bmi.bmiHeader.biWidth = cx;
-        //    bmi.bmiHeader.biHeight = cy;
-        //    bmi.bmiHeader.biPlanes = 1;
-        //    bmi.bmiHeader.biBitCount = 32;
-        //    bmi.bmiHeader.biCompression = 0x0;
-
-        //    void* pBits;
-        //    HBITMAP hBitmap = PInvoke.CreateDIBSection(HDC.Null, bmi, DIB_USAGE.DIB_RGB_COLORS, out pBits, HANDLE.Null, 0);
-
-        //    if (hBitmap != HBITMAP.Null)
-        //    {
-        //        //unsafe
-        //        {
-        //            int* ppBits = (int*)pBits;
-
-        //            for (int y = 0; y < cy; y++)
-        //            {
-        //                for (int x = 0; x < cx; x++)
-        //                {
-        //                    int bAlpha = x * x * 255 / cx / cx;
-        //                    int dw = (bAlpha << 24) | (bAlpha << 16) | bAlpha;
-
-        //                    ppBits[y * cx + x] = dw;
-        //                }
-        //            }
-        //        }
-
-        //    }
-        //}
-
-        //@
-        //#if NET9_0_OR_GREATER
-        //protected override bool SetDarkModeCore(DarkMode darkModeSetting) => true;
-        //protected override bool DarkModeSupported => true;
-        //#endif
     }
 }

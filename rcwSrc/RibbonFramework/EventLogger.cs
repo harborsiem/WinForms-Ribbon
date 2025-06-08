@@ -19,10 +19,9 @@ namespace WinForms.Ribbon
     {
 #pragma warning disable CA1416
         private static EventKey s_LogEventKey = new EventKey();
-        private EventSet _eventSet;
+        private EventSet _eventSet; //taken from RibbonStrip
         private RibbonStrip _ribbon;
-        private IUIEventingManager _cpEventingManager;
-        private bool attached;
+        private bool _attached;
 
         /// <summary>
         /// Log Event
@@ -33,11 +32,10 @@ namespace WinForms.Ribbon
             remove { _eventSet.Remove(s_LogEventKey, value); }
         }
 
-        internal EventLogger(RibbonStrip ribbon, IUIEventingManager cpEventingManager)
+        internal EventLogger(RibbonStrip ribbon)
         {
             _ribbon = ribbon;
             _eventSet = ribbon.EventSet;
-            _cpEventingManager = cpEventingManager;
         }
 
         /// <summary>
@@ -45,10 +43,12 @@ namespace WinForms.Ribbon
         /// </summary>
         public void Attach()
         {
-            if (!attached)
+            if (!_attached)
             {
-                _cpEventingManager.SetEventLogger(this);
-                attached = true;
+                IUIEventingManager cpEventingManager = (IUIEventingManager)_ribbon.Framework!;
+                cpEventingManager.SetEventLogger(this);
+                cpEventingManager = null!;
+                _attached = true;
             }
         }
 
@@ -57,8 +57,13 @@ namespace WinForms.Ribbon
         /// </summary>
         public void Detach()
         {
-            _cpEventingManager.SetEventLogger(null);
-            attached = false;
+            if (_attached)
+            {
+                IUIEventingManager cpEventingManager = (IUIEventingManager)_ribbon.Framework!;
+                cpEventingManager.SetEventLogger(null);
+                cpEventingManager = null!;
+                _attached = false;
+            }
         }
 
         /// <summary>
@@ -89,11 +94,7 @@ namespace WinForms.Ribbon
         /// </summary>
         internal void Destroy()
         {
-            if (attached)
-                Detach();
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-            _cpEventingManager = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+            Detach();
         }
     }
 }

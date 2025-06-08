@@ -10,8 +10,9 @@ namespace WinForms.Ribbon
     public class CollectionItem
     {
         /// <summary>
-        /// This is a RibbonStrip item which contains UICollections
-        /// RibbonComboBox, RibbonQuickAccessToolbar and all Galleries (DropDown, InRibbon, SplitButton) 
+        /// This is a <see cref="IRibbonControl"/> which contains UICollections
+        /// <see cref="RibbonComboBox"/>, <see cref="RibbonQuickAccessToolbar"/> and 
+        /// all Galleries (<see cref="RibbonDropDownGallery"/>, <see cref="RibbonInRibbonGallery"/>, <see cref="RibbonSplitButtonGallery"/>) 
         /// </summary>
         public readonly object Sender;
 

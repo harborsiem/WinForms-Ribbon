@@ -99,7 +99,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// GalleryPropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         /// <param name="ribbonItem">ribbon control that instantiate the provider</param>
         public GalleryPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem ribbonItem)
@@ -135,7 +135,7 @@ namespace WinForms.Ribbon
                     if (currentValue is not null)
                     {
                         IUICollection* cpCollection;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, *currentValue, out cpCollection!);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, *currentValue, out cpCollection);
 
                         //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpCollection)
                         //refCount from (native Framework + PROPVARIANT) have to be released by Framework
@@ -166,7 +166,7 @@ namespace WinForms.Ribbon
                     if (currentValue is not null)
                     {
                         IUICollection* cpCollection;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, *currentValue, out cpCollection!);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, *currentValue, out cpCollection);
 
                         //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpCollection)
                         //refCount from (native Framework + PROPVARIANT) have to be released by Framework

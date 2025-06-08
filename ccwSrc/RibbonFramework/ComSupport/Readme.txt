@@ -19,3 +19,5 @@ internal partial struct => partial struct
 SAFEARRAY:
 internal => 
 PInvokeCore => PInvoke
+
+SR.cs added

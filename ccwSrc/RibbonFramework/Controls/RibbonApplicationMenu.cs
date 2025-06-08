@@ -20,7 +20,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Constructor for the Ribbon ApplicationMenu
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonApplicationMenu(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -34,7 +34,7 @@ namespace WinForms.Ribbon
         /// The title of the tooltip (hint) that appear when the user hovers the mouse over the command.
         /// This title is displayed in bold at the top of the tooltip.
         /// </summary>
-        public string TooltipTitle
+        public string? TooltipTitle
         {
             get
             {
@@ -49,7 +49,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The description of the tooltip as it appears below the title.
         /// </summary>
-        public string TooltipDescription
+        public string? TooltipDescription
         {
             get
             {

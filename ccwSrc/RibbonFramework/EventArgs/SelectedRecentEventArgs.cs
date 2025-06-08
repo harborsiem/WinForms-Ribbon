@@ -72,7 +72,7 @@ namespace WinForms.Ribbon
 
                 selectedRecentItem = new SelectedItem<RecentItemsPropertySet>(selectedItemIndex, propSet);
             }
-            SelectedRecentEventArgs e = new SelectedRecentEventArgs(selectedRecentItem);
+            SelectedRecentEventArgs e = new SelectedRecentEventArgs(selectedRecentItem!);
             return e;
         }
     }

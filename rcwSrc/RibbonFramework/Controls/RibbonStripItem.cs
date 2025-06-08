@@ -247,7 +247,7 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="commandId"></param>
         /// <param name="typeID"></param>
-        internal void BaseCreateUICommand(uint commandId, UI_COMMANDTYPE typeID)
+        internal void RaiseCreateUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
             CommandType = (CommandType)typeID;
             Ribbon.Invoke((MethodInvoker)delegate
@@ -262,7 +262,7 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="commandId"></param>
         /// <param name="typeID"></param>
-        internal void BaseDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
+        internal void RaiseDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
             Ribbon.Invoke((MethodInvoker)delegate
             {

@@ -5,6 +5,7 @@ using System.Threading;
 using System.IO;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.LibraryLoader;
@@ -17,12 +18,13 @@ namespace WinForms.Ribbon
     internal sealed class MarkupHandler : IDisposable
     {
         private const string MarkupAsFileMarker = "file://";
-        private const string DefaultResourceIdent = "APPLICATION_RIBBON";
-        private const string ResourceIdentExtension = "_RIBBON";
+        private const string DefaultResourceIdentifier = "APPLICATION_RIBBON";
+        private const string ResourceIdentifierExtension = "_RIBBON";
 
-        private string? _tempDllFilename;
         private RibbonStrip _ribbon;
-        private readonly string MarkupResourceIdent; //for Exceptions comment
+        private readonly string NameOfMarkupResource; //for Exceptions comment
+        // Stash the delegate to keep it from being collected
+        private readonly ENUMRESNAMEPROCW _enumResNameProcedure;
 
         public string? ResourceIdentifier { get; private set; }
 
@@ -30,11 +32,12 @@ namespace WinForms.Ribbon
 
         public MarkupHandler(Assembly executingAssembly, RibbonStrip ribbon)
         {
-            MarkupResourceIdent = $"{nameof(RibbonStrip)}.{nameof(ribbon.MarkupResource)}";
+            NameOfMarkupResource = $"{nameof(RibbonStrip)}.{nameof(ribbon.MarkupResource)}";
             _ribbon = ribbon;
             ResourceIdentifier = ribbon.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
-            InitFramework(ribbon.MarkupResource, executingAssembly);
+            _enumResNameProcedure = EnumResNameProc;
+            InitFramework(ribbon.MarkupResource!, executingAssembly);
         }
 
         ~MarkupHandler()
@@ -79,7 +82,7 @@ namespace WinForms.Ribbon
             // try to get from current current culture fallback satellite assembly
             found = TryGetRibbonMarkup(markupResource, executingAssembly, out data);
             if (!found)
-                throw new ArgumentException(string.Format(MarkupResourceIdent + " resource '{0}' not found in assembly '{1}'.", markupResource, executingAssembly.Location));
+                throw new ArgumentException(string.Format(NameOfMarkupResource + " resource '{0}' not found in assembly '{1}'.", markupResource, executingAssembly.Location));
 
             return data;
         }
@@ -137,7 +140,7 @@ namespace WinForms.Ribbon
                     last = markupResource.IndexOf('}');
                     if (last < start)
                     {
-                        throw new ArgumentException("} not found in " + MarkupResourceIdent);
+                        throw new ArgumentException("} not found in " + NameOfMarkupResource);
                     }
                     string specialFolder = markupResource.Substring(start + 1, last - start - 1);
                     Environment.SpecialFolder enumSpecial = (Environment.SpecialFolder)Enum.Parse(typeof(Environment.SpecialFolder), specialFolder);
@@ -178,11 +181,11 @@ namespace WinForms.Ribbon
             }
             catch (Exception ex)
             {
-                throw new ArgumentException($"{MarkupResourceIdent} is invalid", ex);
+                throw new ArgumentException($"{NameOfMarkupResource} is invalid", ex);
             }
             if (String.IsNullOrEmpty(localizedPath))
             {
-                throw new ArgumentException($"{MarkupResourceIdent} is invalid");
+                throw new ArgumentException($"{NameOfMarkupResource} is invalid");
             }
             else
                 return File.ReadAllBytes(localizedPath);
@@ -224,7 +227,7 @@ namespace WinForms.Ribbon
         private void InitFramework(string markupResource, Assembly executingAssembly)
         {
             string path = Path.GetTempPath();
-            _tempDllFilename = Path.Combine(path, Path.GetTempFileName());
+            string ribbonDllFilename = Path.Combine(path, Path.GetTempFileName());
             byte[] buffer;
             if (markupResource.ToLowerInvariant().StartsWith(MarkupAsFileMarker))
             {
@@ -233,68 +236,44 @@ namespace WinForms.Ribbon
             else
                 buffer = GetLocalizedRibbon(markupResource, executingAssembly);
 
-            File.WriteAllBytes(_tempDllFilename, buffer);
+            File.WriteAllBytes(ribbonDllFilename, buffer);
 
             // if ribbon dll exists, use it
-            if (File.Exists(_tempDllFilename))
+            if (File.Exists(ribbonDllFilename))
             {
                 if (string.IsNullOrEmpty(ResourceIdentifier))
-                    ResourceIdentifier = DefaultResourceIdent;
+                    ResourceIdentifier = DefaultResourceIdentifier;
                 else
-                    ResourceIdentifier = ResourceIdentifier + ResourceIdentExtension;
+                    ResourceIdentifier = ResourceIdentifier + ResourceIdentifierExtension;
                 // load ribbon from ribbon dll resource
-                InitFramework(_tempDllFilename);
+                InitFramework(ribbonDllFilename);
             }
         }
 
         /// <summary>
         /// Initalize ribbon framework
         /// </summary>
-        /// <param name="ribbonDllName">Dll name where to find ribbon resource</param>
-        private unsafe void InitFramework(string ribbonDllName)
+        /// <param name="ribbonDllFilename">Tempory Dll file name where to find ribbon resource</param>
+        private unsafe void InitFramework(string ribbonDllFilename)
         {
             // dynamically load ribbon library
-            fixed (char* ribbonDllNameLocal = ribbonDllName)
-                MarkupDllHandle = PInvoke.LoadLibraryEx(ribbonDllNameLocal, HANDLE.Null,
+            fixed (char* ribbonDllFilenameLocal = ribbonDllFilename)
+                MarkupDllHandle = PInvoke.LoadLibraryEx(ribbonDllFilenameLocal, HANDLE.Null,
                                                                 LOAD_LIBRARY_FLAGS.DONT_RESOLVE_DLL_REFERENCES |
                                                                 LOAD_LIBRARY_FLAGS.LOAD_IGNORE_CODE_AUTHZ_LEVEL |
                                                                 LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_DATAFILE |
                                                                 LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
 
+            try
+            {
+                if (File.Exists(ribbonDllFilename))
+                    File.Delete(ribbonDllFilename);
+            }
+            catch { }
+
             if (MarkupDllHandle == HMODULE.Null)
             {
-                Dispose();
-                throw new ApplicationException(MarkupResourceIdent + " resource DLL exists but could not be loaded.");
-            }
-            return;
-
-            //InitFramework(resourceName, _loadedDllHandle);
-            //GCHandle namesHandle = GCHandle.Alloc(names);
-            //try
-            //{
-            //    ENUMRESNAMEPROC callback = EnumResNameProc;
-            //    IntPtr enumResNameProc = Marshal.GetFunctionPointerForDelegate(callback);
-            //    fixed (char* pType = "UIFILE")
-            //        PInvoke.EnumResourceNames(MarkupDllHandle, pType, (delegate* unmanaged[Stdcall]<HMODULE, PCWSTR, PWSTR, nint, BOOL>)enumResNameProc, (nint)namesHandle);
-            //}
-            //finally
-            //{
-            //    if (namesHandle.IsAllocated)
-            //        namesHandle.Free();
-            //}
-            HRSRC hrSRC;
-            uint imageSize = 0;
-            fixed (char* pName = ResourceIdentifier)
-            fixed (char* pType = "UIFILE")
-                hrSRC = PInvoke.FindResource(MarkupDllHandle, pName, pType);
-            if (hrSRC != IntPtr.Zero)
-            {
-                imageSize = PInvoke.SizeofResource(MarkupDllHandle, hrSRC);
-            }
-            if (imageSize == 0)
-            {
-                Dispose();
-                throw new ApplicationException(string.Format("Resource DLL not valid '{0}'?", nameof(RibbonStrip) + "." + nameof(_ribbon.ResourceIdentifier)));
+                throw new ApplicationException(NameOfMarkupResource + " resource DLL exists but could not be loaded.");
             }
         }
 
@@ -312,31 +291,74 @@ namespace WinForms.Ribbon
                 PInvoke.FreeLibrary(MarkupDllHandle);
                 MarkupDllHandle = HMODULE.Null;
             }
-            if (!string.IsNullOrEmpty(_tempDllFilename))
-            {
-                try
-                {
-                    if (File.Exists(_tempDllFilename))
-                        File.Delete(_tempDllFilename);
-                    _tempDllFilename = null;
-                }
-                catch { }
-            }
         }
 
-        //delegate BOOL ENUMRESNAMEPROC(HMODULE hModule, PCWSTR lpszType, PWSTR lpszName, nint lParam);
-        //List<string> names = new List<string>();
+        /// <summary>
+        /// Get ResourceIdentifier from RibbonMarkup.ribbon via UIFILE
+        /// </summary>
+        /// <returns></returns>
+        private unsafe string? GetResourceIdentifier()
+        {
+            List<string> names = new List<string>();
+            GCHandle namesHandle = GCHandle.Alloc(names);
+            try
+            {
+                fixed (char* pType = "UIFILE")
+                    PInvoke.EnumResourceNames(MarkupDllHandle, pType,
+                        (delegate* unmanaged[Stdcall]<HMODULE, PCWSTR, PWSTR, nint, BOOL>)Marshal.GetFunctionPointerForDelegate(_enumResNameProcedure),
+                        (nint)namesHandle);
+            }
+            finally
+            {
+                if (namesHandle.IsAllocated)
+                    namesHandle.Free();
+            }
+            if (names.Count == 1)
+                return names[0]; //default value = APPLICATION_RIBBON
+            return null;
+        }
 
-        //private static unsafe BOOL EnumResNameProc(HMODULE hModule, PCWSTR pType, PWSTR pName, nint param)
-        //{
-        //    if (pType.ToString() == "UIFILE")
-        //    {
-        //        GCHandle listHandle = GCHandle.FromIntPtr(param);
-        //        List<string> names = (List<string>)listHandle.Target!;
-        //        names.Add(pName.ToString());
-        //    }
-        //    return true;
-        //}
+        //[UnmanagedFunctionPointer(CallingConvention.Winapi)]
+        //CsWin32 did not give this delegate
+        unsafe delegate BOOL ENUMRESNAMEPROCW(HMODULE hModule, PCWSTR lpszType, PWSTR lpszName, nint lParam);
+
+        /// <summary>
+        /// Callback for GetResourceIdentifier
+        /// </summary>
+        /// <param name="hModule"></param>
+        /// <param name="pType"></param>
+        /// <param name="pName"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private static unsafe BOOL EnumResNameProc(HMODULE hModule, PCWSTR pType, PWSTR pName, nint param)
+        {
+            if (pType.ToString() == "UIFILE")
+            {
+                GCHandle listHandle = GCHandle.FromIntPtr(param);
+                List<string> names = (List<string>)listHandle.Target!;
+                names.Add(pName.ToString());
+            }
+            return true;
+        }
+
+        private unsafe uint GetUiFileSize(string resourceIdentifier)
+        {
+            HRSRC hrSRC;
+            uint imageSize = 0;
+            fixed (char* pName = resourceIdentifier)
+            fixed (char* pType = "UIFILE")
+                hrSRC = PInvoke.FindResource(MarkupDllHandle, pName, pType);
+            if (hrSRC != IntPtr.Zero)
+            {
+                imageSize = PInvoke.SizeofResource(MarkupDllHandle, hrSRC);
+            }
+            //if (imageSize == 0)
+            //{
+            //    Dispose();
+            //    throw new ApplicationException(string.Format("Resource DLL not valid '{0}'?", nameof(RibbonStrip) + "." + nameof(_ribbon.ResourceIdentifier)));
+            //}
+            return imageSize;
+        }
 
         /// <summary>
         /// Parse the embedded resource RibbonMarkup.h file which is produced by UICC.exe during build process

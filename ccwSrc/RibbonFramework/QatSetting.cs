@@ -99,7 +99,7 @@ namespace WinForms.Ribbon
                     try
                     {
                         _loadedQatSettings = new byte[stream.Length];
-                        stream.Read(_loadedQatSettings, 0, _loadedQatSettings.Length);
+                        int bytesRead = stream.Read(_loadedQatSettings, 0, _loadedQatSettings.Length);
                         stream.Position = 0;
                         _ribbon.LoadSettingsFromStreamInternal(stream);
                     }

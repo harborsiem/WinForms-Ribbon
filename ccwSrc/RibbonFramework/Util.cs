@@ -57,7 +57,7 @@ namespace WinForms.Ribbon
             try
             {
                 var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
                 return buffer;
             }
             finally

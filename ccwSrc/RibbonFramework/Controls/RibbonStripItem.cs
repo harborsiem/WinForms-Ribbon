@@ -29,12 +29,12 @@ namespace WinForms.Ribbon
         private string? _name;
 
         /// <summary>
-        /// reference for parent ribbon class
+        /// reference for parent RibbonStrip class
         /// </summary>
         private RibbonStrip _ribbon;
 
         /// <summary>
-        /// reference for parent ribbon class
+        /// reference for parent RibbonStrip class
         /// </summary>
         public RibbonStrip Ribbon => _ribbon;
 
@@ -63,7 +63,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// RibbonStripItem ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">command id attached to this control</param>
         protected RibbonStripItem(RibbonStrip ribbon, uint commandId)
         {
@@ -247,7 +247,7 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="commandId"></param>
         /// <param name="typeID"></param>
-        internal void BaseCreateUICommand(uint commandId, UI_COMMANDTYPE typeID)
+        internal void RaiseCreateUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
             CommandType = (CommandType)typeID;
             Ribbon.Invoke((MethodInvoker)delegate
@@ -262,7 +262,7 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="commandId"></param>
         /// <param name="typeID"></param>
-        internal void BaseDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
+        internal void RaiseDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
             Ribbon.Invoke((MethodInvoker)delegate
             {

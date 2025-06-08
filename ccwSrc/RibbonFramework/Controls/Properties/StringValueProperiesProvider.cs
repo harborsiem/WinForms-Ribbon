@@ -33,7 +33,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// StringValuePropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         public StringValuePropertiesProvider(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)

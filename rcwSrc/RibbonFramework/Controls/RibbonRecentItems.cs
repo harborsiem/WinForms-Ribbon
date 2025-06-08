@@ -140,7 +140,7 @@ namespace WinForms.Ribbon
         /// However, if you want more control over the keytips used, you can specify them yourself.
         /// A keytip is not limited to a single character.
         /// </summary>
-        public string Keytip
+        public string? Keytip
         {
             get
             {

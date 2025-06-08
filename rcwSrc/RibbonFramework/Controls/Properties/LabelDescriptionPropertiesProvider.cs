@@ -22,7 +22,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// LabelDescription property
         /// </summary>
-        string LabelDescription { get; set; }
+        string? LabelDescription { get; set; }
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ namespace WinForms.Ribbon
         }
 
         private readonly RibbonStripItem _item;
-        private string _labelDescription;
+        private string? _labelDescription;
 
         /// <summary>
         /// Handles IUICommandHandler.UpdateProperty function for the supported properties
@@ -74,7 +74,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Label description property
         /// </summary>
-        public string LabelDescription
+        public string? LabelDescription
         {
             get
             {
