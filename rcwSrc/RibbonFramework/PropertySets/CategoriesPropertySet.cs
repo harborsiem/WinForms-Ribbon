@@ -12,6 +12,7 @@ using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Variant;
 
 namespace WinForms.Ribbon
 {
@@ -22,6 +23,41 @@ namespace WinForms.Ribbon
     {
         private string? _label;
         private uint? _categoryId;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public CategoriesPropertySet() { }
+
+        internal unsafe CategoriesPropertySet(IUISimplePropertySet cpIUISimplePropertySet)
+        {
+            PROPVARIANT propvar = PROPVARIANT.Empty;
+            HRESULT hr;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
+            PWSTR pwstr;
+            string label = string.Empty;
+            if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)
+            {
+                UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
+                label = pwstr.ToString();
+                PInvoke.CoTaskMemFree(pwstr);
+                //fixed (char* emptyLocal = string.Empty)
+                //{
+                //    pwstr = PInvoke.PropVariantToStringWithDefault(propvar, emptyLocal);
+                //    label = pwstr.ToString();
+                //}
+                propvar.Clear(); //PropVariantClear
+            }
+
+            propvar = PROPVARIANT.Empty;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+            uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX; //if VT_EMPTY
+            if (propvar.vt == VARENUM.VT_UI4)
+                categoryId = (uint)propvar;
+            //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
+            Label = label;
+            CategoryId = (int)categoryId;
+        }
 
         /// <summary>
         /// Get or set the label

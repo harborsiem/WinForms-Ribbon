@@ -231,7 +231,7 @@ namespace WinForms.Ribbon
             int height, width;
             HBITMAP result = HBITMAP.Null;
             IntPtr data = IntPtr.Zero;
-            HDC dc = PInvoke.CreateCompatibleDC(new HDC(0));
+            HDC dc = PInvoke.CreateCompatibleDC(HDC.Null);
             try
             {
                 BITMAPINFO info = new BITMAPINFO();
@@ -298,7 +298,7 @@ namespace WinForms.Ribbon
             if (hBitmap == HBITMAP.Null)
                 return;
 
-            HDC srcDc = PInvoke.CreateCompatibleDC(new HDC(0));
+            HDC srcDc = PInvoke.CreateCompatibleDC(HDC.Null);
             try
             {
                 if (BitsPerPixel == 32)

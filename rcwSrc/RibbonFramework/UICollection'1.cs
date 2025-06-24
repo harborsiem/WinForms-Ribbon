@@ -51,16 +51,13 @@ namespace WinForms.Ribbon
     /// <typeparam name="T">An AbstractPropertySet</typeparam>
     public sealed class UICollection<T> : IUICollection, IEnumerable<T> where T : AbstractPropertySet, new()
     {
-        //IPropertySystem propSystem; //@
         private List<T> _items;
         private IUICollection _cpIUICollection;
         internal readonly RibbonStrip _ribbon;
-        private Type _typeofT;
         //private CollectionType _colType;
         //private CollectionChange marker = CollectionChange.None;
         private bool _detachEvent;
         private UICollectionChangedEvent<T>? _changedEvent;
-        private PropertySetEnumerator _propset;
 
         /// <summary>
         /// 
@@ -79,30 +76,30 @@ namespace WinForms.Ribbon
                 _cpIUICollection = cpIUICollection;
             else
                 throw new ArgumentException("not an IUICollection ComObject", nameof(cpIUICollection));
-            _typeofT = typeof(T);
             //_colType = colType;
             _ribbon = item.Ribbon;
             if (item is RibbonQuickAccessToolbar)
             {
-                if (!(colType == CollectionType.QatItemsSource && _typeofT == typeof(QatCommandPropertySet)))
+                if (!(colType == CollectionType.QatItemsSource && typeof(T) == typeof(QatCommandPropertySet)))
                     throw new ArgumentException("RibbonQuickAccessToolbar with T or " + nameof(colType) + " not allowed");
             }
             else if (colType == CollectionType.Categories)
             {
-                if (_typeofT != typeof(CategoriesPropertySet))
+                if (typeof(T) != typeof(CategoriesPropertySet))
                     throw new ArgumentException("T is not a valid Type: CategoriesPropertySet");
             }
-            else if (!((itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION && _typeofT == typeof(GalleryCommandPropertySet))
-                || (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION && _typeofT == typeof(GalleryItemPropertySet))))
+            else if (!((itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION && typeof(T) == typeof(GalleryCommandPropertySet))
+                || (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION && typeof(T) == typeof(GalleryItemPropertySet))))
             {
                 throw new ArgumentException("T is not a valid Type: GalleryItemPropertySet or GalleryCommandPropertySet");
             }
             _items = new List<T>();
-            _propset = new PropertySetEnumerator(this);
-            foreach (T propItem in _propset)
+            PropertySetEnumerator propset = new PropertySetEnumerator(this);
+            foreach (T propItem in propset) //Get all existing items, only from QAT
             {
                 _items.Add(propItem);
             }
+            propset.Destroy();
             _changedEvent = new UICollectionChangedEvent<T>(new CollectionItem(item, colType), this);
             _changedEvent.Attach(_cpIUICollection);
         }
@@ -124,9 +121,9 @@ namespace WinForms.Ribbon
             if (!_detachEvent)
             {
                 if (!(newItem is T newGalleryItem))
-                    newGalleryItem = _propset.FromPropertySet((IUISimplePropertySet)newItem)!;
+                    newGalleryItem = FromPropertySet((IUISimplePropertySet)newItem)!;
                 //if (!(e.OldItem is T oldGalleryItem))
-                //oldGalleryItem = _propset.FromPropertySet((IUISimplePropertySet)e.OldItem);
+                //oldGalleryItem = FromPropertySet((IUISimplePropertySet)e.OldItem);
                 switch (action)
                 {
                     case UI_COLLECTIONCHANGE.UI_COLLECTIONCHANGE_INSERT:
@@ -331,6 +328,39 @@ namespace WinForms.Ribbon
 
         #endregion
 
+        private unsafe T? FromPropertySet(IUISimplePropertySet cpIUISimplePropertySet)
+        {
+            if (cpIUISimplePropertySet == null)
+                return null;
+
+            if (typeof(T) == typeof(QatCommandPropertySet))
+            {
+                return new QatCommandPropertySet(cpIUISimplePropertySet) as T;
+            }
+
+            //Just in case, do not know if this ever happens
+
+            if (typeof(T) == typeof(GalleryCommandPropertySet))
+            {
+                return new GalleryCommandPropertySet(cpIUISimplePropertySet) as T;
+            }
+
+            //Just in case, do not know if this ever happens
+
+            if (typeof(T) == typeof(GalleryItemPropertySet))
+            {
+                return new GalleryItemPropertySet(cpIUISimplePropertySet) as T;
+            }
+
+            //Just in case, do not know if this ever happens
+
+            if (typeof(T) == typeof(CategoriesPropertySet))
+            {
+                return new CategoriesPropertySet(cpIUISimplePropertySet) as T;
+            }
+            return null;
+        }
+
         #region IEnumUnknown
 
         //void IEnumUnknown.Next(uint celt, object[] rgelt, out uint pceltFetched) { 
@@ -369,7 +399,6 @@ namespace WinForms.Ribbon
         {
             private UICollection<T> _caller;
             private IEnumUnknown _cpIEnumUnknown;
-            private Type _typeOfT;
             private T? _current;
 
             /// <summary>
@@ -380,7 +409,6 @@ namespace WinForms.Ribbon
             {
                 _caller = caller;
                 _cpIEnumUnknown = (IEnumUnknown)caller._cpIUICollection;
-                _typeOfT = caller._typeofT;
                 Reset();
             }
 
@@ -428,7 +456,7 @@ namespace WinForms.Ribbon
                     _current = cpIUISimplePropertySet as T;
                     if (_current == null)
                     {
-                        _current = FromPropertySet(cpIUISimplePropertySet);
+                        _current = _caller.FromPropertySet(cpIUISimplePropertySet);
                     }
                 }
                 else
@@ -437,197 +465,6 @@ namespace WinForms.Ribbon
                     _current = null;
                 }
                 return fetched == 0 ? false : true;
-            }
-
-            //internal unsafe T? FromPropertySet(IUISimplePropertySet cpIUISimplePropertySet)
-            //{
-            //    if (cpIUISimplePropertySet == null)
-            //        return null;
-
-            //    PROPVARIANT variant = PROPVARIANT.Empty;
-            //    HRESULT hr;
-            //    if (_caller._typeofT == typeof(QatCommandPropertySet))
-            //    {
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.CommandId)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        uint cmdId = PInvoke.PropVariantToUInt32WithDefault(variant, 0);
-            //        QatCommandPropertySet result = new QatCommandPropertySet()
-            //        {
-            //            CommandId = cmdId,
-            //        };
-            //        return result as T;
-            //    }
-            //    if (_caller._typeofT == typeof(GalleryCommandPropertySet))
-            //    {
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.CommandId)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        uint cmdId = PInvoke.PropVariantToUInt32WithDefault(variant, 0); // (uint)variant.Value;
-            //        PInvoke.PropVariantClear(ref variant);
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.CategoryId)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        uint catId = PInvoke.PropVariantToUInt32WithDefault(variant, PInvoke.UI_COLLECTION_INVALIDINDEX);
-            //        PInvoke.PropVariantClear(ref variant);
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.CommandType)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        UI_COMMANDTYPE cType = (UI_COMMANDTYPE)PInvoke.PropVariantToUInt32WithDefault(variant, 0);
-            //        GalleryCommandPropertySet result = new GalleryCommandPropertySet()
-            //        {
-            //            CommandId = cmdId,
-            //            CategoryId = (int)catId,
-            //            CommandType = (UI_CommandType)cType
-            //        };
-            //        return result as T;
-            //    }
-            //    if (_caller._typeofT == typeof(GalleryItemPropertySet))
-            //    {
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.Label)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        string label = PInvoke.PropVariantToStringWithDefault(variant, string.Empty).ToString();
-            //        PInvoke.PropVariantClear(ref variant);
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.CategoryId)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        uint catId = PInvoke.PropVariantToUInt32WithDefault(variant, PInvoke.UI_COLLECTION_INVALIDINDEX);
-            //        PInvoke.PropVariantClear(ref variant);
-            //        fixed (PROPERTYKEY* keyLocal = &RibbonProperties.ItemImage)
-            //            hr = cpIUISimplePropertySet.GetValue(keyLocal, out variant);
-            //        IUIImage? itemImage = null;
-            //        if (hr == HRESULT.S_OK && variant.VarType == VARENUM.VT_UNKNOWN)
-            //            UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, variant, out itemImage!);
-
-            //        GalleryItemPropertySet result = new GalleryItemPropertySet()
-            //        {
-            //            Label = label,
-            //            CategoryId = (int)catId,
-            //            ItemImage = itemImage
-            //        };
-            //        return result as T;
-            //    }
-            //    return null;
-            //}
-
-            internal unsafe T? FromPropertySet(IUISimplePropertySet cpIUISimplePropertySet)
-            {
-                if (cpIUISimplePropertySet == null)
-                    return null;
-
-                PROPVARIANT propvar = PROPVARIANT.Empty;
-                HRESULT hr;
-
-                if (_typeOfT == typeof(QatCommandPropertySet))
-                {
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandId, out propvar);
-                    uint commandId = 0;
-                    if (propvar.vt == VARENUM.VT_UI4)
-                        commandId = (uint)propvar;
-                    //commandId = PInvoke.PropVariantToUInt32WithDefault(propvar, 0);
-                    QatCommandPropertySet result = new QatCommandPropertySet()
-                    {
-                        CommandId = commandId,
-                    };
-                    return result as T;
-                }
-
-                if (_typeOfT == typeof(GalleryCommandPropertySet))
-                {
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandId, out propvar);
-                    uint commandId = 0;
-                    if (propvar.vt == VARENUM.VT_UI4)
-                        commandId = (uint)propvar;
-                    //commandId = PInvoke.PropVariantToUInt32WithDefault(propvar, 0);
-                    propvar.Clear(); //PropVariantClear
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
-                    uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
-                    if (propvar.vt == VARENUM.VT_UI4)
-                        categoryId = (uint)propvar;
-                    //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
-                    propvar.Clear(); //PropVariantClear
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandType, out propvar);
-                    UI_COMMANDTYPE commandType = UI_COMMANDTYPE.UI_COMMANDTYPE_UNKNOWN;
-                    if (propvar.vt == VARENUM.VT_UI4)
-                        commandType = (UI_COMMANDTYPE)(uint)propvar;
-                    //commandType = (UI_COMMANDTYPE)PInvoke.PropVariantToUInt32WithDefault(propvar, 0);
-                    GalleryCommandPropertySet result = new GalleryCommandPropertySet()
-                    {
-                        CommandId = commandId,
-                        CategoryId = (int)categoryId,
-                        CommandType = (CommandType)commandType
-                    };
-                    return result as T;
-                }
-
-                if (_typeOfT == typeof(GalleryItemPropertySet))
-                {
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
-                    PWSTR pwstr;
-                    string label = string.Empty;
-                    if (propvar.vt == VARENUM.VT_LPWSTR)
-                    {
-                        UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        label = pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
-                        //fixed (char* emptyLocal = string.Empty)
-                        //{
-                        //    pwstr = PInvoke.PropVariantToStringWithDefault(propvar, emptyLocal);
-                        //    label = pwstr.ToString();
-                        //}
-                        propvar.Clear(); //PropVariantClear
-                    }
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
-                    uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
-                    if (propvar.vt == VARENUM.VT_UI4)
-                        categoryId = (uint)propvar;
-                    //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
-                    propvar.Clear(); //PropVariantClear
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.ItemImage, out propvar);
-                    IUIImage? cpIUIImage = null;
-                    UIImage? uIImage = null;
-                    if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)
-                    {
-                        UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, out cpIUIImage!);
-                        propvar.Clear(); //PropVariantClear
-                        if (cpIUIImage != null)
-                            uIImage = new UIImage(cpIUIImage);
-                    }
-                    GalleryItemPropertySet result = new GalleryItemPropertySet()
-                    {
-                        Label = label,
-                        CategoryId = (int)categoryId,
-                        ItemImage = uIImage
-                    };
-                    return result as T;
-                }
-
-                if (_typeOfT == typeof(CategoriesPropertySet))
-                {
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
-                    PWSTR pwstr;
-                    string label = string.Empty;
-                    if (propvar.vt == VARENUM.VT_LPWSTR)
-                    {
-                        UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        label = pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
-                        //fixed (char* emptyLocal = string.Empty)
-                        //{
-                        //    pwstr = PInvoke.PropVariantToStringWithDefault(propvar, emptyLocal);
-                        //    label = pwstr.ToString();
-                        //}
-                        propvar.Clear(); //PropVariantClear
-                    }
-                    hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
-                    uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX; //if VT_EMPTY
-                    if (propvar.vt == VARENUM.VT_UI4)
-                        categoryId = (uint)propvar;
-                    //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
-                    propvar.Clear(); //PropVariantClear
-                    CategoriesPropertySet result = new CategoriesPropertySet()
-                    {
-                        Label = label,
-                        CategoryId = (int)categoryId,
-                    };
-                    return result as T;
-                }
-                return null;
             }
 
             bool IEnumerator.MoveNext()
@@ -652,6 +489,11 @@ namespace WinForms.Ribbon
             void IDisposable.Dispose()
             {
                 Reset();
+            }
+
+            public void Destroy()
+            {
+                _cpIEnumUnknown = null!;
             }
         }
     }

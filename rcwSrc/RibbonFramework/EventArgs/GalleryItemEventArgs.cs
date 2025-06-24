@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
@@ -116,47 +117,8 @@ namespace WinForms.Ribbon
             //but this ComboBox has no image
 
             if (propSet == null)
-            {
-                HRESULT hr;
-                propSet = new GalleryItemPropertySet();
-                // get item label
-                PROPVARIANT propLabel;
-                commandExecutionProperties!.GetValue(RibbonProperties.Label, out propLabel);
-#if WithDefault
-                PCWSTR pwstr;
-                fixed (char* emptyLocal = string.Empty)
-                {
-                    pwstr = PInvoke.PropVariantToStringWithDefault(propLabel, emptyLocal);
-                    propSet.Label = pwstr.ToString();
-                }
-#else
-                PWSTR pwstr;
-                hr = UIPropVariant.UIPropertyToStringAlloc(propLabel, out pwstr);
-                propSet.Label = new string(pwstr); // pwstr.ToString();
-                PInvoke.CoTaskMemFree(pwstr);
-#endif
-                propLabel.Clear(); //PropVariantClear
+                propSet = new GalleryItemPropertySet(commandExecutionProperties);
 
-                // get item CategoryID value
-                PROPVARIANT propCategoryID;
-                hr = commandExecutionProperties.GetValue(RibbonProperties.CategoryId, out propCategoryID);
-                uint uintResult = PInvoke.UI_COLLECTION_INVALIDINDEX;
-                if (propCategoryID.vt == VARENUM.VT_UI4)
-                    uintResult = (uint)propCategoryID;
-                //uintResult = PInvoke.PropVariantToUInt32WithDefault(propCategoryID, PInvoke.UI_COLLECTION_INVALIDINDEX);
-                propSet.CategoryId = (int)uintResult;
-
-                // get item ItemImage value
-                PROPVARIANT propItemImage;
-                commandExecutionProperties.GetValue(RibbonProperties.ItemImage, out propItemImage);
-                if (propItemImage.vt == VARENUM.VT_UNKNOWN)
-                {
-                    IUIImage image;
-                    UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propItemImage, out image!);
-                    propSet.ItemImage = new UIImage(image);
-                    propItemImage.Clear(); //PropVariantClear
-                }
-            }
             return propSet;
         }
     }

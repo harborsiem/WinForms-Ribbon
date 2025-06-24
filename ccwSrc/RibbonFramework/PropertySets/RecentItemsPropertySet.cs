@@ -25,6 +25,16 @@ namespace WinForms.Ribbon
         private bool? _pinned;
 
         /// <summary>
+        /// ctor
+        /// </summary>
+        public RecentItemsPropertySet() { }
+
+        //internal unsafe RecentItemsPropertySet(IUISimplePropertySet* cpIUISimplePropertySet)
+        //{
+
+        //}
+
+        /// <summary>
         /// This is the label as it will appear on the ribbon.
         /// </summary>
         public string Label

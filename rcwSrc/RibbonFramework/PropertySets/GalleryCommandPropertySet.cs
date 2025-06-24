@@ -12,6 +12,7 @@ using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Variant;
 
 namespace WinForms.Ribbon
 {
@@ -23,6 +24,39 @@ namespace WinForms.Ribbon
         private uint? _commandId;
         private UI_COMMANDTYPE? _commandType;
         private uint? _categoryId;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public GalleryCommandPropertySet() { }
+
+        internal unsafe GalleryCommandPropertySet(IUISimplePropertySet cpIUISimplePropertySet)
+        {
+            PROPVARIANT propvar = PROPVARIANT.Empty;
+            HRESULT hr;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandId, out propvar);
+            uint commandId = 0;
+            if (propvar.vt == VARENUM.VT_UI4)
+                commandId = (uint)propvar;
+            //commandId = PInvoke.PropVariantToUInt32WithDefault(propvar, 0);
+
+            propvar = PROPVARIANT.Empty;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+            uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
+            if (propvar.vt == VARENUM.VT_UI4)
+                categoryId = (uint)propvar;
+            //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
+
+            propvar = PROPVARIANT.Empty;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandType, out propvar);
+            UI_COMMANDTYPE commandType = UI_COMMANDTYPE.UI_COMMANDTYPE_UNKNOWN;
+            if (propvar.vt == VARENUM.VT_UI4)
+                commandType = (UI_COMMANDTYPE)(uint)propvar;
+            //commandType = (UI_COMMANDTYPE)PInvoke.PropVariantToUInt32WithDefault(propvar, 0);
+            CommandId = commandId;
+            CommandType = (CommandType)commandType;
+            CategoryId = (int)categoryId;
+        }
 
         /// <summary>
         /// Get or set the Command Id

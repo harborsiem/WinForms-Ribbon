@@ -10,6 +10,7 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using static Windows.Win32.System.Variant.VARENUM;
+using FILETIME = Windows.Win32.Foundation.FILETIME;
 
 namespace Windows.Win32.System.Com.StructuredStorage
 {

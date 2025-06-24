@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+### RibbonFramework V1.1.1, RibbonTools64 V8.1.0
+
+#### Changed (RibbonFramework)
+
+- Internal optimizations
+- .NET Framework (4.6.2 and later) and .NET 8 (and later) support for RCW RibbonFramework
+- .NET 8 (and later) support for CCW RibbonFramework
+- New Nuget package for [RCW RibbonFramework](https://www.nuget.org/packages/RibbonFramework.RCW)
+
 ### RibbonFramework V1.1.0, RibbonTools64 V8.1.0
 
 #### Changed (RibbonFramework)

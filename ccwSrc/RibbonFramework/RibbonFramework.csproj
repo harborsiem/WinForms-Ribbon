@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>

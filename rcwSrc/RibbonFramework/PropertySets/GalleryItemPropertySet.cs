@@ -6,12 +6,14 @@
 //
 //*****************************************************************************
 
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
-using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Variant;
 
 namespace WinForms.Ribbon
 {
@@ -23,6 +25,54 @@ namespace WinForms.Ribbon
         private string? _label;
         private uint? _categoryId;
         private UIImage? _itemImage;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public GalleryItemPropertySet() { }
+
+        internal unsafe GalleryItemPropertySet(IUISimplePropertySet cpIUISimplePropertySet)
+        {
+            PROPVARIANT propvar = PROPVARIANT.Empty;
+            HRESULT hr;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
+            PWSTR pwstr;
+            string label = string.Empty;
+            if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)
+            {
+                UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
+                label = pwstr.ToString();
+                PInvoke.CoTaskMemFree(pwstr);
+                //fixed (char* emptyLocal = string.Empty)
+                //{
+                //    pwstr = PInvoke.PropVariantToStringWithDefault(propvar, emptyLocal);
+                //    label = pwstr.ToString();
+                //}
+                propvar.Clear(); //PropVariantClear
+            }
+
+            propvar = PROPVARIANT.Empty;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+            uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
+            if (propvar.vt == VARENUM.VT_UI4)
+                categoryId = (uint)propvar;
+            //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
+
+            propvar = PROPVARIANT.Empty;
+            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.ItemImage, out propvar);
+            IUIImage? cpIUIImage = null;
+            UIImage? uIImage = null;
+            if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)
+            {
+                UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, out cpIUIImage!);
+                propvar.Clear(); //PropVariantClear
+                if (cpIUIImage != null)
+                    uIImage = new UIImage(cpIUIImage);
+            }
+            Label = label;
+            CategoryId = (int)categoryId;
+            ItemImage = uIImage;
+        }
 
         /// <summary>
         /// Get or set the label

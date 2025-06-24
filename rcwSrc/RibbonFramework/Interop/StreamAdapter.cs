@@ -93,9 +93,11 @@ namespace Windows.Win32.System.Com
         public unsafe HRESULT Read(void* pv, uint cb, uint* pcbRead)
         {
             Span<byte> buffer = new Span<byte>(pv, checked((int)cb));
-#if NET48
+#if NET462_OR_GREATER
             byte[] array = buffer.ToArray();
             int val = _stream.Read(array, 0, array.Length);
+            //Marshal.Copy(array, 0, (IntPtr)pv, val);
+            MemoryExtensions.CopyTo(array, buffer);
 #else
             int val = _stream.Read(buffer);
 #endif
@@ -175,7 +177,7 @@ namespace Windows.Win32.System.Com
             }
             else if (_stream.CanRead)
             {
-                //streamStats.grfMode = streamStats.grfMode;
+                streamStats.grfMode = STGM.STGM_READ;
             }
             else
             {
@@ -211,7 +213,7 @@ namespace Windows.Win32.System.Com
         public unsafe HRESULT Write(void* pv, uint cb, uint* pcbWritten)
         {
             var buffer = new ReadOnlySpan<byte>(pv, checked((int)cb));
-#if NET48
+#if NET462_OR_GREATER
             byte[] array = buffer.ToArray();
             _stream.Write(array, 0, array.Length);
 #else

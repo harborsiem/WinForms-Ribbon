@@ -1,15 +1,16 @@
 //#define Unused
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using static Windows.Win32.System.Variant.VARENUM;
+using FILETIME = Windows.Win32.Foundation.FILETIME;
 
 namespace Windows.Win32.System.Com.StructuredStorage
 {
@@ -867,8 +868,19 @@ BeginMainLoop:
             }
         }
 
+#if NET462_OR_GREATER
+        //This is a dummy, because functions with GetSpan are not used by RibbonFramework
+        private static Span<T> GetSpan<T>(Array array)
+        //=> throw new NotSupportedException();
+        => CreateSpan<T>(array);
+        private static Span<T> CreateSpan<T>(Array array)
+        {
+            return new Span<T>(Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToPointer(), array.Length);
+        }
+#else
         private static Span<T> GetSpan<T>(Array array)
             => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToPointer()), array.Length);
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator bool(PROPVARIANT value)
