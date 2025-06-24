@@ -24,6 +24,7 @@ It also uses some internal classes and structs from Microsoft WinForms project o
   1. One library has Com callable wrappers (CCW) for all COM interfaces for more performance. (Less Garbage collection, ...) 
   2. The other library has Runtime callable wrappers (RCW) for all COM interfaces. This is similar to WindowsRibbon.
 - RibbonStrip property ResourceName changed to MarkupResource
+- Some properties names changed.
 - Color functions changed.
 
 - Samples for **C#** and **Visual Basic** adapted to the *RibbonFramework*.
@@ -44,9 +45,12 @@ Todo
 ## Installation:
 
 At the releases page of this project is a setup for **RibbonTools64**. Download **RibbonTools.zip**, unzip and install **RibbonTools.msi**
-Nuget package for CCW RibbonFramework with name [**RibbonFramework.CCW**](https://www.nuget.org/packages/RibbonFramework.CCW) available. You can manage this with the nuget package manager in **Visual Studio 2022**
+Nuget package for CCW RibbonFramework with name [**RibbonFramework.CCW**](https://www.nuget.org/packages/RibbonFramework.CCW) available.
+**.NET 8** and later supported.
+Nuget package for RCW RibbonFramework with name [**RibbonFramework.RCW**](https://www.nuget.org/packages/RibbonFramework.RCW) available.
+**.NET Framework 4.6.2** and later and **.NET 8** and later supported.
+You can manage it for your project with the nuget package manager in **Visual Studio 2022**
 
-Todo
 
 ## Samples
 
