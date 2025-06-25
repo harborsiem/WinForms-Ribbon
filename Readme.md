@@ -1,5 +1,7 @@
 # WinForms-Ribbon for .NET8 and later
 
+**RCW version** also available for **.NET Framework 4.6.2 and later**.
+
 *Windows Ribbon Framework* for WinForms
 
 **WinForms-Ribbon** is a .NET wrapper for *Microsoft Windows Ribbon Framework* library UIRibbon.dll. It will allow WinForms developers to use *Microsoft Windows Ribbon Framework* library in their WinForms applications.
