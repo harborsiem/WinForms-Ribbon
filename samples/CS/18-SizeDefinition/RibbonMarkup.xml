@@ -92,6 +92,20 @@
              Id="1011"
              LabelTitle="Home">
     </Command>
+    <Command Name="cmdTabSpecialLayouts" Id="2204" LabelTitle="Special Layouts" />
+    <Command Name="cmdCombo1" Id="78" />
+    <Command Name="cmdCombo2" Id="79" />
+    <Command Name="cmdButton1" Id="80" LabelTitle="Button1" />
+    <Command Name="cmdButton2" Id="81" LabelTitle="Button2" />
+    <Command Name="cmdHidden1" Id="82" />
+    <Command Name="cmdHidden2" Id="83" />
+    <Command Name="cmdGroup1" Id="84" LabelTitle="Group1" />
+    <Command Name="cmdGroup2" Id="85" LabelTitle="Group2" />
+    <Command Name="cmdGroup3" Id="86" LabelTitle="Group3" />
+    <Command Name="cmdButtonLabel" Id="87" LabelTitle="Extra Label" />
+    <Command Name="cmdGroup4" Id="88" LabelTitle="Group4" />
+    <Command Name="cmdGroup5" Id="89" LabelTitle="DatePicker" />
+    <Command Name="cmdButtonDate" Id="90" />
 
   </Application.Commands>
 
@@ -153,6 +167,123 @@
             <Button CommandName="cmdAlignRight" />
             <Button CommandName="cmdJustify" />
             <Button CommandName="cmdParagraph" />
+          </Group>
+        </Tab>
+        <Tab CommandName="cmdTabSpecialLayouts">
+          <Group CommandName="cmdGroup1">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="b1" />
+                <ControlNameDefinition Name="c2" />
+                <ControlNameDefinition Name="b2" />
+                <ControlNameDefinition Name="h1" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <Row>
+                  <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                  <ControlSizeDefinition IsImageVisible="false" ControlName="b1" />
+                </Row>
+                <Row>
+                  <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c2" />
+                  <ControlSizeDefinition IsImageVisible="false" ControlName="b2" />
+                </Row>
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdButton1" />
+            <ComboBox CommandName="cmdCombo2" />
+            <Button CommandName="cmdButton2" />
+            <Button CommandName="cmdHidden1" />
+          </Group>
+          <Group CommandName="cmdGroup2">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="b1" />
+                <ControlNameDefinition Name="c2" />
+                <ControlNameDefinition Name="b2" />
+                <ControlNameDefinition Name="h1" />
+                <ControlNameDefinition Name="h2" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c2" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+                <ColumnBreak ShowSeparator="false" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b1" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b2" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h2" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdButton1" />
+            <ComboBox CommandName="cmdCombo2" />
+            <Button CommandName="cmdButton2" />
+            <Button CommandName="cmdHidden1" />
+            <Button CommandName="cmdHidden2" />
+          </Group>
+          <Group CommandName="cmdGroup3">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="l1" />
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="h1" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsImageVisible="false" ControlName="l1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <Button CommandName="cmdButtonLabel" />
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdHidden1" />
+          </Group>
+          <Group CommandName="cmdGroup4">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="b1" />
+                <ControlNameDefinition Name="c2" />
+                <ControlNameDefinition Name="b2" />
+                <ControlNameDefinition Name="h1" />
+                <ControlNameDefinition Name="h2" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c2" />
+                <ColumnBreak ShowSeparator="false" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h2" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b2" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdButton1" />
+            <ComboBox CommandName="cmdCombo2" />
+            <Button CommandName="cmdButton2" />
+            <Button CommandName="cmdHidden1" />
+            <Button CommandName="cmdHidden2" />
+          </Group>
+          <Group CommandName="cmdGroup5">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="dt" />
+                <ControlNameDefinition Name="h1" />
+                <ControlNameDefinition Name="h2" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsImageVisible="false" ControlName="dt" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h2" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <Button CommandName="cmdButtonDate" />
+            <Button CommandName="cmdHidden1" />
+            <Button CommandName="cmdHidden2" />
           </Group>
         </Tab>
       </Ribbon.Tabs>

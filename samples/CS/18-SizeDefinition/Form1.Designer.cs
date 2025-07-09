@@ -35,6 +35,7 @@ namespace _18_SizeDefinition
             // 
             this._ribbon.Location = new System.Drawing.Point(0, 0);
             this._ribbon.Name = "_ribbon";
+            this._ribbon.MarkupHeader = "_18_SizeDefinition.RibbonMarkup.h";
             this._ribbon.MarkupResource = "_18_SizeDefinition.RibbonMarkup.ribbon";
             this._ribbon.Size = new System.Drawing.Size(501, 116);
             this._ribbon.TabIndex = 6;

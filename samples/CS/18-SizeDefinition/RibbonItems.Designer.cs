@@ -27,6 +27,20 @@ namespace WinForms.Ribbon
             public const uint cmdAlignRight = 1007;
             public const uint cmdJustify = 1008;
             public const uint cmdParagraph = 1009;
+            public const uint cmdTabSpecialLayouts = 2204;
+            public const uint cmdGroup1 = 84;
+            public const uint cmdCombo1 = 78;
+            public const uint cmdButton1 = 80;
+            public const uint cmdCombo2 = 79;
+            public const uint cmdButton2 = 81;
+            public const uint cmdHidden1 = 82;
+            public const uint cmdGroup2 = 85;
+            public const uint cmdHidden2 = 83;
+            public const uint cmdGroup3 = 86;
+            public const uint cmdButtonLabel = 87;
+            public const uint cmdGroup4 = 88;
+            public const uint cmdGroup5 = 89;
+            public const uint cmdButtonDate = 90;
         }
 
         // ContextPopup CommandName
@@ -43,6 +57,20 @@ namespace WinForms.Ribbon
         public RibbonButton AlignRight { get; private set; }
         public RibbonButton Justify { get; private set; }
         public RibbonButton Paragraph { get; private set; }
+        public RibbonTab TabSpecialLayouts { get; private set; }
+        public RibbonGroup Group1 { get; private set; }
+        public RibbonComboBox Combo1 { get; private set; }
+        public RibbonButton Button1 { get; private set; }
+        public RibbonComboBox Combo2 { get; private set; }
+        public RibbonButton Button2 { get; private set; }
+        public RibbonButton Hidden1 { get; private set; }
+        public RibbonGroup Group2 { get; private set; }
+        public RibbonButton Hidden2 { get; private set; }
+        public RibbonGroup Group3 { get; private set; }
+        public RibbonButton ButtonLabel { get; private set; }
+        public RibbonGroup Group4 { get; private set; }
+        public RibbonGroup Group5 { get; private set; }
+        public RibbonButton ButtonDate { get; private set; }
 
         public RibbonItems(RibbonStrip ribbon)
         {
@@ -60,6 +88,20 @@ namespace WinForms.Ribbon
             AlignRight = new RibbonButton(ribbon, Cmd.cmdAlignRight);
             Justify = new RibbonButton(ribbon, Cmd.cmdJustify);
             Paragraph = new RibbonButton(ribbon, Cmd.cmdParagraph);
+            TabSpecialLayouts = new RibbonTab(ribbon, Cmd.cmdTabSpecialLayouts);
+            Group1 = new RibbonGroup(ribbon, Cmd.cmdGroup1);
+            Combo1 = new RibbonComboBox(ribbon, Cmd.cmdCombo1);
+            Button1 = new RibbonButton(ribbon, Cmd.cmdButton1);
+            Combo2 = new RibbonComboBox(ribbon, Cmd.cmdCombo2);
+            Button2 = new RibbonButton(ribbon, Cmd.cmdButton2);
+            Hidden1 = new RibbonButton(ribbon, Cmd.cmdHidden1);
+            Group2 = new RibbonGroup(ribbon, Cmd.cmdGroup2);
+            Hidden2 = new RibbonButton(ribbon, Cmd.cmdHidden2);
+            Group3 = new RibbonGroup(ribbon, Cmd.cmdGroup3);
+            ButtonLabel = new RibbonButton(ribbon, Cmd.cmdButtonLabel);
+            Group4 = new RibbonGroup(ribbon, Cmd.cmdGroup4);
+            Group5 = new RibbonGroup(ribbon, Cmd.cmdGroup5);
+            ButtonDate = new RibbonButton(ribbon, Cmd.cmdButtonDate);
         }
 
     }

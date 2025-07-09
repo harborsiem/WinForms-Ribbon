@@ -12,7 +12,7 @@ namespace _18_SizeDefinition
         public Form1()
         {
             InitializeComponent();
-            _ribbonItems = new RibbonItems(_ribbon);
+            _ribbonItems = new RibbonItems(_ribbon, true);
             _ribbonItems.Init();
         }
     }

@@ -1,4 +1,4 @@
-# Windows Ribbon Framework for WinForms .NET (Core)
+# Windows Ribbon Framework for WinForms .NET (Core and .NET Framework)
 
 The package contains .NET wrapper classes for the COM based Windows Ribbon Framework.
 Microsofts Windows Ribbon Framework is available since Windows 7.
