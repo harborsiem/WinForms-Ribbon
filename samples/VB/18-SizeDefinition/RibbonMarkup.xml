@@ -1,54 +1,114 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Application xmlns='http://schemas.microsoft.com/windows/2009/Ribbon'>
   <Application.Commands>
-    <Command Name="cmdDecreaseIndent" Id="1001" TooltipTitle="Decrease indent" TooltipDescription="Decrease the indent level of the paragraph.">
+
+    <Command Name="cmdDecreaseIndent"
+             Id="1001"
+             TooltipTitle="Decrease indent"
+             TooltipDescription="Decrease the indent level of the paragraph.">
       <Command.SmallImages>
         <Image>Res/DecreaseIndent.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdIncreaseIndent" Id="1002" TooltipTitle="Increase indent" TooltipDescription="Increase the indent level of the paragraph.">
+
+    <Command Name="cmdIncreaseIndent"
+             Id="1002"
+             TooltipTitle="Increase indent"
+             TooltipDescription="Increase the indent level of the paragraph.">
       <Command.SmallImages>
         <Image>Res/IncreaseIndent.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdStartList" Id="1003" TooltipTitle="Start a list" TooltipDescription="Click the arrow to choose different list styles.">
+
+    <Command Name="cmdStartList"
+             Id="1003"
+             TooltipTitle="Start a list"
+             TooltipDescription="Click the arrow to choose different list styles.">
       <Command.SmallImages>
         <Image>Res/StartList.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdLineSpacing" Id="1004" TooltipTitle="Line spacing" TooltipDescription="Change the spacing between lines of text. Add or remove the space after paragraphs.">
+
+    <Command Name="cmdLineSpacing"
+             Id="1004"
+             TooltipTitle="Line spacing"
+             TooltipDescription="Change the spacing between lines of text. Add or remove the space after paragraphs.">
       <Command.SmallImages>
         <Image>Res/LineSpacing.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdAlignLeft" Id="1005" TooltipTitle="Align text left (Ctrl+L)" TooltipDescription="Align text to the left.">
+
+    <Command Name="cmdAlignLeft"
+             Id="1005"
+             TooltipTitle="Align text left (Ctrl+L)"
+             TooltipDescription="Align text to the left.">
       <Command.SmallImages>
         <Image>Res/AlignLeft.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdAlignCenter" Id="1006" TooltipTitle="Center (Ctrl+E)" TooltipDescription="Center text.">
+
+    <Command Name="cmdAlignCenter"
+             Id="1006"
+             TooltipTitle="Center (Ctrl+E)"
+             TooltipDescription="Center text.">
       <Command.SmallImages>
         <Image>Res/AlignCenter.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdAlignRight" Id="1007" TooltipTitle="Align text right (Ctrl+R)" TooltipDescription="Align text to the right.">
+
+    <Command Name="cmdAlignRight"
+             Id="1007"
+             TooltipTitle="Align text right (Ctrl+R)"
+             TooltipDescription="Align text to the right.">
       <Command.SmallImages>
         <Image>Res/AlignRight.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdJustify" Id="1008" TooltipTitle="Justify (Ctrl+J)" TooltipDescription="Align text to both left and right margins, adding extra space between words as necessary. &#xA;This creates a clean look along the left and right side of the page.">
+
+    <Command Name="cmdJustify"
+             Id="1008"
+             TooltipTitle="Justify (Ctrl+J)"
+             TooltipDescription="Align text to both left and right margins, adding extra space between words as necessary. &#xA;This creates a clean look along the left and right side of the page.">
       <Command.SmallImages>
         <Image>Res/Justify.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdParagraph" Id="1009" TooltipTitle="Paragraph" TooltipDescription="Show the Paragraph dialog box.">
+
+    <Command Name="cmdParagraph"
+             Id="1009"
+             TooltipTitle="Paragraph"
+             TooltipDescription="Show the Paragraph dialog box.">
       <Command.SmallImages>
         <Image>Res/Paragraph.bmp</Image>
       </Command.SmallImages>
     </Command>
-    <Command Name="cmdGroupParagraph" Id="1010" LabelTitle="Paragraph" />
-    <Command Name="cmdTabHome" Id="1011" LabelTitle="Home" />
+
+    <Command Name="cmdGroupParagraph"
+             Id="1010"
+             LabelTitle="Paragraph">
+    </Command>
+
+    <Command Name="cmdTabHome"
+             Id="1011"
+             LabelTitle="Home">
+    </Command>
+    <Command Name="cmdTabSpecialLayouts" Id="2204" LabelTitle="Special Layouts" />
+    <Command Name="cmdCombo1" Id="78" />
+    <Command Name="cmdCombo2" Id="79" />
+    <Command Name="cmdButton1" Id="80" LabelTitle="Button1" />
+    <Command Name="cmdButton2" Id="81" LabelTitle="Button2" />
+    <Command Name="cmdHidden1" Id="82" />
+    <Command Name="cmdHidden2" Id="83" />
+    <Command Name="cmdGroup1" Id="84" LabelTitle="Group1" />
+    <Command Name="cmdGroup2" Id="85" LabelTitle="Group2" />
+    <Command Name="cmdGroup3" Id="86" LabelTitle="Group3" />
+    <Command Name="cmdButtonLabel" Id="87" LabelTitle="Extra Label" />
+    <Command Name="cmdGroup4" Id="88" LabelTitle="Group4" />
+    <Command Name="cmdGroup5" Id="89" LabelTitle="DatePicker" />
+    <Command Name="cmdButtonDate" Id="90" />
+
   </Application.Commands>
+
   <Application.Views>
     <Ribbon>
       <Ribbon.SizeDefinitions>
@@ -67,36 +127,30 @@
           <GroupSizeDefinition Size="Large">
             <Row>
               <ControlGroup>
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button1" />
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button2" />
+                <ControlSizeDefinition ControlName="button1" IsLabelVisible="false" />
+                <ControlSizeDefinition ControlName="button2" IsLabelVisible="false" />
               </ControlGroup>
               <ControlGroup>
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button3" />
+                <ControlSizeDefinition ControlName="button3" IsLabelVisible="false" />
               </ControlGroup>
               <ControlGroup>
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button4" />
+                <ControlSizeDefinition ControlName="button4" IsLabelVisible="false" />
               </ControlGroup>
             </Row>
             <Row>
               <ControlGroup>
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button5" />
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button6" />
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button7" />
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button8" />
+                <ControlSizeDefinition ControlName="button5" IsLabelVisible="false" />
+                <ControlSizeDefinition ControlName="button6" IsLabelVisible="false" />
+                <ControlSizeDefinition ControlName="button7" IsLabelVisible="false" />
+                <ControlSizeDefinition ControlName="button8" IsLabelVisible="false" />
               </ControlGroup>
               <ControlGroup>
-                <ControlSizeDefinition IsLabelVisible="false" ControlName="button9" />
+                <ControlSizeDefinition ControlName="button9" IsLabelVisible="false" />
               </ControlGroup>
             </Row>
           </GroupSizeDefinition>
-        </SizeDefinition>
+        </SizeDefinition> 
       </Ribbon.SizeDefinitions>
-      <Ribbon.ApplicationMenu>
-        <ApplicationMenu />
-      </Ribbon.ApplicationMenu>
-      <Ribbon.QuickAccessToolbar>
-        <QuickAccessToolbar />
-      </Ribbon.QuickAccessToolbar>
       <Ribbon.Tabs>
         <Tab CommandName="cmdTabHome">
           <Group CommandName="cmdGroupParagraph" SizeDefinition="ParagraphLayout">
@@ -115,8 +169,124 @@
             <Button CommandName="cmdParagraph" />
           </Group>
         </Tab>
+        <Tab CommandName="cmdTabSpecialLayouts">
+          <Group CommandName="cmdGroup1">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="b1" />
+                <ControlNameDefinition Name="c2" />
+                <ControlNameDefinition Name="b2" />
+                <ControlNameDefinition Name="h1" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <Row>
+                  <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                  <ControlSizeDefinition IsImageVisible="false" ControlName="b1" />
+                </Row>
+                <Row>
+                  <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c2" />
+                  <ControlSizeDefinition IsImageVisible="false" ControlName="b2" />
+                </Row>
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdButton1" />
+            <ComboBox CommandName="cmdCombo2" />
+            <Button CommandName="cmdButton2" />
+            <Button CommandName="cmdHidden1" />
+          </Group>
+          <Group CommandName="cmdGroup2">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="b1" />
+                <ControlNameDefinition Name="c2" />
+                <ControlNameDefinition Name="b2" />
+                <ControlNameDefinition Name="h1" />
+                <ControlNameDefinition Name="h2" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c2" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+                <ColumnBreak ShowSeparator="false" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b1" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b2" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h2" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdButton1" />
+            <ComboBox CommandName="cmdCombo2" />
+            <Button CommandName="cmdButton2" />
+            <Button CommandName="cmdHidden1" />
+            <Button CommandName="cmdHidden2" />
+          </Group>
+          <Group CommandName="cmdGroup3">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="l1" />
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="h1" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsImageVisible="false" ControlName="l1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <Button CommandName="cmdButtonLabel" />
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdHidden1" />
+          </Group>
+          <Group CommandName="cmdGroup4">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="c1" />
+                <ControlNameDefinition Name="b1" />
+                <ControlNameDefinition Name="c2" />
+                <ControlNameDefinition Name="b2" />
+                <ControlNameDefinition Name="h1" />
+                <ControlNameDefinition Name="h2" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="c2" />
+                <ColumnBreak ShowSeparator="false" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h2" />
+                <ControlSizeDefinition IsImageVisible="false" ControlName="b2" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <ComboBox CommandName="cmdCombo1" />
+            <Button CommandName="cmdButton1" />
+            <ComboBox CommandName="cmdCombo2" />
+            <Button CommandName="cmdButton2" />
+            <Button CommandName="cmdHidden1" />
+            <Button CommandName="cmdHidden2" />
+          </Group>
+          <Group CommandName="cmdGroup5">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="dt" />
+                <ControlNameDefinition Name="h1" />
+                <ControlNameDefinition Name="h2" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition IsImageVisible="false" ControlName="dt" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h1" />
+                <ControlSizeDefinition IsLabelVisible="false" IsImageVisible="false" ControlName="h2" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <Button CommandName="cmdButtonDate" />
+            <Button CommandName="cmdHidden1" />
+            <Button CommandName="cmdHidden2" />
+          </Group>
+        </Tab>
       </Ribbon.Tabs>
     </Ribbon>
   </Application.Views>
 </Application>
-<!--ResourceName Value="APPLICATION"-->

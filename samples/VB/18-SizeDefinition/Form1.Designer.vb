@@ -30,6 +30,7 @@
             '
             Me._ribbon.Location = New System.Drawing.Point(0, 0)
 			Me._ribbon.Name = "_ribbon"
+			Me._ribbon.MarkupHeader = "RibbonMarkup.h"
 			Me._ribbon.MarkupResource = "RibbonMarkup.ribbon"
 			Me._ribbon.Size = New System.Drawing.Size(501, 116)
 			Me._ribbon.TabIndex = 6

@@ -24,6 +24,20 @@ Namespace Global.WinForms.Ribbon
             Public Const cmdAlignRight As UInteger = 1007
             Public Const cmdJustify As UInteger = 1008
             Public Const cmdParagraph As UInteger = 1009
+            Public Const cmdTabSpecialLayouts As UInteger = 2204
+            Public Const cmdGroup1 As UInteger = 84
+            Public Const cmdCombo1 As UInteger = 78
+            Public Const cmdButton1 As UInteger = 80
+            Public Const cmdCombo2 As UInteger = 79
+            Public Const cmdButton2 As UInteger = 81
+            Public Const cmdHidden1 As UInteger = 82
+            Public Const cmdGroup2 As UInteger = 85
+            Public Const cmdHidden2 As UInteger = 83
+            Public Const cmdGroup3 As UInteger = 86
+            Public Const cmdButtonLabel As UInteger = 87
+            Public Const cmdGroup4 As UInteger = 88
+            Public Const cmdGroup5 As UInteger = 89
+            Public Const cmdButtonDate As UInteger = 90
         End Class
 
         ' ContextPopup CommandName
@@ -100,6 +114,90 @@ Namespace Global.WinForms.Ribbon
                 Return _Paragraph
             End Get
         End Property
+        Private _TabSpecialLayouts As RibbonTab
+        Public ReadOnly Property TabSpecialLayouts As RibbonTab
+            Get
+                Return _TabSpecialLayouts
+            End Get
+        End Property
+        Private _Group1 As RibbonGroup
+        Public ReadOnly Property Group1 As RibbonGroup
+            Get
+                Return _Group1
+            End Get
+        End Property
+        Private _Combo1 As RibbonComboBox
+        Public ReadOnly Property Combo1 As RibbonComboBox
+            Get
+                Return _Combo1
+            End Get
+        End Property
+        Private _Button1 As RibbonButton
+        Public ReadOnly Property Button1 As RibbonButton
+            Get
+                Return _Button1
+            End Get
+        End Property
+        Private _Combo2 As RibbonComboBox
+        Public ReadOnly Property Combo2 As RibbonComboBox
+            Get
+                Return _Combo2
+            End Get
+        End Property
+        Private _Button2 As RibbonButton
+        Public ReadOnly Property Button2 As RibbonButton
+            Get
+                Return _Button2
+            End Get
+        End Property
+        Private _Hidden1 As RibbonButton
+        Public ReadOnly Property Hidden1 As RibbonButton
+            Get
+                Return _Hidden1
+            End Get
+        End Property
+        Private _Group2 As RibbonGroup
+        Public ReadOnly Property Group2 As RibbonGroup
+            Get
+                Return _Group2
+            End Get
+        End Property
+        Private _Hidden2 As RibbonButton
+        Public ReadOnly Property Hidden2 As RibbonButton
+            Get
+                Return _Hidden2
+            End Get
+        End Property
+        Private _Group3 As RibbonGroup
+        Public ReadOnly Property Group3 As RibbonGroup
+            Get
+                Return _Group3
+            End Get
+        End Property
+        Private _ButtonLabel As RibbonButton
+        Public ReadOnly Property ButtonLabel As RibbonButton
+            Get
+                Return _ButtonLabel
+            End Get
+        End Property
+        Private _Group4 As RibbonGroup
+        Public ReadOnly Property Group4 As RibbonGroup
+            Get
+                Return _Group4
+            End Get
+        End Property
+        Private _Group5 As RibbonGroup
+        Public ReadOnly Property Group5 As RibbonGroup
+            Get
+                Return _Group5
+            End Get
+        End Property
+        Private _ButtonDate As RibbonButton
+        Public ReadOnly Property ButtonDate As RibbonButton
+            Get
+                Return _ButtonDate
+            End Get
+        End Property
 
         Public Sub New(ByVal ribbon As RibbonStrip)
             If ribbon Is Nothing Then
@@ -117,6 +215,20 @@ Namespace Global.WinForms.Ribbon
             _AlignRight = New RibbonButton(_ribbon, Cmd.cmdAlignRight)
             _Justify = New RibbonButton(_ribbon, Cmd.cmdJustify)
             _Paragraph = New RibbonButton(_ribbon, Cmd.cmdParagraph)
+            _TabSpecialLayouts = New RibbonTab(_ribbon, Cmd.cmdTabSpecialLayouts)
+            _Group1 = New RibbonGroup(_ribbon, Cmd.cmdGroup1)
+            _Combo1 = New RibbonComboBox(_ribbon, Cmd.cmdCombo1)
+            _Button1 = New RibbonButton(_ribbon, Cmd.cmdButton1)
+            _Combo2 = New RibbonComboBox(_ribbon, Cmd.cmdCombo2)
+            _Button2 = New RibbonButton(_ribbon, Cmd.cmdButton2)
+            _Hidden1 = New RibbonButton(_ribbon, Cmd.cmdHidden1)
+            _Group2 = New RibbonGroup(_ribbon, Cmd.cmdGroup2)
+            _Hidden2 = New RibbonButton(_ribbon, Cmd.cmdHidden2)
+            _Group3 = New RibbonGroup(_ribbon, Cmd.cmdGroup3)
+            _ButtonLabel = New RibbonButton(_ribbon, Cmd.cmdButtonLabel)
+            _Group4 = New RibbonGroup(_ribbon, Cmd.cmdGroup4)
+            _Group5 = New RibbonGroup(_ribbon, Cmd.cmdGroup5)
+            _ButtonDate = New RibbonButton(_ribbon, Cmd.cmdButtonDate)
         End Sub
 
     End Class
