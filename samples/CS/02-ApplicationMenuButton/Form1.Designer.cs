@@ -67,6 +67,7 @@ namespace _02_ApplicationMenuButton
             // 
             this._ribbon.Location = new System.Drawing.Point(0, 0);
             this._ribbon.Name = "_ribbon";
+            this._ribbon.MarkupHeader = "_02_ApplicationMenuButton.RibbonMarkup.h";
             this._ribbon.MarkupResource = "_02_ApplicationMenuButton.RibbonMarkup.ribbon";
             this._ribbon.Size = new System.Drawing.Size(407, 116);
             this._ribbon.TabIndex = 2;

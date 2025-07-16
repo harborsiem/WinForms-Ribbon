@@ -22,17 +22,17 @@ namespace WinForms.Ribbon
             _buttonDropB.Click += new EventHandler<EventArgs>(_buttonDropB_ExecuteEvent);
         }
 
-        unsafe void _buttonDropA_ExecuteEvent(object sender, EventArgs e)
+        void _buttonDropA_ExecuteEvent(object sender, EventArgs e)
         {
             // load bitmap from file
             Bitmap bitmap = GetResourceBitmap("Drop32.bmp");
             bitmap.MakeTransparent();
 
             // set large image property
-            _buttonDropA.LargeImage = new UIImage(Ribbon, bitmap); //.ConvertToUIImage(bitmap);
+            _buttonDropA.LargeImage = new UIImage(Ribbon, bitmap);
         }
 
-        unsafe void _buttonDropB_ExecuteEvent(object sender, EventArgs e)
+        void _buttonDropB_ExecuteEvent(object sender, EventArgs e)
         {
             List<int> supportedImageSizes = new List<int>() { 32, 48, 64 };
 
@@ -54,7 +54,7 @@ namespace WinForms.Ribbon
             var bitmap = GetResourceBitmap(string.Format("Exit{0}{1}.bmp", exitStatus, selectedImageSize));
             bitmap.MakeTransparent();
 
-            _buttonDropB.LargeImage = new UIImage(Ribbon, bitmap); //.ConvertToUIImage(bitmap);
+            _buttonDropB.LargeImage = new UIImage(Ribbon, bitmap);
         }
 
         Bitmap GetResourceBitmap(string name)

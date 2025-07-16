@@ -24,7 +24,7 @@ namespace WinForms.Ribbon
             DropDownGallery.CancelPreview += new EventHandler<GalleryItemEventArgs>(_dropDownGallery_OnCancelPreview);
         }
 
-        unsafe void _dropDownGallery_ItemsSourceReady(object sender, EventArgs e)
+        void _dropDownGallery_ItemsSourceReady(object sender, EventArgs e)
         {
             // set label
             DropDownGallery.Label = "Size";
@@ -36,7 +36,7 @@ namespace WinForms.Ribbon
             {
                 itemsSource.Add(new GalleryItemPropertySet()
                 {
-                    ItemImage = new UIImage(Ribbon, (Bitmap)image) //.ConvertToUIImage((Bitmap)image)
+                    ItemImage = new UIImage(Ribbon, (Bitmap)image)
                 }); 
             }
         }
@@ -49,7 +49,7 @@ namespace WinForms.Ribbon
             categories.Add(new CategoriesPropertySet() { Label = "Category 1", CategoryId = 1 });
         }
 
-        unsafe void _splitButtonGallery_ItemsSourceReady(object sender, EventArgs e)
+        void _splitButtonGallery_ItemsSourceReady(object sender, EventArgs e)
         {
             // set label
             SplitButtonGallery.Label = "Brushes";
@@ -62,7 +62,7 @@ namespace WinForms.Ribbon
                 _buttons[i] = new RibbonButton(Ribbon, 2000 + i)
                 {
                     Label = "Label " + i.ToString(),
-                    LargeImage = new UIImage(Ribbon, (Bitmap)_form.ImageListBrushes.Images[(int)i]) //.ConvertToUIImage((Bitmap)_form.ImageListBrushes.Images[(int)i])
+                    LargeImage = new UIImage(Ribbon, (Bitmap)_form.ImageListBrushes.Images[(int)i])
                 };
             }
 
@@ -81,7 +81,7 @@ namespace WinForms.Ribbon
             }
         }
 
-        unsafe void _inRibbonGallery_ItemsSourceReady(object sender, EventArgs e)
+        void _inRibbonGallery_ItemsSourceReady(object sender, EventArgs e)
         {
             // set _inRibbonGallery items
             UICollection<GalleryItemPropertySet> itemsSource = InRibbonGallery.GalleryItemItemsSource;
@@ -90,7 +90,7 @@ namespace WinForms.Ribbon
             {
                 itemsSource.Add(new GalleryItemPropertySet()
                 {
-                    ItemImage = new UIImage(Ribbon, (Bitmap)image) //.ConvertToUIImage((Bitmap)image)
+                    ItemImage = new UIImage(Ribbon, (Bitmap)image)
                 });
             }
         }
