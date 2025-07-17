@@ -12,6 +12,7 @@ namespace WinForms.Ribbon
         UI_HSBCOLOR _highlightCurrent;
         UI_HSBCOLOR _textCurrent;
         UI_HSBCOLOR _appButtonColorCurrent;
+        bool _hasAppButtonColor;
 
         public void Init()
         {
@@ -24,7 +25,10 @@ namespace WinForms.Ribbon
             Ribbon.SetBackgroundColor(_backgroundDefault);
             Ribbon.SetHighlightColor(_highlightDefault);
             Ribbon.SetTextColor(_textDefault);
-            Ribbon.SetApplicationButtonColor(_appButtonColorDefault);
+            if (_hasAppButtonColor)
+            {
+                Ribbon.SetApplicationButtonColor(_appButtonColorDefault);
+            }
             _backgroundCurrent = _backgroundDefault;
             _highlightCurrent = _highlightDefault;
             _textCurrent = _textDefault;
@@ -39,7 +43,10 @@ namespace WinForms.Ribbon
                 Ribbon.SetBackgroundColor(_backgroundCurrent);
                 Ribbon.SetHighlightColor(_highlightCurrent);
                 Ribbon.SetTextColor(_textCurrent);
-                //Ribbon.SetApplicationButtonColor(_appButtonColorCurrent);
+                if (_hasAppButtonColor)
+                {
+                    //Ribbon.SetApplicationButtonColor(_appButtonColorCurrent);
+                }
             }
         }
 
@@ -48,13 +55,23 @@ namespace WinForms.Ribbon
             _backgroundDefault = Ribbon.GetBackgroundColor();
             _highlightDefault = Ribbon.GetHighlightColor();
             _textDefault = Ribbon.GetTextColor();
-            _appButtonColorDefault = Ribbon.GetApplicationButtonColor();
+            try
+            {
+                _appButtonColorDefault = Ribbon.GetApplicationButtonColor();
+                _hasAppButtonColor = true;
+            }
+            catch (NotSupportedException)
+            {
+                _hasAppButtonColor = false;
+            }
             // set ribbon colors
-            //Ribbon.SetColors(Color.Wheat, Color.IndianRed, Color.BlueViolet);
             Ribbon.SetBackgroundColor(_backgroundCurrent = new UI_HSBCOLOR(Color.Wheat));
             Ribbon.SetHighlightColor(_highlightCurrent = new UI_HSBCOLOR(Color.IndianRed));
             Ribbon.SetTextColor(_textCurrent = new UI_HSBCOLOR(Color.BlueViolet));
-            //Ribbon.SetApplicationButtonColor(_appButtonColorCurrent = new UI_HSBCOLOR(Color.BlueViolet));
+            if (_hasAppButtonColor)
+            {
+                //Ribbon.SetApplicationButtonColor(_appButtonColorCurrent = new UI_HSBCOLOR(Color.BlueViolet));
+            }
         }
 
     }

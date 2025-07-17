@@ -35,7 +35,7 @@ It also uses some internal classes and structs from Microsoft WinForms project o
 
 The project includes the library RibbonFramework, which adds support for *Microsoft Windows Ribbon Framework* to WinForms application.
 
-Read the Wiki Pages for more details on how to use the *RibbonFramework*. (Todo)
+Read the Wiki Pages for more details on how to use the *RibbonFramework*.
 
 Note: You must have Windows 7 SDK (or any later SDK) installed in order to compile (build) the project.
 You also have to install C++ Tools in Visual Studio.
