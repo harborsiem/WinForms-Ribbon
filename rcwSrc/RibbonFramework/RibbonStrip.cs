@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Diagnostics;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -41,7 +42,7 @@ namespace WinForms.Ribbon
         private static readonly Guid IIDGuidIUIContextualUI = typeof(IUIContextualUI).GUID;
         private static readonly Guid IIDGuidIUIRibbon = typeof(IUIRibbon).GUID;
 
-        private static readonly EventKey EventRibbonEventException = new EventKey();
+        private static readonly EventKey s_EventRibbonEventException = new EventKey();
         private static readonly EventKey s_ViewCreatedKey = new EventKey();
         private static readonly EventKey s_ViewDestroyKey = new EventKey();
         private static readonly EventKey s_RibbonHeightKey = new EventKey();
@@ -946,7 +947,7 @@ namespace WinForms.Ribbon
 
         internal bool OnRibbonEventException(object sender, ThreadExceptionEventArgs args)
         {
-            EventHandler<ThreadExceptionEventArgs>? eh = Events[EventRibbonEventException] as EventHandler<ThreadExceptionEventArgs>;
+            EventHandler<ThreadExceptionEventArgs>? eh = Events[s_EventRibbonEventException] as EventHandler<ThreadExceptionEventArgs>;
             if (eh != null)
             {
                 eh(sender, args);
@@ -963,11 +964,11 @@ namespace WinForms.Ribbon
         {
             add
             {
-                Events.AddHandler(EventRibbonEventException, value);
+                Events.AddHandler(s_EventRibbonEventException, value);
             }
             remove
             {
-                Events.RemoveHandler(EventRibbonEventException, value);
+                Events.RemoveHandler(s_EventRibbonEventException, value);
             }
         }
 

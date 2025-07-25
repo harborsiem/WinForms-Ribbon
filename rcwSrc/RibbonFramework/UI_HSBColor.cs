@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -12,9 +13,29 @@ namespace WinForms.Ribbon
     /// <summary>
     /// C# implementation of the UI_HSBCOLOR
     /// </summary>
+    [StructLayout(LayoutKind.Explicit)]
     public readonly partial struct UI_HSBCOLOR
     : IEquatable<UI_HSBCOLOR>
     {
+        /// <summary>
+        /// Hue value, Range 0 .. 255
+        /// </summary>
+        [FieldOffset(0)]
+        public readonly byte Hue;
+
+        /// <summary>
+        /// Saturation value, Range 0 .. 255
+        /// </summary>
+        [FieldOffset(1)]
+        public readonly byte Saturation;
+
+        /// <summary>
+        /// Brightness value, Range 0 .. 255
+        /// </summary>
+        [FieldOffset(2)]
+        public readonly byte Brightness;
+
+        [FieldOffset(0)]
         public readonly uint Value;
         public UI_HSBCOLOR(uint value) => this.Value = value;
         public UI_HSBCOLOR(byte hue, byte saturation, byte brightness) =>
@@ -29,21 +50,6 @@ namespace WinForms.Ribbon
         public override bool Equals(object obj) => obj is UI_HSBCOLOR other && this.Equals(other);
 
         public override int GetHashCode() => this.Value.GetHashCode();
-
-        /// <summary>
-        /// Hue value, Range 0 .. 255
-        /// </summary>
-        public byte Hue => (byte)Value;
-
-        /// <summary>
-        /// Saturation value, Range 0 .. 255
-        /// </summary>
-        public byte Saturation => (byte)(Value >> 8);
-
-        /// <summary>
-        /// Brightness value, Range 0 .. 255
-        /// </summary>
-        public byte Brightness => (byte)(Value >> 16);
 
         /// <summary>
         /// Convert RGB Color to Ribbon HSB Color format

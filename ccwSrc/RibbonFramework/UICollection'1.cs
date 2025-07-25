@@ -11,11 +11,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Variant;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 
@@ -51,13 +52,17 @@ namespace WinForms.Ribbon
     /// <typeparam name="T">An AbstractPropertySet</typeparam>
     public sealed unsafe class UICollection<T> : IUICollection.Interface, IEnumerable<T> where T : AbstractPropertySet, new()
     {
+        private static readonly EventKey s_CategoriesChangedKey = new EventKey();
+        private static readonly EventKey s_ItemsSourceChangedKey = new EventKey();
         private List<T> _items;
         private IUICollection* _cpIUICollection;
-        internal readonly RibbonStrip _ribbon;
-        //private CollectionType _colType;
+        private readonly RibbonStrip _ribbon;
+        private readonly EventKey _changedKey;
         //private CollectionChange marker = CollectionChange.None;
         private bool _detachEvent;
         private UICollectionChangedEvent<T>? _changedEvent;
+        private readonly CollectionItem _collectionItem;
+        private readonly RibbonStripItem _ribbonItem;
 
         internal IUICollection* CpIUICollection => _cpIUICollection;
 
@@ -65,9 +70,9 @@ namespace WinForms.Ribbon
         /// 
         /// </summary>
         /// <param name="cpIUICollection"></param>
-        /// <param name="item"></param>
-        /// <param name="colType"></param>
-        internal unsafe UICollection(ComScope<IUICollection> cpIUICollection, IRibbonControl item, CollectionType colType)
+        /// <param name="ribbonItem"></param>
+        /// <param name="collectionType"></param>
+        internal unsafe UICollection(ComScope<IUICollection> cpIUICollection, RibbonStripItem ribbonItem, CollectionType collectionType)
         {
             if (cpIUICollection.IsNull)
                 throw new ArgumentNullException(nameof(cpIUICollection));
@@ -76,21 +81,20 @@ namespace WinForms.Ribbon
             //refCount = cpIUICollection.AsUnknown->Release();
             //@ refCount = 3 for cpIUICollection, is this OK ?
 
-            UI_COMMANDTYPE itemCommandType = (UI_COMMANDTYPE)item.CommandType;
-            if (item == null || !(itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION || itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION))
-                throw new ArgumentException("Ribbon control is not a Collection or CommandCollection", nameof(item));
+            UI_COMMANDTYPE itemCommandType = (UI_COMMANDTYPE)ribbonItem.CommandType;
+            if (ribbonItem == null || !(itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION || itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION))
+                throw new ArgumentException("Ribbon control is not a Collection or CommandCollection", nameof(ribbonItem));
             if (cpIUICollection.IsNull)
                 throw new ArgumentException("Not a IUICollection ComObject", nameof(cpIUICollection));
             else
                 _cpIUICollection = cpIUICollection;
-            //_colType = colType;
-            _ribbon = item.Ribbon;
-            if (item is RibbonQuickAccessToolbar)
+            _ribbon = ribbonItem.Ribbon;
+            if (ribbonItem is RibbonQuickAccessToolbar)
             {
-                if (!(colType == CollectionType.QatItemsSource && typeof(T) == typeof(QatCommandPropertySet)))
-                    throw new ArgumentException("RibbonQuickAccessToolbar with T or " + nameof(colType) + " not allowed");
+                if (!(collectionType == CollectionType.QatItemsSource && typeof(T) == typeof(QatCommandPropertySet)))
+                    throw new ArgumentException("RibbonQuickAccessToolbar with T or " + nameof(collectionType) + " not allowed");
             }
-            else if (colType == CollectionType.Categories)
+            else if (collectionType == CollectionType.Categories)
             {
                 if (typeof(T) != typeof(CategoriesPropertySet))
                     throw new ArgumentException("T is not a valid Type: CategoriesPropertySet");
@@ -100,6 +104,15 @@ namespace WinForms.Ribbon
             {
                 throw new ArgumentException("T is not a valid Type: GalleryItemPropertySet or GalleryCommandPropertySet");
             }
+            if (collectionType == CollectionType.Categories)
+            {
+                _changedKey = s_CategoriesChangedKey;
+            }
+            else
+            {
+                _changedKey = s_ItemsSourceChangedKey;
+            }
+            _ribbonItem = ribbonItem;
             _items = new List<T>();
             PropertySetEnumerator propset = new PropertySetEnumerator(this);
             foreach (T propItem in propset) //Get all existing items, only from QAT
@@ -107,7 +120,8 @@ namespace WinForms.Ribbon
                 _items.Add(propItem);
             }
             propset.Destroy();
-            _changedEvent = new UICollectionChangedEvent<T>(new CollectionItem(item, colType), this);
+            _collectionItem = new CollectionItem(ribbonItem, collectionType);
+            _changedEvent = new UICollectionChangedEvent<T>(this);
             _changedEvent.Attach(_cpIUICollection);
         }
 
@@ -409,14 +423,16 @@ namespace WinForms.Ribbon
         /// </summary>
         public event EventHandler<CollectionChangedEventArgs>? ChangedEvent
         {
-            add
+            add { _ribbonItem.EventSet.Add(_changedKey, value); }
+            remove { _ribbonItem.EventSet.Remove(_changedKey, value); }
+        }
+
+        internal void InvokeOnChanged(CollectionChangedEventArgs e)
+        {
+            _ribbon.BeginInvoke((MethodInvoker)delegate
             {
-                _changedEvent!.ChangedEvent += value;
-            }
-            remove
-            {
-                _changedEvent!.ChangedEvent -= value;
-            }
+                _ribbonItem.EventSet.Raise(_changedKey, _collectionItem, e);
+            });
         }
 
         /// <summary>

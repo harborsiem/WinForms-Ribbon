@@ -185,7 +185,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             {
                 HRESULT hr;
                 PROPVARIANT propvar = PROPVARIANT.Empty;
-                hr = PInvoke.SafeArrayCopy(psa, out propvar.Anonymous.Anonymous.Anonymous.parray);
+                hr = PInvoke.SafeArrayCopy(psa, &propvar.Anonymous.Anonymous.Anonymous.parray);
                 if (hr.Succeeded)
                 {
                     propvar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;

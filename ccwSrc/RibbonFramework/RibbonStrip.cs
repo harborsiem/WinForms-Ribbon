@@ -19,6 +19,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Buffers;
 using System.IO;
+using System.Diagnostics;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
@@ -1160,14 +1161,13 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe bool GetMinimized()
         {
-            using var uiRibbonScope = GetIUIRibbon();
+            using var uiRibbonScope = new UIRibbonScope(this);
             if (!uiRibbonScope.IsNull)
             {
-                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 HRESULT hr;
                 PROPVARIANT propvar;
                 fixed (PROPERTYKEY* pMinimized = &RibbonProperties.Minimized)
-                    hr = cpPropertyStore.Value->GetValue(pMinimized, &propvar);
+                    hr = uiRibbonScope.PropertyStoreScope.Value->GetValue(pMinimized, &propvar);
                 bool result = (bool)propvar; //PropVariantToBoolean
                 return result;
             }
@@ -1180,17 +1180,16 @@ namespace WinForms.Ribbon
         /// </summary>
         private void SetMinimized(bool value)
         {
-            using var uiRibbonScope = GetIUIRibbon();
+            using var uiRibbonScope = new UIRibbonScope(this);
             if (!uiRibbonScope.IsNull)
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
                 propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 fixed (PROPERTYKEY* pMinimized = &RibbonProperties.Minimized)
-                    hr = cpPropertyStore.Value->SetValue(pMinimized, &propvar);
+                    hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pMinimized, &propvar);
                 if (hr.Succeeded)
-                    hr = cpPropertyStore.Value->Commit();
+                    hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
             }
         }
 
@@ -1199,14 +1198,13 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe bool GetViewable()
         {
-            using var uiRibbonScope = GetIUIRibbon();
+            using var uiRibbonScope = new UIRibbonScope(this);
             if (!uiRibbonScope.IsNull)
             {
-                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 HRESULT hr;
                 PROPVARIANT propvar;
                 fixed (PROPERTYKEY* pViewable = &RibbonProperties.Viewable)
-                    hr = cpPropertyStore.Value->GetValue(pViewable, &propvar);
+                    hr = uiRibbonScope.PropertyStoreScope.Value->GetValue(pViewable, &propvar);
                 bool result = (bool)propvar; //PropVariantToBoolean
                 return result;
             }
@@ -1219,17 +1217,16 @@ namespace WinForms.Ribbon
         /// </summary>
         private void SetViewable(bool value)
         {
-            using var uiRibbonScope = GetIUIRibbon();
+            using var uiRibbonScope = new UIRibbonScope(this);
             if (!uiRibbonScope.IsNull)
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
                 propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 fixed (PROPERTYKEY* pViewable = &RibbonProperties.Viewable)
-                    hr = cpPropertyStore.Value->SetValue(pViewable, &propvar);
+                    hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pViewable, &propvar);
                 if (hr.Succeeded)
-                    hr = cpPropertyStore.Value->Commit();
+                    hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
             }
         }
 
@@ -1238,14 +1235,13 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe UI_CONTROLDOCK GetQuickAccessToolbarDock()
         {
-            using var uiRibbonScope = GetIUIRibbon();
+            using var uiRibbonScope = new UIRibbonScope(this);
             if (!uiRibbonScope.IsNull)
             {
-                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 HRESULT hr;
                 PROPVARIANT propvar;
                 fixed (PROPERTYKEY* pQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
-                    hr = cpPropertyStore.Value->GetValue(pQuickAccessToolbarDock, &propvar);
+                    hr = uiRibbonScope.PropertyStoreScope.Value->GetValue(pQuickAccessToolbarDock, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_CONTROLDOCK retResult = (UI_CONTROLDOCK)result;
                 return retResult;
@@ -1259,16 +1255,15 @@ namespace WinForms.Ribbon
         /// </summary>
         private void SetQuickAccessToolbarDock(UI_CONTROLDOCK value)
         {
-            using var uiRibbonScope = GetIUIRibbon();
+            using var uiRibbonScope = new UIRibbonScope(this);
             if (!uiRibbonScope.IsNull)
             {
                 HRESULT hr;
                 PROPVARIANT propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
-                using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 fixed (PROPERTYKEY* pQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
-                    hr = cpPropertyStore.Value->SetValue(pQuickAccessToolbarDock, &propvar);
+                    hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pQuickAccessToolbarDock, &propvar);
                 if (hr.Succeeded)
-                    hr = cpPropertyStore.Value->Commit();
+                    hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
             }
         }
 

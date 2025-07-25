@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>
@@ -34,6 +34,10 @@
     <PackageProjectUrl>https://github.com/harborsiem/WinForms-Ribbon</PackageProjectUrl>
     <PackageTags>Ribbon Framework;ribbon;winforms;csharp</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="COLORREF.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="Ribbon64.png" Pack="true" PackagePath="\" />
@@ -73,20 +77,4 @@
   <ItemGroup>
     <EmbeddedResource Include="Ribbon16.bmp" />
   </ItemGroup>
-
-<!--
-  <ItemGroup>
-    <Reference Include="WindowsCore">
-      <HintPath>..\WindowsCore\bin\Debug\net8.0-windows\WindowsCore.dll</HintPath>
-    </Reference>
-  </ItemGroup>
--->
-
-<!--
-  <ItemGroup>
-    <Reference Include="FromWinForms">
-      <HintPath>..\FromWinForms\bin\Debug\net8.0-windows\FromWinForms.dll</HintPath>
-    </Reference>
-  </ItemGroup>
--->
 </Project>

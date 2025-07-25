@@ -13,6 +13,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <GenerateResourceWarnOnBinaryFormatterUse>False</GenerateResourceWarnOnBinaryFormatterUse>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -22,7 +22,7 @@ It also uses some internal classes and structs from Microsoft WinForms project o
 - Some events added
 - Invoke functions for events integrated. No Invoke functions for ItemsSourceReady, CategoriesReady 
 - Easier persistence of Qat settings with new RibbonStrip property QatSettingsFile as an alternative.
-- Two different RibbonFramework libraries.
+- Two different, but functionally identical RibbonFramework libraries.
   1. One library has Com callable wrappers (CCW) for all COM interfaces for more performance. (Less Garbage collection, ...) 
   2. The other library has Runtime callable wrappers (RCW) for all COM interfaces. This is similar to WindowsRibbon.
 - RibbonStrip property ResourceName changed to MarkupResource
@@ -44,12 +44,15 @@ For easier designing, building and previewing the Windows Ribbon Framework there
 
 ## Installation:
 
-At the releases page of this project is a setup for **RibbonTools64**. Download **RibbonTools.zip**, unzip and install **RibbonTools.msi**
-Nuget package for CCW RibbonFramework with name [**RibbonFramework.CCW**](https://www.nuget.org/packages/RibbonFramework.CCW) available.
+At the releases page of this project is a setup for **RibbonTools64**. Download **RibbonTools.zip**, unzip and install **RibbonTools.msi**.
+
+NuGet package for CCW RibbonFramework with name [**RibbonFramework.CCW**](https://www.nuget.org/packages/RibbonFramework.CCW) available.
 **.NET 8** and later supported.
-Nuget package for RCW RibbonFramework with name [**RibbonFramework.RCW**](https://www.nuget.org/packages/RibbonFramework.RCW) available.
+
+NuGet package for RCW RibbonFramework with name [**RibbonFramework.RCW**](https://www.nuget.org/packages/RibbonFramework.RCW) available.
 **.NET Framework 4.6.2** and later and **.NET 8** and later supported.
-You can manage it for your project with the nuget package manager in **Visual Studio 2022**
+
+You can manage it for your project with the NuGet package manager in **Visual Studio 2022**.
 
 
 ## Samples

@@ -8,7 +8,6 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 using static Windows.Win32.System.Variant.VARENUM;
 using FILETIME = Windows.Win32.Foundation.FILETIME;
 
@@ -94,7 +93,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
 
             fixed (PROPVARIANT* t = &this)
             {
-                PInvoke.PropVariantClear(t);
+                PInvoke.PropVariantClear(t); //@@@ PInvokeCore
             }
 
             Anonymous.Anonymous.vt = VT_EMPTY;
@@ -1125,7 +1124,7 @@ BeginMainLoop:
                 }
                 PROPVARIANT propVarLocal;
                 fixed (PCWSTR* parray = array)
-                    hr = PInvoke.InitPropVariantFromStringVector(parray, (uint)strings.Length, &propVarLocal);
+                    hr = PInvoke.InitPropVariantFromStringVector(parray, (uint)strings.Length, &propVarLocal); //@@@ PInvokeCore
                 propVar = propVarLocal;
             }
             finally
@@ -1148,7 +1147,7 @@ BeginMainLoop:
         {
             PROPVARIANT result;
             fixed (PROPVARIANT* pThis = &this)
-                PInvoke.PropVariantCopy(&result, pThis);
+                PInvoke.PropVariantCopy(&result, pThis); //@@@ PInvokeCore
             return result;
         }
 
@@ -1323,43 +1322,43 @@ BeginMainLoop:
             //}
             else if (value is string[] stringVectorValue)
             {
-                InitPropVariantFromStringVector(stringVectorValue, out propvar);
+                InitPropVariantFromStringVector(stringVectorValue, out propvar); //@@@ PInvokeCore
                 return propvar;
             }
             else if (value is short[] shortVectorValue)
             {
                 fixed (short* shortVectorLocal = shortVectorValue)
-                    PInvoke.InitPropVariantFromInt16Vector(shortVectorLocal, (uint)shortVectorValue.Length, &propvar);
+                    PInvoke.InitPropVariantFromInt16Vector(shortVectorLocal, (uint)shortVectorValue.Length, &propvar); //@@@ PInvokeCore
                 return propvar;
             }
             else if (value is ushort[] ushortVectorValue)
             {
                 fixed (ushort* ushortVectorLocal = ushortVectorValue)
-                    PInvoke.InitPropVariantFromUInt16Vector(ushortVectorLocal, (uint)ushortVectorValue.Length, &propvar);
+                    PInvoke.InitPropVariantFromUInt16Vector(ushortVectorLocal, (uint)ushortVectorValue.Length, &propvar); //@@@ PInvokeCore
                 return propvar;
             }
             else if (value is int[] intVectorValue)
             {
                 fixed (int* intVectorLocal = intVectorValue)
-                    PInvoke.InitPropVariantFromInt32Vector(intVectorLocal, (uint)intVectorValue.Length, &propvar);
+                    PInvoke.InitPropVariantFromInt32Vector(intVectorLocal, (uint)intVectorValue.Length, &propvar); //@@@ PInvokeCore
                 return propvar;
             }
             else if (value is uint[] uintVectorValue)
             {
                 fixed (uint* uintVectorLocal = uintVectorValue)
-                    PInvoke.InitPropVariantFromUInt32Vector(uintVectorLocal, (uint)uintVectorValue.Length, &propvar);
+                    PInvoke.InitPropVariantFromUInt32Vector(uintVectorLocal, (uint)uintVectorValue.Length, &propvar); //@@@ PInvokeCore
                 return propvar;
             }
             else if (value is long[] longVectorValue)
             {
                 fixed (long* longVectorLocal = longVectorValue)
-                    PInvoke.InitPropVariantFromInt64Vector(longVectorLocal, (uint)longVectorValue.Length, &propvar);
+                    PInvoke.InitPropVariantFromInt64Vector(longVectorLocal, (uint)longVectorValue.Length, &propvar); //@@@ PInvokeCore
                 return propvar;
             }
             else if (value is ulong[] ulongVectorValue)
             {
                 fixed (ulong* ulongVectorLocal = ulongVectorValue)
-                    PInvoke.InitPropVariantFromUInt64Vector(ulongVectorLocal, (uint)ulongVectorValue.Length, &propvar);
+                    PInvoke.InitPropVariantFromUInt64Vector(ulongVectorLocal, (uint)ulongVectorValue.Length, &propvar); //@@@ PInvokeCore
                 return propvar;
             }
             //else if (value is DateTime[] dateTimeVectorValue)
@@ -1389,7 +1388,7 @@ BeginMainLoop:
             uint count;
             fixed (PROPVARIANT* pThis = &this)
             {
-                count = PInvoke.PropVariantGetElementCount(pThis);
+                count = PInvoke.PropVariantGetElementCount(pThis); //@@@ PInvokeCore
                 uint[] array = new uint[count];
                 if (count == 0)
                     return array;
@@ -1397,7 +1396,7 @@ BeginMainLoop:
                 uint value;
                 for (uint i = 0; i < count; i++)
                 {
-                    PInvoke.PropVariantGetUInt32Elem(pThis, i, &value);
+                    PInvoke.PropVariantGetUInt32Elem(pThis, i, &value); //@@@ PInvokeCore
                     array[i] = value;
                 }
                 return array;
@@ -1409,7 +1408,7 @@ BeginMainLoop:
             uint count;
             fixed (PROPVARIANT* pThis = &this)
             {
-                count = PInvoke.PropVariantGetElementCount(pThis);
+                count = PInvoke.PropVariantGetElementCount(pThis); //@@@ PInvokeCore
                 string[] array = new string[count];
                 if (count == 0)
                     return array;
@@ -1417,9 +1416,9 @@ BeginMainLoop:
                 PWSTR value;
                 for (uint i = 0; i < count; i++)
                 {
-                    PInvoke.PropVariantGetStringElem(pThis, i, &value);
+                    PInvoke.PropVariantGetStringElem(pThis, i, &value); //@@@ PInvokeCore
                     array[i] = value.ToString();
-                    PInvoke.CoTaskMemFree(value);
+                    PInvoke.CoTaskMemFree(value); //@@@ PInvokeCore
                 }
                 return array;
             }
@@ -1430,14 +1429,14 @@ BeginMainLoop:
         /// </summary>
         private static unsafe Array GetIUnknownSafeArray(SAFEARRAY* psa)
         {
-            uint cDims = PInvoke.SafeArrayGetDim(psa);
+            uint cDims = PInvoke.SafeArrayGetDim(psa); //@@@ PInvokeCore
             if (cDims != 1)
                 throw new ArgumentException("Multi-dimensional SafeArrays not supported.");
 
             int lBound;
-            PInvoke.SafeArrayGetLBound(psa, 1U, &lBound);
+            PInvoke.SafeArrayGetLBound(psa, 1U, &lBound); //@@@ PInvokeCore
             int uBound;
-            PInvoke.SafeArrayGetUBound(psa, 1U, &uBound);
+            PInvoke.SafeArrayGetUBound(psa, 1U, &uBound); //@@@ PInvokeCore
 
             int n = uBound - lBound + 1; // uBound is inclusive
 
@@ -1446,7 +1445,7 @@ BeginMainLoop:
             void* value = null;
             for (int i = lBound; i <= uBound; i++)
             {
-                PInvoke.SafeArrayGetElement(psa, &i, &value);
+                PInvoke.SafeArrayGetElement(psa, &i, &value); //@@@ PInvokeCore
                 array[i] = (value == null) ? null : (IUnknown*)value;
             }
             return array;

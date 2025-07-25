@@ -10,7 +10,6 @@
 using System;
 using System.Runtime.InteropServices;
 //using System.Runtime.InteropServices.ComTypes;
-using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
@@ -25,16 +24,12 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed unsafe class UICollectionChangedEvent<T> : IUICollectionChangedEvent.Interface where T : AbstractPropertySet, new()
     {
-        private static readonly EventKey s_ChangedEventKey = new EventKey();
         private IUICollection* _cpIUICollection;
-        private readonly CollectionItem _sender;
         private readonly UICollection<T> _collection;
         private uint _cookie;
-        private readonly EventSet _eventSet = new EventSet();
 
-        internal UICollectionChangedEvent(CollectionItem sender, UICollection<T> collection)
+        internal UICollectionChangedEvent(UICollection<T> collection)
         {
-            _sender = sender;
             _collection = collection;
         }
 
@@ -70,15 +65,6 @@ namespace WinForms.Ribbon
                 //refCount = _cpIUICollection->Release();
                 _cookie = 0;
             }
-        }
-
-        /// <summary>
-        /// The Changed event
-        /// </summary>
-        public event EventHandler<CollectionChangedEventArgs>? ChangedEvent
-        {
-            add { _eventSet.Add(s_ChangedEventKey, value); }
-            remove { _eventSet.Remove(s_ChangedEventKey, value); }
         }
 
         private ComScope<IConnectionPoint> GetConnectionPoint(IUICollection* cpIUICollection)
@@ -127,22 +113,14 @@ namespace WinForms.Ribbon
 
             _collection.OnChanged(action, oldIndex, oldItem, newIndex, newItem);
 
+            //call to the user ChangedEvent
             CollectionChangedEventArgs e = new CollectionChangedEventArgs(action, oldIndex, newIndex);
-            _collection._ribbon.BeginInvoke((MethodInvoker)delegate
-            {
-                OnChanged(e);
-            });
-
-            //_eventSet.Raise(s_ChangedEventKey, _sender, e);
+            _collection.InvokeOnChanged(e);
 
             return HRESULT.S_OK;
         }
 
         #endregion
 
-        private void OnChanged(CollectionChangedEventArgs e)
-        {
-            _eventSet.Raise(s_ChangedEventKey, _sender, e);
-        }
     }
 }

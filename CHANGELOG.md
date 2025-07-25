@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+### RibbonFramework V1.1.2, RibbonTools64 V8.1.0
+
+#### Changed (RibbonFramework)
+
+- Optimizations
+
+#### Changed (Samples)
+
+- Suppress warnings for Galleries
+
 ### RibbonFramework V1.1.1, RibbonTools64 V8.1.0
 
 #### Changed (RibbonFramework)
