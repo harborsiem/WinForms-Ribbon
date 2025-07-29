@@ -46,10 +46,14 @@ For easier designing, building and previewing the Windows Ribbon Framework there
 
 At the releases page of this project is a setup for **RibbonTools64**. Download **RibbonTools.zip**, unzip and install **RibbonTools.msi**.
 
-NuGet package for CCW RibbonFramework with name [**RibbonFramework.CCW**](https://www.nuget.org/packages/RibbonFramework.CCW) available.
+[![latest version](https://img.shields.io/nuget/vpre/RibbonFramework.CCW)](https://www.nuget.org/packages/RibbonFramework.CCW)
+[![download count](https://img.shields.io/nuget/dt/RibbonFramework.CCW)](https://www.nuget.org/stats/packages/RibbonFramework.CCW?groupby=Version)
+for CCW RibbonFramework with name **RibbonFramework.CCW** available.
 **.NET 8** and later supported.
 
-NuGet package for RCW RibbonFramework with name [**RibbonFramework.RCW**](https://www.nuget.org/packages/RibbonFramework.RCW) available.
+[![latest version](https://img.shields.io/nuget/vpre/RibbonFramework.RCW)](https://www.nuget.org/packages/RibbonFramework.RCW)
+[![download count](https://img.shields.io/nuget/dt/RibbonFramework.RCW)](https://www.nuget.org/stats/packages/RibbonFramework.RCW?groupby=Version)
+for RCW RibbonFramework with name **RibbonFramework.RCW** available.
 **.NET Framework 4.6.2** and later and **.NET 8** and later supported.
 
 You can manage it for your project with the NuGet package manager in **Visual Studio 2022**.
