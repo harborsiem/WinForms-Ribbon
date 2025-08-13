@@ -507,14 +507,14 @@ namespace WinForms.Ribbon
             remove { EventSet.Remove(s_CancelPreviewKey, value); }
         }
 
-        internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
+        private protected override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
             ColorPickerEventArgs eventArgs = ColorPickerEventArgs.Create(*key, *currentValue, commandExecutionProperties);
             EventSet.Raise(s_ColorChangedKey, this, eventArgs);
             return HRESULT.S_OK;
         }
 
-        internal override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
+        private protected override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
         {
             ColorPickerEventArgs eventArgs = ColorPickerEventArgs.Create(*key, *currentValue, commandExecutionProperties);
             if (cancel)

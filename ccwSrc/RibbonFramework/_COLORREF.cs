@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace WinForms.Ribbon
@@ -24,9 +25,27 @@ namespace WinForms.Ribbon
     ///  </para>
     /// </remarks>
     //_COLORREF is identical to Windows.Win32.Foundation.COLORREF
+    [StructLayout(LayoutKind.Explicit)]
     public readonly partial struct _COLORREF
         : IEquatable<_COLORREF>
     {
+        /// <summary>
+        /// GetRValue macro
+        /// </summary>
+        [FieldOffset(0)]
+        public readonly byte GetRValue;
+        /// <summary>
+        /// GetGValue macro
+        /// </summary>
+        [FieldOffset(1)]
+        public readonly byte GetGValue;
+        /// <summary>
+        /// GetBValue macro
+        /// </summary>
+        [FieldOffset(2)]
+        public readonly byte GetBValue;
+
+        [FieldOffset(0)]
         public readonly uint Value;
 
         public _COLORREF(uint value) => this.Value = value;
@@ -41,7 +60,7 @@ namespace WinForms.Ribbon
 
         public bool Equals(_COLORREF other) => this.Value == other.Value;
 
-        public override bool Equals(object obj) => obj is _COLORREF other && this.Equals(other);
+        public override bool Equals(object? obj) => obj is _COLORREF other && this.Equals(other);
 
         public override int GetHashCode() => this.Value.GetHashCode();
 
@@ -50,11 +69,5 @@ namespace WinForms.Ribbon
         public static implicit operator _COLORREF(Color color) => new((uint)ColorTranslator.ToWin32(color));
         public static implicit operator Color(_COLORREF color) => ColorTranslator.FromWin32((int)color.Value);
         public static implicit operator _COLORREF(int color) => new((uint)color);
-
-        public byte GetRValue => (byte)Value;
-
-        public byte GetGValue => (byte)(Value >> 8);
-
-        public byte GetBValue => (byte)(Value >> 16);
     }
 }

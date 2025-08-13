@@ -98,6 +98,36 @@ namespace WinForms.Ribbon
             }
         }
 
+        internal unsafe void RaiseExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
+        {
+            try
+            {
+                Ribbon.Invoke((MethodInvoker)delegate
+                {
+                    OnExecute(key, currentValue, commandExecutionProperties);
+                });
+            }
+            catch (Exception ex)
+            {
+                EventExceptionHandler(ex);
+            }
+        }
+
+        internal unsafe void RaisePreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties, bool cancel)
+        {
+            try
+            {
+                Ribbon.Invoke((MethodInvoker)delegate
+                {
+                    OnPreview(key, currentValue, commandExecutionProperties, cancel);
+                });
+            }
+            catch (Exception ex)
+            {
+                EventExceptionHandler(ex);
+            }
+        }
+
         /// <summary>
         /// Handles IUICommandHandler.Execute function for this ribbon control, called by ExecuteEventsProvider
         /// </summary>
@@ -105,7 +135,7 @@ namespace WinForms.Ribbon
         /// <param name="currentValue">the new value of the property that has changed</param>
         /// <param name="commandExecutionProperties">additional data for this execution</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
-        internal virtual unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
+        private protected virtual unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
         {
             return HRESULT.S_OK;
         }
@@ -118,7 +148,7 @@ namespace WinForms.Ribbon
         /// <param name="commandExecutionProperties">additional data for this execution</param>
         /// <param name="cancel">cancel = true: CancelPreview</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
-        internal virtual unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties, bool cancel)
+        private protected virtual unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties, bool cancel)
         {
             return HRESULT.S_OK;
         }

@@ -369,14 +369,14 @@ namespace WinForms.Ribbon
             remove { EventSet.Remove(s_CancelPreviewKey, value); }
         }
 
-        internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
+        private protected override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
             FontControlEventArgs eventArgs = FontControlEventArgs.Create(*key, *currentValue, commandExecutionProperties)!;
             EventSet.Raise(s_FontChangedKey, this, eventArgs);
             return HRESULT.S_OK;
         }
 
-        internal override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
+        private protected override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
         {
             FontControlEventArgs eventArgs = FontControlEventArgs.Create(*key, *currentValue, commandExecutionProperties)!;
             if (cancel)

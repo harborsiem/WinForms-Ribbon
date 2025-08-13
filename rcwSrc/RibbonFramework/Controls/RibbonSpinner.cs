@@ -368,7 +368,7 @@ namespace WinForms.Ribbon
             remove { EventSet.Remove(s_ValueChangedKey, value); }
         }
 
-        internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
+        private protected override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
         {
             //if (*key == RibbonProperties.DecimalValue)
             //{

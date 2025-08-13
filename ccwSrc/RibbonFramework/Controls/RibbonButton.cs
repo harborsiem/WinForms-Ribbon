@@ -265,7 +265,7 @@ namespace WinForms.Ribbon
             remove { EventSet.Remove(s_ClickKey, value); }
         }
 
-        internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
+        private protected override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
             EventSet.Raise(s_ClickKey, this, EventArgs.Empty);
             return HRESULT.S_OK;

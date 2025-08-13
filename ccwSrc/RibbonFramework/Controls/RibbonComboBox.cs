@@ -465,14 +465,14 @@ namespace WinForms.Ribbon
             remove { EventSet.Remove(s_CancelPreviewKey, value); }
         }
 
-        internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
+        private protected override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
             GalleryItemEventArgs eventArgs = GalleryItemEventArgs.Create(*key, *currentValue, commandExecutionProperties)!;
             EventSet.Raise(s_SelectedIndexChangedKey, this, eventArgs);
             return HRESULT.S_OK;
         }
 
-        internal override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
+        private protected override unsafe HRESULT OnPreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties, bool cancel)
         {
             GalleryItemEventArgs eventArgs = GalleryItemEventArgs.Create(*key, *currentValue, commandExecutionProperties)!;
             if (cancel)

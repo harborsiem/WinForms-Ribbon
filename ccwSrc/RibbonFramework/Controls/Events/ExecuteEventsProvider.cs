@@ -8,7 +8,6 @@
 //*****************************************************************************
 
 using System;
-using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
@@ -56,23 +55,21 @@ namespace WinForms.Ribbon
         {
             if (verb == UI_EXECUTIONVERB.UI_EXECUTIONVERB_EXECUTE)
             {
+                _ribbonItem.RaiseExecute(key, currentValue, commandExecutionProperties);
+#if InternalEvent
                 try
                 {
-                    _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
-                    {
-                        _ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
-                    });
-                    //_ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
+                //    _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
+                //    {
+                //        _ribbonItem.OnExecute(key, currentValue, commandExecutionProperties);
+                //    });
                     _ribbonItem.EventSet.Raise(s_ExecuteProviderKey, _ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                    //if (ExecuteEvent != null)
-                    //{
-                    //    ExecuteEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                    //}
                 }
                 catch (Exception ex)
                 {
                     return _ribbonItem.EventExceptionHandler(ex);
                 }
+#endif
             }
 
             return HRESULT.S_OK;

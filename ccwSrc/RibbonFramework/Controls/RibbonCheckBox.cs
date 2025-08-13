@@ -287,7 +287,7 @@ namespace WinForms.Ribbon
             remove { EventSet.Remove(s_CheckedChangedKey, value); }
         }
 
-        internal override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
+        private protected override unsafe HRESULT OnExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
             EventSet.Raise(s_CheckedChangedKey, this, EventArgs.Empty);
             return HRESULT.S_OK;

@@ -8,7 +8,6 @@
 //*****************************************************************************
 
 using System;
-using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
@@ -60,43 +59,39 @@ namespace WinForms.Ribbon
             switch (verb)
             {
                 case UI_EXECUTIONVERB.UI_EXECUTIONVERB_PREVIEW:
+                    _ribbonItem.RaisePreview(key, currentValue, commandExecutionProperties, false);
+#if InternalEvent
                     try
                     {
-                        _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
-                        {
-                            _ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, false);
-                        });
-                        //_ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, false);
+                    //    _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
+                    //    {
+                    //        _ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, false);
+                    //    });
                         _ribbonItem.EventSet.Raise(s_PreviewProviderKey, _ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                        //if (PreviewEvent != null)
-                        //{
-                        //    PreviewEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                        //}
                     }
                     catch (Exception ex)
                     {
                         return _ribbonItem.EventExceptionHandler(ex);
                     }
+#endif
                     break;
 
                 case UI_EXECUTIONVERB.UI_EXECUTIONVERB_CANCELPREVIEW:
+                    _ribbonItem.RaisePreview(key, currentValue, commandExecutionProperties, true);
+#if InternalEvent
                     try
                     {
-                        _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
-                        {
-                            _ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, true);
-                        });
-                        //_ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, true);
+                    //    _ribbonItem.Ribbon.Invoke((MethodInvoker)delegate
+                    //    {
+                    //        _ribbonItem.OnPreview(key, currentValue, commandExecutionProperties, true);
+                    //    });
                         _ribbonItem.EventSet.Raise(s_CancelPreviewProviderKey, _ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                        //if (CancelPreviewEvent != null)
-                        //{
-                        //    CancelPreviewEvent(_ribbonItem, new ExecuteEventArgs(key, currentValue, commandExecutionProperties));
-                        //}
                     }
                     catch (Exception ex)
                     {
                         return _ribbonItem.EventExceptionHandler(ex);
                     }
+#endif
                     break;
             }
             return HRESULT.S_OK;
