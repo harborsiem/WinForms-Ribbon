@@ -525,7 +525,7 @@ namespace WinForms.Ribbon
                 // destroy ribbon framework
                 Framework.Destroy();
                 int refCount = Marshal.ReleaseComObject(Framework);
-                Debug.WriteLine("RefCount Framework: " +  refCount);
+                Debug.WriteLine("Destroy IUIFramework refCount: " +  refCount);
 
                 // remove reference to framework object
                 Framework = null;
@@ -540,7 +540,8 @@ namespace WinForms.Ribbon
             if (_cpIUIImageFromBitmap != null)
             {
                 // remove reference to imageFromBitmap object
-                Marshal.ReleaseComObject(_cpIUIImageFromBitmap);
+                int refCount = Marshal.ReleaseComObject(_cpIUIImageFromBitmap);
+                Debug.WriteLine("Destroy IUIImageFromBitmap refCount: " + refCount);
                 _cpIUIImageFromBitmap = null;
             }
 

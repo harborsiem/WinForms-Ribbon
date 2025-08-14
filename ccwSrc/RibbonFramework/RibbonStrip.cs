@@ -537,7 +537,7 @@ namespace WinForms.Ribbon
                 // remove reference to framework object
                 _cpIUIFramework = null;
                 uint refCount = localFramework->Release();
-                Debug.WriteLine("DestroyFramework Framework refCount: " + refCount.ToString());
+                Debug.WriteLine("Destroy IUIFramework refCount: " + refCount.ToString());
             }
 
             // Unregister event handlers
@@ -553,7 +553,7 @@ namespace WinForms.Ribbon
                 IUIImageFromBitmap* localImageFromBitmap = _cpIUIImageFromBitmap;
                 _cpIUIImageFromBitmap = null;
                 uint refCount = localImageFromBitmap->Release();
-                Debug.WriteLine("DestroyFramework ImageFromBitmap refCount: " + refCount.ToString());
+                Debug.WriteLine("Destroy IUIImageFromBitmap refCount: " + refCount.ToString());
             }
 
             // remove references to ribbon items

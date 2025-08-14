@@ -179,7 +179,8 @@ namespace WinForms.Ribbon
             base.OnDestroyUICommand(commandId, typeID);
             if (CommandType != CommandType.Unknown)
             {
-                QatItemsSource!.Destroy();
+                if (QatItemsSource != null)
+                    QatItemsSource.Destroy();
             }
         }
     }

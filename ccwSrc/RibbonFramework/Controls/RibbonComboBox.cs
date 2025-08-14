@@ -491,8 +491,10 @@ namespace WinForms.Ribbon
             base.OnDestroyUICommand(commandId, typeID);
             if (CommandType != CommandType.Unknown)
             {
-                GalleryCategories!.Destroy();
-                GalleryItemItemsSource!.Destroy();
+                if (GalleryCategories != null)
+                    GalleryCategories.Destroy();
+                if (GalleryItemItemsSource != null)
+                    GalleryItemItemsSource.Destroy();
             }
         }
     }

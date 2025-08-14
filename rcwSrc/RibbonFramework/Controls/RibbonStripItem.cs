@@ -98,6 +98,9 @@ namespace WinForms.Ribbon
             }
         }
 
+        /// <summary>
+        /// Handles IUICommandHandler.Execute function for this ribbon control, called by ExecuteEventsProvider
+        /// </summary>
         internal unsafe void RaiseExecute(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties)
         {
             try
@@ -113,6 +116,9 @@ namespace WinForms.Ribbon
             }
         }
 
+        /// <summary>
+        /// Handles IUICommandHandler.Execute function for this ribbon control, called by PreviewEventsProvider
+        /// </summary>
         internal unsafe void RaisePreview(PROPERTYKEY* key, PROPVARIANT* currentValue, IUISimplePropertySet? commandExecutionProperties, bool cancel)
         {
             try
@@ -129,7 +135,7 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Handles IUICommandHandler.Execute function for this ribbon control, called by ExecuteEventsProvider
+        /// Handles IUICommandHandler.Execute function for this ribbon control, called by RaiseExecute
         /// </summary>
         /// <param name="key">the property that has changed</param>
         /// <param name="currentValue">the new value of the property that has changed</param>
@@ -141,7 +147,7 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Handles IUICommandHandler.Execute function for this ribbon control, called by PreviewEventsProvider
+        /// Handles IUICommandHandler.Execute function for this ribbon control, called by RaisePreview
         /// </summary>
         /// <param name="key">the property that has changed</param>
         /// <param name="currentValue">the new value of the property that has changed</param>
