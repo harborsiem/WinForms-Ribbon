@@ -553,7 +553,7 @@ namespace WinForms.Ribbon
         //    hr = store.GetValue(RibbonProperties.FontProperties_DeltaSize, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
-        //        objValue = (UI_FONTDELTASIZE)(uint)propvar;
+        //        objValue = (FontDeltaSize)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_DeltaSize), objValue);
         //    }
         //    hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);

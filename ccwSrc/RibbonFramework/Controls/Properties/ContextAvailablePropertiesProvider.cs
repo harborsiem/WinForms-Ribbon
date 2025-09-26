@@ -28,7 +28,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IContextAvailablePropertiesProvider
     /// </summary>
-    public sealed unsafe class ContextAvailablePropertiesProvider : BasePropertiesProvider, IContextAvailablePropertiesProvider
+    public sealed class ContextAvailablePropertiesProvider : BasePropertiesProvider, IContextAvailablePropertiesProvider
     {
         /// <summary>
         /// ContextAvailablePropertiesProvider ctor

@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon in-ribbon gallery control.
     /// </summary>
-    public sealed unsafe class RibbonInRibbonGallery : RibbonStripItem,
+    public sealed class RibbonInRibbonGallery : RibbonStripItem,
         IGalleryPropertiesProvider,
         IGalleryProvider,
         IGallery2PropertiesProvider,
@@ -85,7 +85,7 @@ namespace WinForms.Ribbon
         /// The list of categories. 
         /// Also exposed as an IUICollection of IUISimplePropertySet elements
         /// </summary>
-        IUICollection* IGalleryProvider.Categories
+        unsafe IUICollection* IGalleryProvider.Categories
         {
             get
             {
@@ -98,7 +98,7 @@ namespace WinForms.Ribbon
         /// It is exposed as an IUICollection where every element
         /// in the collection is of type: IUISimplePropertySet
         /// </summary>
-        IUICollection* IGalleryProvider.ItemsSource
+        unsafe IUICollection* IGalleryProvider.ItemsSource
         {
             get
             {

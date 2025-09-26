@@ -23,6 +23,7 @@ namespace UIRibbonTools
 
         private void EditFrame_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Size thisSize = this.Size;
@@ -45,6 +46,7 @@ namespace UIRibbonTools
                 this.ResumeLayout(false);
                 this.PerformLayout();
             }
+#endif
         }
 
         //    public void InitMargins()

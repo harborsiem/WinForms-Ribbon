@@ -80,7 +80,7 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         internal static unsafe GalleryItemEventArgs? Create(in PROPERTYKEY key, in PROPVARIANT currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
-            GalleryItemPropertySet propSet;
+            GalleryItemPropertySet? propSet;
             SelectedItem<GalleryItemPropertySet> selected;
             int selectedItemIndex = -1;
             if (key == RibbonProperties.SelectedItem)
@@ -101,7 +101,7 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="commandExecutionProperties"></param>
         /// <returns>GalleryItemPropertySet</returns>
-        internal static unsafe GalleryItemPropertySet GetGalleryItemProperty(IUISimplePropertySet* commandExecutionProperties)
+        internal static unsafe GalleryItemPropertySet? GetGalleryItemProperty(IUISimplePropertySet* commandExecutionProperties)
         {
             GalleryItemPropertySet? propSet;
             if (commandExecutionProperties is not null)
@@ -110,7 +110,7 @@ namespace WinForms.Ribbon
             }
             else
             {
-                return null!;
+                return null;
             }
 
             //We need this part for a RibbonComboBox with markup IsEditable

@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Definition for gallery properties provider interface
     /// </summary>
-    public unsafe interface IGalleryPropertiesProvider
+    public interface IGalleryPropertiesProvider
     {
         /// <summary>
         /// Categories property, Managed version
@@ -29,16 +29,6 @@ namespace WinForms.Ribbon
         /// Items source property
         /// </summary>
         UICollection<GalleryItemPropertySet>? GalleryItemItemsSource { get; }
-
-        ///// <summary>
-        ///// Categories property
-        ///// </summary>
-        //IUICollection* Categories { get; }
-
-        ///// <summary>
-        ///// Items source property
-        ///// </summary>
-        //IUICollection* ItemsSource { get; }
 
         /// <summary>
         /// Invalidate GalleryCategories or Categories if one change a value
@@ -85,7 +75,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IGalleryPropertiesProvider
     /// </summary>
-    public sealed unsafe class GalleryPropertiesProvider : BasePropertiesProvider, IGalleryPropertiesProvider,
+    public sealed class GalleryPropertiesProvider : BasePropertiesProvider, IGalleryPropertiesProvider,
         IGalleryProvider
     {
         private static readonly EventKey s_CategoriesReadyKey = new EventKey();
@@ -220,7 +210,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Categories property
         /// </summary>
-        IUICollection* IGalleryProvider.Categories
+        unsafe IUICollection* IGalleryProvider.Categories
         {
             get
             {
@@ -246,7 +236,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection* IGalleryProvider.ItemsSource
+        unsafe IUICollection* IGalleryProvider.ItemsSource
         {
             get
             {
@@ -272,7 +262,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Invalidate GalleryCategories or Categories if one change a value
         /// </summary>
-        public void InvalidateCategories()
+        public unsafe void InvalidateCategories()
         {
             if (_ribbon.Framework != null)
             {
@@ -284,7 +274,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Invalidate GalleryItemItemsSource or ItemsSource if one change a value
         /// </summary>
-        public void InvalidateItemsSource()
+        public unsafe void InvalidateItemsSource()
         {
             if (_ribbon.Framework != null)
             {

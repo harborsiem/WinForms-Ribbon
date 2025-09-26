@@ -28,23 +28,23 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IKeytipPropertiesProvider
     /// </summary>
-    public sealed unsafe class KeytipPropertiesProvider : BasePropertiesProvider, IKeytipPropertiesProvider
+    public sealed class KeytipPropertiesProvider : BasePropertiesProvider, IKeytipPropertiesProvider
     {
         /// <summary>
         /// KeytipPropertiesProvider ctor
         /// </summary>
         /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
-        /// <param name="item">ribbon control</param>
-        public KeytipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
+        /// <param name="ribbonItem">ribbon control</param>
+        public KeytipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem ribbonItem)
             : base(ribbon, commandId)
         {
-            _item = item;
+            _ribbonItem = ribbonItem;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.Keytip);
         }
 
-        private readonly RibbonStripItem _item;
+        private readonly RibbonStripItem _ribbonItem;
         private string? _keytip;
 
         /// <summary>
@@ -74,14 +74,14 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Keytip property
         /// </summary>
-        public string? Keytip
+        public unsafe string? Keytip
         {
             get
             {
                 if (_keytip == null)
                 {
-                    if (_item.ResourceIds != null && _item.ResourceIds.KeytipId >= 2)
-                        _keytip = _ribbon.LoadString(_item.ResourceIds.KeytipId);
+                    if (_ribbonItem.ResourceIds != null && _ribbonItem.ResourceIds.KeytipId >= 2)
+                        _keytip = _ribbon.LoadString(_ribbonItem.ResourceIds.KeytipId);
                 }
                 return _keytip;
             }

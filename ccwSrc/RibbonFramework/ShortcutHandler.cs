@@ -9,7 +9,7 @@ using Windows.Win32.UI.Ribbon;
 
 namespace WinForms.Ribbon
 {
-    internal sealed class ShortcutHandler
+    internal sealed class ShortcutHandler : IDisposable
     {
         private IUICommandHandler.Interface _commandHandler;
         private RibbonStrip _ribbon;

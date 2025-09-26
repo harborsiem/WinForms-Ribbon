@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon button control.
     /// </summary>
-    public sealed unsafe class RibbonButton : RibbonStripItem,
+    public sealed class RibbonButton : RibbonStripItem,
         IEnabledPropertiesProvider,
         IKeytipPropertiesProvider,
         ILabelPropertiesProvider,

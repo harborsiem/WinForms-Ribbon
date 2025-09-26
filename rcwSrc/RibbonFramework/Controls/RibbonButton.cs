@@ -39,7 +39,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon Button
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonButton(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -154,7 +154,7 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Small images
-        /// For setting the Image, use use UIImage class.
+        /// For setting the Image, use UIImage class.
         /// </summary>
         public UIImage? SmallImage
         {
@@ -170,7 +170,7 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// Large images for use with high-contrast system settings
-        /// For setting the Image, use use UIImage class.
+        /// For setting the Image, use UIImage class.
         /// </summary>
         public UIImage? LargeHighContrastImage
         {

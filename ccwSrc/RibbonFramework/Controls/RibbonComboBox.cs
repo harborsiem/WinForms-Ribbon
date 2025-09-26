@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon combobox control.
     /// </summary>
-    public sealed unsafe class RibbonComboBox : RibbonStripItem,
+    public sealed class RibbonComboBox : RibbonStripItem,
         IGalleryPropertiesProvider,
         IGalleryProvider,
         IStringValuePropertiesProvider,
@@ -83,7 +83,7 @@ namespace WinForms.Ribbon
         /// The list of categories. 
         /// Also exposed as an IUICollection of IUISimplePropertySet elements
         /// </summary>
-        IUICollection* IGalleryProvider.Categories
+        unsafe IUICollection* IGalleryProvider.Categories
         {
             get
             {
@@ -96,7 +96,7 @@ namespace WinForms.Ribbon
         /// It is exposed as an IUICollection where every element
         /// in the collection is of type: IUISimplePropertySet
         /// </summary>
-        IUICollection* IGalleryProvider.ItemsSource
+        unsafe IUICollection* IGalleryProvider.ItemsSource
         {
             get
             {

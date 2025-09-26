@@ -556,8 +556,24 @@ namespace UIRibbonTools
                 newDirectory = Path.GetDirectoryName(dialog.FileName);
                 if ((!string.IsNullOrEmpty(originalDirectory)) && (!string.Equals(originalDirectory, newDirectory, StringComparison.OrdinalIgnoreCase)))
                 {
+#if !MessageBox
+                    if (TaskDialog.ShowDialog(this, new TaskDialogPage()
+                    {
+                        Text = RS_DIFFERENT_DIR_MESSAGE,
+                        Heading = RS_DIFFERENT_DIR_HEADER,
+                        Caption = "Confirm",
+                        Buttons =
+                        {
+                            TaskDialogButton.Yes,
+                            TaskDialogButton.No
+                        },
+                        //Icon = TaskDialogIcon.Confirm,
+                        DefaultButton = TaskDialogButton.Yes
+                    }) == TaskDialogButton.No)
+#else
                     if (MessageBox.Show(RS_DIFFERENT_DIR_MESSAGE, RS_DIFFERENT_DIR_HEADER, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
-                        return;
+#endif
+                    return;
                 }
                 _document.SaveToFile(dialog.FileName);
                 UpdateCaption();
@@ -705,6 +721,34 @@ namespace UIRibbonTools
             bool result = true;
             if (_modified)
             {
+#if !MessageBox
+                TaskDialogButton button = TaskDialog.ShowDialog(this, new TaskDialogPage()
+                {
+                    Text = RS_CHANGED_MESSAGE,
+                    Heading = RS_CHANGED_HEADER,
+                    Caption = "Confirm",
+                    Buttons =
+                    {
+                        TaskDialogButton.Yes,
+                        TaskDialogButton.No,
+                        TaskDialogButton.Cancel
+                    },
+                    Icon = TaskDialogIcon.None,
+                    DefaultButton = TaskDialogButton.Yes
+                });
+                if (button == TaskDialogButton.Yes)
+                {
+                    if (_actionSave.Enabled)
+                        ActionSaveExecute(this, EventArgs.Empty);
+                    else
+                        ActionSaveAsExecute(this, EventArgs.Empty);
+                }
+                else
+                {
+                    if (button == TaskDialogButton.Cancel)
+                        result = false;
+                }
+#else
                 switch (MessageBox.Show(RS_CHANGED_MESSAGE, RS_CHANGED_HEADER, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
                 {
                     case DialogResult.Yes:
@@ -723,6 +767,7 @@ namespace UIRibbonTools
                         result = false;
                         break;
                 }
+#endif
             }
             return result;
         }
@@ -752,8 +797,23 @@ namespace UIRibbonTools
             {
                 _initialized = true;
                 if (!Settings.Instance.ToolsAvailable())
+#if !MessageBox
+                    if (TaskDialog.ShowDialog(this, new TaskDialogPage()
+                    {
+                        Text = Settings.RS_TOOLS_MESSAGE + Environment.NewLine + Settings.RS_TOOLS_SETUP,
+                        Heading = Settings.RS_TOOLS_HEADER,
+                        Caption = "Warning",
+                        Buttons =
+                        {
+                            TaskDialogButton.Yes,
+                            TaskDialogButton.No
+                        },
+                        Icon = TaskDialogIcon.Warning,
+                        DefaultButton = TaskDialogButton.Yes
+                    }) == TaskDialogButton.Yes)
+#else
                     if (MessageBox.Show(Settings.RS_TOOLS_MESSAGE + Environment.NewLine + Settings.RS_TOOLS_SETUP, Settings.RS_TOOLS_HEADER, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-
+#endif
                         ShowSettingsDialog();
             }
         }

@@ -122,7 +122,7 @@ namespace WinForms.Ribbon
             {
                 if (_decimalPlaces.HasValue)
                 {
-                    newValue = (PROPVARIANT)_decimalPlaces.Value;
+                    newValue = (PROPVARIANT)_decimalPlaces.Value; //InitPropVariantFromUInt32
                 }
             }
             else if (key == RibbonProperties.FormatString)

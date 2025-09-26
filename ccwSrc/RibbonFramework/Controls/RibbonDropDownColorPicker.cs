@@ -19,7 +19,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon drop down color picker control.
     /// </summary>
-    public sealed unsafe class RibbonDropDownColorPicker : RibbonStripItem,
+    public sealed class RibbonDropDownColorPicker : RibbonStripItem,
         IColorPickerPropertiesProvider,
         IEnabledPropertiesProvider,
         IKeytipPropertiesProvider,

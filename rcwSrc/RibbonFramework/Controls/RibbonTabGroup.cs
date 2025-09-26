@@ -26,7 +26,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon TabGroup (ContextualTab).
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonTabGroup(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)

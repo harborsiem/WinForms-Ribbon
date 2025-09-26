@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon spinner control.
     /// </summary>
-    public sealed unsafe class RibbonSpinner : RibbonStripItem,
+    public sealed class RibbonSpinner : RibbonStripItem,
         ISpinnerPropertiesProvider,
         IRepresentativeStringPropertiesProvider,
         IEnabledPropertiesProvider,

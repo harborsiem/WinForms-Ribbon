@@ -38,8 +38,9 @@ namespace WinForms.Ribbon
         [FieldOffset(0)]
         public readonly uint Value;
         public UI_HSBCOLOR(uint value) => this.Value = value;
-        public UI_HSBCOLOR(byte hue, byte saturation, byte brightness) =>
-            this.Value = (uint)(hue | (saturation << 8) | (brightness << 16));
+        public UI_HSBCOLOR(byte hue, byte saturation, byte brightness)
+        { Hue = hue; Saturation = saturation; Brightness = brightness; }
+        //this.Value = (uint)(hue | (saturation << 8) | (brightness << 16));
         public static implicit operator uint(UI_HSBCOLOR value) => value.Value;
         public static explicit operator UI_HSBCOLOR(uint value) => new UI_HSBCOLOR(value);
         public static bool operator ==(UI_HSBCOLOR left, UI_HSBCOLOR right) => left.Value == right.Value;

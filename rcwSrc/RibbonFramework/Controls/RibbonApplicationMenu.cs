@@ -20,7 +20,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Constructor for the Ribbon ApplicationMenu
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonApplicationMenu(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)

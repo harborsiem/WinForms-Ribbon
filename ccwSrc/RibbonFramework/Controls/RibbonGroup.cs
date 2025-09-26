@@ -13,7 +13,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon group control.
     /// </summary>
-    public sealed unsafe class RibbonGroup : RibbonStripItem,
+    public sealed class RibbonGroup : RibbonStripItem,
         IKeytipPropertiesProvider,
         ILabelPropertiesProvider,
         IImagePropertiesProvider,

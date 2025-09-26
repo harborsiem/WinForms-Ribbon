@@ -17,7 +17,7 @@ using Windows.Win32.System.Variant;
 namespace WinForms.Ribbon
 {
     /// <summary>
-    /// Helper class that wraps a categories IUISimplePropertySet.
+    /// Helper class that wraps a categories item IUISimplePropertySet.
     /// </summary>
     public sealed class CategoriesPropertySet : AbstractPropertySet
     {

@@ -46,7 +46,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon ComboBox
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonComboBox(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -68,7 +68,7 @@ namespace WinForms.Ribbon
 
         /// <summary>
         /// The list of categories. 
-        /// Also exposed as an UICollection of GalleryItemPropertySet elements
+        /// Also exposed as an UICollection of CategoriesPropertySet elements
         /// </summary>
         public UICollection<CategoriesPropertySet>? GalleryCategories => _galleryPropertiesProvider.GalleryCategories;
 

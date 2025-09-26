@@ -25,7 +25,7 @@ namespace WinForms.Ribbon
     public abstract class BasePropertiesProvider : IPropertiesProvider
     {
         /// <summary>
-        /// reference for parent ribbon class
+        /// reference for parent RibbonStrip class
         /// </summary>
         protected readonly RibbonStrip _ribbon;
 
@@ -42,7 +42,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// BasePropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">command id attached to this control</param>
         protected BasePropertiesProvider(RibbonStrip ribbon, uint commandId)
         {

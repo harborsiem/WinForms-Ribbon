@@ -35,16 +35,16 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
-        /// <param name="item">ribbon control</param>
-        public LabelDescriptionPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
+        /// <param name="ribbonItem">ribbon control</param>
+        public LabelDescriptionPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem ribbonItem)
             : base(ribbon, commandId)
         {
-            _item = item;
+            _ribbonItem = ribbonItem;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.LabelDescription);
         }
 
-        private readonly RibbonStripItem _item;
+        private readonly RibbonStripItem _ribbonItem;
         private string? _labelDescription;
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace WinForms.Ribbon
             {
                 if (_labelDescription == null)
                 {
-                    if (_item.ResourceIds != null && _item.ResourceIds.LabelDescriptionId >= 2)
-                        _labelDescription = _ribbon.LoadString(_item.ResourceIds.LabelDescriptionId);
+                    if (_ribbonItem.ResourceIds != null && _ribbonItem.ResourceIds.LabelDescriptionId >= 2)
+                        _labelDescription = _ribbon.LoadString(_ribbonItem.ResourceIds.LabelDescriptionId);
                 }
                 return _labelDescription;
             }

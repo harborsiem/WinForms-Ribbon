@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon toggle button control.
     /// </summary>
-    public sealed unsafe class RibbonToggleButton : RibbonStripItem,
+    public sealed class RibbonToggleButton : RibbonStripItem,
         IBooleanValuePropertyProvider, 
         IEnabledPropertiesProvider,
         IKeytipPropertiesProvider,

@@ -39,19 +39,19 @@ namespace WinForms.Ribbon
         /// <summary>
         /// TooltipPropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
-        /// <param name="item">ribbon control</param>
-        public TooltipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
+        /// <param name="ribbonItem">ribbon control</param>
+        public TooltipPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem ribbonItem)
             : base(ribbon, commandId)
         {
-            _item = item;
+            _ribbonItem = ribbonItem;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.TooltipTitle);
             _supportedProperties.Add(RibbonProperties.TooltipDescription);
         }
 
-        private readonly RibbonStripItem _item;
+        private readonly RibbonStripItem _ribbonItem;
         private string? _tooltipTitle;
         private string? _tooltipDescription;
 
@@ -96,8 +96,8 @@ namespace WinForms.Ribbon
             {
                 if (_tooltipTitle == null)
                 {
-                    if (_item.ResourceIds != null && _item.ResourceIds.TooltipTitleId >= 2)
-                        _tooltipTitle = _ribbon.LoadString(_item.ResourceIds.TooltipTitleId);
+                    if (_ribbonItem.ResourceIds != null && _ribbonItem.ResourceIds.TooltipTitleId >= 2)
+                        _tooltipTitle = _ribbon.LoadString(_ribbonItem.ResourceIds.TooltipTitleId);
                 }
                 return _tooltipTitle;
             }
@@ -124,8 +124,8 @@ namespace WinForms.Ribbon
             {
                 if (_tooltipDescription == null)
                 {
-                    if (_item.ResourceIds != null && _item.ResourceIds.TooltipDescriptionId >= 2)
-                        _tooltipDescription = _ribbon.LoadString(_item.ResourceIds.TooltipDescriptionId);
+                    if (_ribbonItem.ResourceIds != null && _ribbonItem.ResourceIds.TooltipDescriptionId >= 2)
+                        _tooltipDescription = _ribbon.LoadString(_ribbonItem.ResourceIds.TooltipDescriptionId);
                 }
                 return _tooltipDescription;
             }

@@ -9,24 +9,24 @@
 //*****************************************************************************
 
 using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.ComponentModel;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Buffers;
+using System.IO;
 using System.Diagnostics;
 using Windows.Win32;
 using Windows.Win32.Foundation;
-using Windows.Win32.Graphics.Gdi;
-using Windows.Win32.System.Com;
-using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.UI.Ribbon;
+using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.Shell.PropertiesSystem;
+using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Com;
 
 namespace WinForms.Ribbon
 {
@@ -42,7 +42,7 @@ namespace WinForms.Ribbon
         private static readonly Guid IIDGuidIUIContextualUI = typeof(IUIContextualUI).GUID;
         private static readonly Guid IIDGuidIUIRibbon = typeof(IUIRibbon).GUID;
 
-        private static readonly EventKey s_EventRibbonEventException = new EventKey();
+        private static readonly EventKey s_RibbonEventExceptionKey = new EventKey();
         private static readonly EventKey s_ViewCreatedKey = new EventKey();
         private static readonly EventKey s_ViewDestroyKey = new EventKey();
         private static readonly EventKey s_RibbonHeightKey = new EventKey();
@@ -71,6 +71,7 @@ namespace WinForms.Ribbon
 
         private readonly EventSet _eventSet = new EventSet();
         private Dictionary<uint, RibbonStripItem> _mapRibbonStripItems = new Dictionary<uint, RibbonStripItem>();
+        private IUIFramework? _cpIUIFramework;
         private IUIImageFromBitmap? _cpIUIImageFromBitmap;
         private UIApplication? _uIApplication;
         private QatSetting? _qatSetting;
@@ -111,7 +112,7 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Initializes a new instance of the Ribbon
+        /// Initializes a new instance of the RibbonStrip
         /// </summary>
         public RibbonStrip()
         {
@@ -440,7 +441,7 @@ namespace WinForms.Ribbon
         /// Get ribbon framework object
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        internal IUIFramework? Framework { get; private set; }
+        internal IUIFramework? Framework => _cpIUIFramework;
 
         /// <summary>
         /// Create ribbon framework object
@@ -462,7 +463,7 @@ namespace WinForms.Ribbon
         /// Create image-from-bitmap factory object
         /// </summary>
         /// <returns>image-from-bitmap factory object</returns>
-        internal static IUIImageFromBitmap CreateImageFromBitmapFactory()
+        private static IUIImageFromBitmap CreateImageFromBitmapFactory()
         {
             IUIImageFromBitmap cpIUIImageFromBitmap = (new UIRibbonImageFromBitmapFactory() as IUIImageFromBitmap)!;
             return cpIUIImageFromBitmap;
@@ -479,7 +480,7 @@ namespace WinForms.Ribbon
         {
             HRESULT hr;
             // create ribbon framework object
-            Framework = CreateRibbonFramework();
+            _cpIUIFramework = CreateRibbonFramework();
             _cpIUIImageFromBitmap = CreateImageFromBitmapFactory();
 
             if (Framework == null)
@@ -528,13 +529,14 @@ namespace WinForms.Ribbon
                 Debug.WriteLine("Destroy IUIFramework refCount: " +  refCount);
 
                 // remove reference to framework object
-                Framework = null;
+                _cpIUIFramework = null;
             }
 
             // Unregister event handlers
             RegisterForm(null);
 
             _markupHandler?.Dispose();
+
             _shortcutHandler?.Dispose();
 
             if (_cpIUIImageFromBitmap != null)
@@ -637,7 +639,6 @@ namespace WinForms.Ribbon
             propertyStore = null!;
         }
 
-
         /// <summary>
         /// Get ribbon text color
         /// </summary>
@@ -677,75 +678,6 @@ namespace WinForms.Ribbon
 
             propertyStore.Commit();
             propertyStore = null!;
-        }
-
-        /// <summary>
-        /// Set current application modes
-        /// </summary>
-        /// <param name="modesArray">array of modes to set</param>
-        /// <remarks>Unlisted modes will be unset</remarks>
-        public void SetModes(params byte[] modesArray)
-        {
-            if (modesArray == null || modesArray.Length == 0)
-                throw new ArgumentNullException(nameof(modesArray));
-            // check that ribbon is initialized
-            if (Framework == null)
-            {
-                return;
-            }
-
-            // calculate compact modes value
-            int compactModes = 0;
-            for (int i = 0; i < modesArray.Length; ++i)
-            {
-                if (modesArray[i] >= 32)
-                {
-                    throw new ArgumentException("Modes should range between 0 to 31.");
-                }
-
-                compactModes |= (1 << modesArray[i]);
-            }
-
-            // set modes
-            Framework.SetModes(compactModes);
-        }
-
-        /// <summary>
-        /// Shows a predefined context popup in a specific location
-        /// </summary>
-        /// <param name="contextPopupID">commandId for the context popup</param>
-        /// <param name="x">X in screen coordinates</param>
-        /// <param name="y">Y in screen coordinates</param>
-        public unsafe void ShowContextPopup(uint contextPopupID, int x, int y)
-        {
-            // check that ribbon is initialized
-            if (Framework == null)
-            {
-                return;
-            }
-
-            HRESULT hr;
-            void* voidPtr;
-            object contextualUI;
-
-            hr = Framework.GetView(contextPopupID, IIDGuidIUIContextualUI, out voidPtr);
-            if (hr.Succeeded)
-            {
-                if ((IntPtr)voidPtr != IntPtr.Zero)
-                {
-                    contextualUI = Marshal.GetObjectForIUnknown((IntPtr)voidPtr);
-                    IUIContextualUI? cpIUIContextualUI = contextualUI as IUIContextualUI;
-                    if (cpIUIContextualUI != null)
-                    {
-                        cpIUIContextualUI.ShowAtLocation(x, y);
-                        Marshal.ReleaseComObject(cpIUIContextualUI);
-                    }
-                }
-            }
-            else
-            {
-                Marshal.ThrowExceptionForHR((int)hr);
-            }
         }
 
         /// <summary>
@@ -856,86 +788,74 @@ namespace WinForms.Ribbon
             return false;
         }
 
-
-#pragma warning disable CS8602 //_application has null check by Initialized
         /// <summary>
-        /// Specifies whether the ribbon is in a collapsed or expanded state
+        /// Set current application modes
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool Minimized
+        /// <param name="modesArray">array of modes to set</param>
+        /// <remarks>Unlisted modes will be unset</remarks>
+        public void SetModes(params byte[] modesArray)
         {
-            get
+            if (modesArray == null || modesArray.Length == 0)
+                throw new ArgumentNullException(nameof(modesArray));
+            // check that ribbon is initialized
+            if (Framework == null)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return false;
-                }
-                return GetMinimized();
+                return;
             }
-            set
+
+            // calculate compact modes value
+            int compactModes = 0;
+            for (int i = 0; i < modesArray.Length; ++i)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
+                if (modesArray[i] >= 32)
                 {
-                    return;
+                    throw new ArgumentException("Modes should range between 0 to 31.");
                 }
-                SetMinimized(value);
+
+                compactModes |= (1 << modesArray[i]);
             }
+
+            // set modes
+            Framework.SetModes(compactModes);
         }
 
         /// <summary>
-        /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
+        /// Shows a predefined context popup in a specific location
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool Viewable
+        /// <param name="contextPopupID">commandId for the context popup</param>
+        /// <param name="x">X in screen coordinates</param>
+        /// <param name="y">Y in screen coordinates</param>
+        public unsafe void ShowContextPopup(uint contextPopupID, int x, int y)
         {
-            get
+            // check that ribbon is initialized
+            if (Framework == null)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return false;
-                }
-                return GetViewable();
+                return;
             }
-            set
-            {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return;
-                }
-                SetViewable(value);
-            }
-        }
 
-        /// <summary>
-        /// Specifies whether the quick access toolbar is docked at the top or at the bottom
-        /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ControlDock QuickAccessToolbarDock
-        {
-            get
+            HRESULT hr;
+            void* voidPtr;
+            object contextualUI;
+
+            hr = Framework.GetView(contextPopupID, IIDGuidIUIContextualUI, out voidPtr);
+            if (hr.Succeeded)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
+                if ((IntPtr)voidPtr != IntPtr.Zero)
                 {
-                    return (ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
+                    contextualUI = Marshal.GetObjectForIUnknown((IntPtr)voidPtr);
+                    IUIContextualUI? cpIUIContextualUI = contextualUI as IUIContextualUI;
+                    if (cpIUIContextualUI != null)
+                    {
+                        cpIUIContextualUI.ShowAtLocation(x, y);
+                        Marshal.ReleaseComObject(cpIUIContextualUI);
+                    }
                 }
-                return (ControlDock)GetQuickAccessToolbarDock();
             }
-            set
+            else
             {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return;
-                }
-                SetQuickAccessToolbarDock((UI_CONTROLDOCK)value);
+                Marshal.ThrowExceptionForHR((int)hr);
             }
         }
-#pragma warning restore CS8602
 
         /// <summary>
         /// Adds a ribbon control to the internal map
@@ -948,7 +868,7 @@ namespace WinForms.Ribbon
 
         internal bool OnRibbonEventException(object sender, ThreadExceptionEventArgs args)
         {
-            EventHandler<ThreadExceptionEventArgs>? eh = Events[s_EventRibbonEventException] as EventHandler<ThreadExceptionEventArgs>;
+            EventHandler<ThreadExceptionEventArgs>? eh = Events[s_RibbonEventExceptionKey] as EventHandler<ThreadExceptionEventArgs>;
             if (eh != null)
             {
                 eh(sender, args);
@@ -965,11 +885,11 @@ namespace WinForms.Ribbon
         {
             add
             {
-                Events.AddHandler(s_EventRibbonEventException, value);
+                Events.AddHandler(s_RibbonEventExceptionKey, value);
             }
             remove
             {
-                Events.RemoveHandler(s_EventRibbonEventException, value);
+                Events.RemoveHandler(s_RibbonEventExceptionKey, value);
             }
         }
 
@@ -982,12 +902,10 @@ namespace WinForms.Ribbon
             add
             {
                 EventSet.Add(s_ViewCreatedKey, value);
-                //Events.AddHandler(s_ViewCreatedKey, value);
             }
             remove
             {
                 EventSet.Remove(s_ViewCreatedKey, value);
-                //Events.RemoveHandler(s_ViewCreatedKey, value);
             }
         }
 
@@ -1007,9 +925,6 @@ namespace WinForms.Ribbon
             _qatSetting!.Load();
 
             EventSet.Raise(s_ViewCreatedKey, this, EventArgs.Empty);
-            //EventHandler? eh = Events[s_ViewCreatedKey] as EventHandler;
-            //if (eh != null)
-            //    eh(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1021,12 +936,10 @@ namespace WinForms.Ribbon
             add
             {
                 EventSet.Add(s_ViewDestroyKey, value);
-                //Events.AddHandler(s_ViewDestroyKey, value);
             }
             remove
             {
                 EventSet.Remove(s_ViewDestroyKey, value);
-                //Events.RemoveHandler(s_ViewDestroyKey, value);
             }
         }
 
@@ -1034,9 +947,6 @@ namespace WinForms.Ribbon
         {
             _qatSetting!.Save();
             EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
-            //EventHandler? eh = Events[s_ViewDestroyKey] as EventHandler;
-            //if (eh != null)
-            //    eh(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1048,21 +958,16 @@ namespace WinForms.Ribbon
             add
             {
                 EventSet.Add(s_RibbonHeightKey, value);
-                //Events.AddHandler(s_RibbonHeightKey, value);
             }
             remove
             {
                 EventSet.Remove(s_RibbonHeightKey, value);
-                //Events.RemoveHandler(s_RibbonHeightKey, value);
             }
         }
 
         internal void OnRibbonHeightChanged()
         {
             EventSet.Raise(s_RibbonHeightKey, this, EventArgs.Empty);
-            //EventHandler? eh = Events[s_RibbonHeightKey] as EventHandler;
-            //if (eh != null)
-            //    eh(this, EventArgs.Empty);
         }
 
         internal HMODULE MarkupHandleInternal
@@ -1177,6 +1082,32 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
+        /// Specifies whether the ribbon is in a collapsed or expanded state
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool Minimized
+        {
+            get
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return false;
+                }
+                return GetMinimized();
+            }
+            set
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return;
+                }
+                SetMinimized(value);
+            }
+        }
+
+        /// <summary>
         /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
         /// </summary>
         private unsafe bool GetViewable()
@@ -1210,6 +1141,32 @@ namespace WinForms.Ribbon
                 hr = propstore.Commit();
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool Viewable
+        {
+            get
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return false;
+                }
+                return GetViewable();
+            }
+            set
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return;
+                }
+                SetViewable(value);
             }
         }
 
@@ -1251,6 +1208,32 @@ namespace WinForms.Ribbon
             }
         }
 
+        /// <summary>
+        /// Specifies whether the quick access toolbar is docked at the top or at the bottom
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ControlDock QuickAccessToolbarDock
+        {
+            get
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return (ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
+                }
+                return (ControlDock)GetQuickAccessToolbarDock();
+            }
+            set
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return;
+                }
+                SetQuickAccessToolbarDock((UI_CONTROLDOCK)value);
+            }
+        }
+
         private unsafe IUIRibbon GetIUIRibbon()
         {
             HRESULT hr;
@@ -1268,235 +1251,5 @@ namespace WinForms.Ribbon
             }
             return null!;
         }
-
-        ///// <summary>
-        ///// Get a Bitmap from an IUIImage
-        ///// </summary>
-        ///// <param name="uiImage"></param>
-        ///// <returns></returns>
-        //public static unsafe Bitmap GetBitmap(IUIImage uiImage)
-        //{
-        //    if (uiImage == null)
-        //        throw new ArgumentNullException(nameof(uiImage));
-        //    HBITMAP hBitmap;
-        //    uiImage.GetBitmap(&hBitmap);
-        //    // Create the BITMAP structure and get info from our nativeHBitmap
-        //    //this is a workaround because GDI+ did it not correct for 32 bit Bitmaps
-        //    BITMAP bitmapStruct = new BITMAP();
-        //    int bitmapSize = Marshal.SizeOf(bitmapStruct);
-        //    int size = PInvoke.GetObject(hBitmap, bitmapSize, &bitmapStruct);
-        //    //if (size != bitmapSize)
-        //    //    return null;
-        //    Bitmap managedBitmap;
-        //    if (bitmapStruct.bmBitsPixel == 32)
-        //    {
-        //        // Create the managed bitmap using the pointer to the pixel data of the native HBitmap
-        //        managedBitmap = new Bitmap(
-        //            bitmapStruct.bmWidth, bitmapStruct.bmHeight, bitmapStruct.bmWidthBytes, PixelFormat.Format32bppArgb, (IntPtr)bitmapStruct.bmBits);
-        //        if (bitmapStruct.bmHeight > 0)
-        //            managedBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-        //    }
-        //    else
-        //    {
-        //        managedBitmap = Bitmap.FromHbitmap(hBitmap);
-        //    }
-        //    return managedBitmap;
-        //}
-
-        //public static unsafe Bitmap? GetBitmap1(IUIImage uiImage)
-        //{
-        //    if (uiImage == null)
-        //        throw new ArgumentNullException(nameof(uiImage));
-        //    HBITMAP hBitmap;
-        //    uiImage.GetBitmap(&hBitmap);
-        //    Bitmap? managedBitmap = null;
-        //    IWICImagingFactory? factory = new PInvoke.WICImagingFactory() as IWICImagingFactory;
-        //    if (factory != null)
-        //    {
-        //        factory.CreateBitmapFromHBITMAP(hBitmap, HPALETTE.Null, WICBitmapAlphaChannelOption.WICBitmapUseAlpha, out IWICBitmap wicBitmap);
-        //        wicBitmap.GetSize(out uint width1, out uint height1);
-        //        WICRect rect = new WICRect() { X = 0, Y = 0, Width = (int)width1, Height = (int)height1 };
-        //        wicBitmap.Lock(null, (uint)WICBitmapLockFlags.WICBitmapLockRead, out IWICBitmapLock ppILock);
-        //        ppILock.GetStride(out uint stride);
-        //        ppILock.GetPixelFormat(out Guid format);
-        //        ppILock.GetSize(out uint width, out uint height);
-        //        byte* pData;
-        //        ppILock.GetDataPointer(out uint bufferSize, &pData);
-        //        factory.CreateComponentInfo(format, out IWICComponentInfo ppIInfo);
-        //        IWICPixelFormatInfo formatInfo = ppIInfo as IWICPixelFormatInfo;
-        //        IWICPixelFormatInfo2 formatInfo2 = ppIInfo as IWICPixelFormatInfo2;
-        //        if (formatInfo != null)
-        //        {
-        //            formatInfo.GetBitsPerPixel(out uint bpp);
-        //            formatInfo.GetChannelCount(out uint channelCount);
-        //            BOOL pfSupportsTransparency = false;
-        //            if (formatInfo2 != null)
-        //            {
-        //                formatInfo2.SupportsTransparency(out pfSupportsTransparency);
-        //            }
-        //            //formatInfo.GetChannelMask((200, friendly, out uint chActual);
-        //            managedBitmap = new Bitmap((int)width, (int)height, (int)stride, PixelFormat.Format32bppArgb, (IntPtr)pData);
-        //            //PixelFormat pf = PixelFormat.
-        //        }
-
-        //    }
-        //    return managedBitmap;
-        //}
-
-        //public static unsafe Bitmap? GetBitmap2(HBITMAP hBitmap)
-        //{
-        //    //if (uiImage == null)
-        //    //    throw new ArgumentNullException(nameof(uiImage));
-        //    //HBITMAP hBitmap;
-        //    //uiImage.GetBitmap(&hBitmap);
-        //    Bitmap? managedBitmap = null;
-        //    IWICImagingFactory? factory = new PInvoke.WICImagingFactory() as IWICImagingFactory;
-        //    if (factory != null)
-        //    {
-        //        factory.CreateBitmapFromHBITMAP(hBitmap, HPALETTE.Null, WICBitmapAlphaChannelOption.WICBitmapUsePremultipliedAlpha, out IWICBitmap wicBitmap);
-        //        wicBitmap.GetSize(out uint width1, out uint height1);
-        //        WICRect rect = new WICRect() { X = 0, Y = 0, Width = (int)width1, Height = (int)height1 };
-        //        wicBitmap.Lock(null, (uint)WICBitmapLockFlags.WICBitmapLockRead, out IWICBitmapLock ppILock);
-        //        ppILock.GetStride(out uint stride);
-        //        ppILock.GetPixelFormat(out Guid format);
-        //        ppILock.GetSize(out uint width, out uint height);
-        //        byte* pData;
-        //        ppILock.GetDataPointer(out uint bufferSize, &pData);
-        //        factory.CreateComponentInfo(format, out IWICComponentInfo ppIInfo);
-        //        IWICPixelFormatInfo formatInfo = ppIInfo as IWICPixelFormatInfo;
-        //        IWICPixelFormatInfo2 formatInfo2 = ppIInfo as IWICPixelFormatInfo2;
-        //        if (formatInfo != null)
-        //        {
-        //            formatInfo.GetBitsPerPixel(out uint bpp);
-        //            formatInfo.GetChannelCount(out uint channelCount);
-        //            BOOL pfSupportsTransparency = false;
-        //            if (formatInfo2 != null)
-        //            {
-        //                formatInfo2.SupportsTransparency(out pfSupportsTransparency);
-        //            }
-        //            string friendlyName = null;
-        //            char[] chars = new char[200];
-        //            fixed (char* charsLocal = chars)
-        //            {
-        //                PWSTR friendly = new PWSTR(charsLocal);
-        //                formatInfo.GetFriendlyName(200, friendly, out uint chActual);
-        //                if (chActual > 0)
-        //                    friendlyName = new string(charsLocal, 0, (int)chActual - 1);
-        //            }
-        //            PixelFormat pf = GetPixelFormat(format);
-        //            managedBitmap = new Bitmap((int)width, (int)height, (int)stride, pf, (IntPtr)pData);
-        //        }
-
-        //    }
-        //    return managedBitmap;
-        //}
-        ////Format1bppIndexed  DEFINE_GUID(GUID_WICPixelFormat1bppIndexed, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x01);
-        ////Format4bppIndexed  DEFINE_GUID(GUID_WICPixelFormat4bppIndexed, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x03);
-        ////Format8bppIndexed  DEFINE_GUID(GUID_WICPixelFormat8bppIndexed, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x04);
-        ////Format16bppArgb1555  DEFINE_GUID(GUID_WICPixelFormat16bppBGRA5551, 0x05ec7c2b, 0xf1e6, 0x4961, 0xad, 0x46, 0xe1, 0xcc, 0x81, 0x0a, 0x87, 0xd2);
-        ////Format16bppGrayScale  DEFINE_GUID(GUID_WICPixelFormat16bppGray,   0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0b);
-        ////Format16bppRgb555  DEFINE_GUID(GUID_WICPixelFormat16bppBGR555, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x09);
-        ////Format16bppRgb565  DEFINE_GUID(GUID_WICPixelFormat16bppBGR565, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0a);
-        ////Format24bppRgb  DEFINE_GUID(GUID_WICPixelFormat24bppBGR, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0c);
-        ////Format32bppRgb  DEFINE_GUID(GUID_WICPixelFormat32bppBGR,   0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0e);
-        ////Format32bppArgb  DEFINE_GUID(GUID_WICPixelFormat32bppBGRA,  0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0f);
-        ////Format32bppPArgb  DEFINE_GUID(GUID_WICPixelFormat32bppPBGRA, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x10);
-        ////Format48bppRgb  DEFINE_GUID(GUID_WICPixelFormat48bppBGR, 0xe605a384, 0xb468, 0x46ce, 0xbb, 0x2e, 0x36, 0xf1, 0x80, 0xe6, 0x43, 0x13);
-        ////Format64bppArgb  DEFINE_GUID(GUID_WICPixelFormat64bppRGBA,  0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x16);
-        ////DEFINE_GUID(GUID_WICPixelFormat64bppBGRA,  0x1562ff7c, 0xd352, 0x46f9, 0x97, 0x9e, 0x42, 0x97, 0x6b, 0x79, 0x22, 0x46);
-
-        ////Format64bppPArgb  DEFINE_GUID(GUID_WICPixelFormat64bppPRGBA, 0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x17);
-        ////DEFINE_GUID(GUID_WICPixelFormat64bppPBGRA, 0x8c518e8e, 0xa4ec, 0x468b, 0xae, 0x70, 0xc9, 0xa3, 0x5a, 0x9c, 0x55, 0x30);
-
-        //private static PixelFormat GetPixelFormat(in Guid guid)
-        //{
-        //    if (PInvoke.GUID_WICPixelFormat32bppBGR == guid)
-        //        return PixelFormat.Format32bppRgb;
-        //    if (PInvoke.GUID_WICPixelFormat32bppBGRA == guid)
-        //        return PixelFormat.Format32bppArgb;
-        //    if (PInvoke.GUID_WICPixelFormat32bppPBGRA == guid)
-        //        return PixelFormat.Format32bppPArgb;
-        //    if (PInvoke.GUID_WICPixelFormat1bppIndexed == guid)
-        //        return PixelFormat.Format1bppIndexed;
-        //    if (PInvoke.GUID_WICPixelFormat4bppIndexed == guid)
-        //        return PixelFormat.Format4bppIndexed;
-        //    if (PInvoke.GUID_WICPixelFormat8bppIndexed == guid)
-        //        return PixelFormat.Format8bppIndexed;
-        //    if (PInvoke.GUID_WICPixelFormat24bppBGR == guid)
-        //        return PixelFormat.Format24bppRgb;
-        //    if (PInvoke.GUID_WICPixelFormat16bppGray == guid)
-        //        return PixelFormat.Format16bppGrayScale;
-        //    if (PInvoke.GUID_WICPixelFormat16bppBGR555 == guid)
-        //        return PixelFormat.Format16bppRgb555;
-        //    if (PInvoke.GUID_WICPixelFormat16bppBGR565 == guid)
-        //        return PixelFormat.Format16bppRgb565;
-        //    if (PInvoke.GUID_WICPixelFormat48bppBGR == guid)
-        //        return PixelFormat.Format48bppRgb;
-        //    if (PInvoke.GUID_WICPixelFormat64bppBGRA == guid)
-        //        return PixelFormat.Format64bppArgb;
-        //    if (PInvoke.GUID_WICPixelFormat64bppPBGRA == guid)
-        //        return PixelFormat.Format64bppPArgb;
-        //    if (PInvoke.GUID_WICPixelFormat16bppBGRA5551 == guid)
-        //        return PixelFormat.Format16bppArgb1555;
-        //    return PixelFormat.Undefined;
-        //}
-
-        //public unsafe IUIImage Dummy(string filename)
-        //{
-        //    HBITMAP hbm = HBITMAP.Null;
-        //    HRESULT hr;
-        //    PCWSTR pCWSTR = new PCWSTR();
-        //    string path = Path.GetFullPath(filename);
-        //    //only Bitmap files possible, no V5 Bitmap
-        //    hbm = (HBITMAP)(IntPtr)PInvoke.LoadImage(PInvoke.GetModuleHandle(pCWSTR), path, GDI_IMAGE_TYPE.IMAGE_BITMAP, 0, 0, IMAGE_FLAGS.LR_CREATEDIBSECTION | IMAGE_FLAGS.LR_LOADFROMFILE);
-        //    if (hbm == HBITMAP.Null)
-        //    {
-        //        hr = PInvoke.HRESULT_FROM_WIN32((WIN32_ERROR)Marshal.GetLastWin32Error());
-        //        return null;
-        //    }
-        //    IUIImage uiImage;
-        //    _imageFromBitmap.CreateImage(hbm, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out uiImage);
-
-        //    return uiImage;
-
-        //}
-
-        //public unsafe void dummy2()
-        //{
-        //    int cx, cy;
-        //    cx = cy = 16;
-
-        //    BITMAPINFO bmi = new BITMAPINFO();
-        //    bmi.bmiHeader = new BITMAPINFOHEADER();
-        //    bmi.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
-        //    bmi.bmiHeader.biWidth = cx;
-        //    bmi.bmiHeader.biHeight = cy;
-        //    bmi.bmiHeader.biPlanes = 1;
-        //    bmi.bmiHeader.biBitCount = 32;
-        //    bmi.bmiHeader.biCompression = 0x0;
-
-        //    void* pBits;
-        //    HBITMAP hBitmap = PInvoke.CreateDIBSection(HDC.Null, bmi, DIB_USAGE.DIB_RGB_COLORS, out pBits, HANDLE.Null, 0);
-
-        //    if (hBitmap != HBITMAP.Null)
-        //    {
-        //        //unsafe
-        //        {
-        //            int* ppBits = (int*)pBits;
-
-        //            for (int y = 0; y < cy; y++)
-        //            {
-        //                for (int x = 0; x < cx; x++)
-        //                {
-        //                    int bAlpha = x * x * 255 / cx / cx;
-        //                    int dw = (bAlpha << 24) | (bAlpha << 16) | bAlpha;
-
-        //                    ppBits[y * cx + x] = dw;
-        //                }
-        //            }
-        //        }
-
-        //    }
-        //}
     }
 }

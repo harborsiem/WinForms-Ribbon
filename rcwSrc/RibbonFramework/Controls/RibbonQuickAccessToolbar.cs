@@ -40,7 +40,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon QuickAccessToolbar (QAT)
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonQuickAccessToolbar(RibbonStrip ribbon, uint commandId) : base(ribbon, commandId)
         {
@@ -49,7 +49,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon QuickAccessToolbar (QAT)
         /// </summary>
-        /// <param name="ribbon">Parent Ribbon control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         /// <param name="customizeCommandId">Customize Command id attached to this control</param>
         public RibbonQuickAccessToolbar(RibbonStrip ribbon, uint commandId, uint customizeCommandId) : this(ribbon, commandId)

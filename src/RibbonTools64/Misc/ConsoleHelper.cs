@@ -29,7 +29,22 @@ namespace UIRibbonTools
                 }
                 else
                 {
+#if !MessageBox
+                    TaskDialog.ShowDialog(new TaskDialogPage()
+                {
+                    Text = "No Console possible",
+                    Heading = "",
+                    Caption = "Information",
+                    Buttons =
+                    {
+                        TaskDialogButton.OK
+                    },
+                    Icon = TaskDialogIcon.Information,
+                    DefaultButton = TaskDialogButton.OK
+                });
+#else
                     MessageBox.Show("No Console possible");
+#endif
                 }
             }
             else

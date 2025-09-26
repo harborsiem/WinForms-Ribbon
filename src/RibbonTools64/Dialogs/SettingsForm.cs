@@ -101,7 +101,22 @@ namespace UIRibbonTools
         private void SizeButton_Click(object sender, EventArgs e)
         {
             if (Program.ApplicationForm.WindowState == FormWindowState.Maximized)
+#if !MessageBox
+                TaskDialog.ShowDialog(this, new TaskDialogPage()
+                {
+                    Text = "Can't set default size when application is maximized",
+                    Heading = "Set default size",
+                    Caption = "Information",
+                    Buttons =
+                    {
+                        TaskDialogButton.OK
+                    },
+                    Icon = TaskDialogIcon.Information,
+                    DefaultButton = TaskDialogButton.OK
+                });
+#else
                 MessageBox.Show("Can't set default size when application is maximized", "Set default size", MessageBoxButtons.OK, MessageBoxIcon.Information);
+#endif
             else
             {
                 _size = Program.ApplicationForm.Size;

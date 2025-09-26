@@ -114,7 +114,22 @@ namespace UIRibbonTools
                 else
                 {
                     _log(MessageKind.Pipe, validateMsg);
+#if !MessageBox
+                    TaskDialog.ShowDialog(new TaskDialogPage() 
+                {
+                    Text = "Xml is not valid",
+                    Heading = "XML Validation",
+                    Caption = "Error",
+                    Buttons =
+                    {
+                        TaskDialogButton.OK
+                    },
+                    Icon = TaskDialogIcon.Error,
+                    DefaultButton = TaskDialogButton.OK
+                });
+#else
                     MessageBox.Show("Xml is not valid", "XML Validation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
                 }
             }
             //buildActionEnabled(buildEnabled);
@@ -205,7 +220,22 @@ namespace UIRibbonTools
             }
             catch (Exception ex)
             {
+#if !MessageBox
+                TaskDialog.ShowDialog(new TaskDialogPage()
+                {
+                    Text = ex.Message,
+                    Heading = "Exception",
+                    Caption = "Error",
+                    Buttons =
+                    {
+                        TaskDialogButton.OK
+                    },
+                    Icon = TaskDialogIcon.Error,
+                    DefaultButton = TaskDialogButton.OK
+                });
+#else
                 MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
             }
             finally
             {

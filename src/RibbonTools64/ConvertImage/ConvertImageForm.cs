@@ -221,7 +221,22 @@ namespace UIRibbonTools
                 stride = data.Stride;
                 bmp.UnlockBits(data);
                 boxText = string.Format("Width: {0}, Height: {1}" + Environment.NewLine + "PixelFormat: {2}" + Environment.NewLine + "Stride: {3}", bmp.Width, bmp.Height, bmp.PixelFormat, stride);
+#if !MessageBox
+                TaskDialog.ShowDialog(this, new TaskDialogPage()
+                {
+                    Text = boxText + Environment.NewLine + bmpText,
+                    Heading = Path.GetFileName(fileName),
+                    Caption = "Information",
+                    Buttons =
+                    {
+                        TaskDialogButton.OK
+                    },
+                    Icon = TaskDialogIcon.Information,
+                    DefaultButton = TaskDialogButton.OK
+                });
+#else
                 MessageBox.Show(boxText + Environment.NewLine + bmpText, Path.GetFileName(fileName), MessageBoxButtons.OK, MessageBoxIcon.Information);
+#endif
             }
             finally
             {

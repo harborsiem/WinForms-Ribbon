@@ -224,8 +224,24 @@ namespace UIRibbonTools
         private void ActionRemoveCommandExecute(object sender, EventArgs e)
         {
             if (_command != null && ((_command.ReferenceCount == 0) ||
+#if !MessageBox
+              (TaskDialog.ShowDialog(this, new TaskDialogPage()
+              {
+                  Text = string.Format(RS_REMOVE_COMMAND_MESSAGE, _command.ReferenceCount),
+                  Heading = RS_REMOVE_COMMAND_HEADER,
+                  Caption = "Confirm",
+                  Buttons =
+                  {
+                      TaskDialogButton.Yes,
+                      TaskDialogButton.No
+                  },
+                  Icon = TaskDialogIcon.None,
+                  DefaultButton = TaskDialogButton.Yes
+              }) == TaskDialogButton.Yes)))
+#else
               (MessageBox.Show(string.Format(RS_REMOVE_COMMAND_MESSAGE, _command.ReferenceCount), RS_REMOVE_COMMAND_HEADER,
                   MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)))
+#endif
             {
                 if (ListViewCommands.SelectedItems.Count > 0)
                 {

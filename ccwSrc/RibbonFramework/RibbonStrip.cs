@@ -685,68 +685,6 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Set current application modes
-        /// </summary>
-        /// <param name="modesArray">array of modes to set</param>
-        /// <remarks>Unlisted modes will be unset</remarks>
-        public void SetModes(params byte[] modesArray)
-        {
-            if (modesArray == null || modesArray.Length == 0)
-                throw new ArgumentNullException(nameof(modesArray));
-            // check that ribbon is initialized
-            if (Framework == null)
-            {
-                return;
-            }
-
-            // calculate compact modes value
-            int compactModes = 0;
-            for (int i = 0; i < modesArray.Length; ++i)
-            {
-                if (modesArray[i] >= 32)
-                {
-                    throw new ArgumentException("Modes should range between 0 to 31.");
-                }
-
-                compactModes |= (1 << modesArray[i]);
-            }
-
-            // set modes
-            Framework->SetModes(compactModes);
-        }
-
-        /// <summary>
-        /// Shows a predefined context popup in a specific location
-        /// </summary>
-        /// <param name="contextPopupID">commandId for the context popup</param>
-        /// <param name="x">X in screen coordinates</param>
-        /// <param name="y">Y in screen coordinates</param>
-        public unsafe void ShowContextPopup(uint contextPopupID, int x, int y)
-        {
-            // check that ribbon is initialized
-            if (Framework == null)
-            {
-                return;
-            }
-
-            HRESULT hr;
-            IUIContextualUI* cpContextualUI;
-            hr = Framework->GetView(contextPopupID, IID.Get<IUIContextualUI>(), (void**)&cpContextualUI);
-            if (hr.Succeeded)
-            {
-                using var contextualUIScope = new ComScope<IUIContextualUI>(cpContextualUI);
-                if (!contextualUIScope.IsNull)
-                {
-                    contextualUIScope.Value->ShowAtLocation(x, y);
-                }
-            }
-            else
-            {
-                Marshal.ThrowExceptionForHR((int)hr);
-            }
-        }
-
-        /// <summary>
         /// Get color of application button
         /// </summary>
         public unsafe UI_HSBCOLOR GetApplicationButtonColor()
@@ -852,86 +790,67 @@ namespace WinForms.Ribbon
             return false;
         }
 
-
-#pragma warning disable CS8602 //_application has null check by Initialized
         /// <summary>
-        /// Specifies whether the ribbon is in a collapsed or expanded state
+        /// Set current application modes
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool Minimized
+        /// <param name="modesArray">array of modes to set</param>
+        /// <remarks>Unlisted modes will be unset</remarks>
+        public void SetModes(params byte[] modesArray)
         {
-            get
+            if (modesArray == null || modesArray.Length == 0)
+                throw new ArgumentNullException(nameof(modesArray));
+            // check that ribbon is initialized
+            if (Framework == null)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return false;
-                }
-                return GetMinimized();
+                return;
             }
-            set
+
+            // calculate compact modes value
+            int compactModes = 0;
+            for (int i = 0; i < modesArray.Length; ++i)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
+                if (modesArray[i] >= 32)
                 {
-                    return;
+                    throw new ArgumentException("Modes should range between 0 to 31.");
                 }
-                SetMinimized(value);
+
+                compactModes |= (1 << modesArray[i]);
             }
+
+            // set modes
+            Framework->SetModes(compactModes);
         }
 
         /// <summary>
-        /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
+        /// Shows a predefined context popup in a specific location
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool Viewable
+        /// <param name="contextPopupID">commandId for the context popup</param>
+        /// <param name="x">X in screen coordinates</param>
+        /// <param name="y">Y in screen coordinates</param>
+        public unsafe void ShowContextPopup(uint contextPopupID, int x, int y)
         {
-            get
+            // check that ribbon is initialized
+            if (Framework == null)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return false;
-                }
-                return GetViewable();
+                return;
             }
-            set
-            {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return;
-                }
-                SetViewable(value);
-            }
-        }
 
-        /// <summary>
-        /// Specifies whether the quick access toolbar is docked at the top or at the bottom
-        /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ControlDock QuickAccessToolbarDock
-        {
-            get
+            HRESULT hr;
+            IUIContextualUI* cpContextualUI;
+            hr = Framework->GetView(contextPopupID, IID.Get<IUIContextualUI>(), (void**)&cpContextualUI);
+            if (hr.Succeeded)
             {
-                // check that ribbon is initialized
-                if (Framework == null)
+                using var contextualUIScope = new ComScope<IUIContextualUI>(cpContextualUI);
+                if (!contextualUIScope.IsNull)
                 {
-                    return (ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
+                    contextualUIScope.Value->ShowAtLocation(x, y);
                 }
-                return (ControlDock)GetQuickAccessToolbarDock();
             }
-            set
+            else
             {
-                // check that ribbon is initialized
-                if (Framework == null)
-                {
-                    return;
-                }
-                SetQuickAccessToolbarDock((UI_CONTROLDOCK)value);
+                Marshal.ThrowExceptionForHR((int)hr);
             }
         }
-#pragma warning restore CS8602
 
         /// <summary>
         /// Adds a ribbon control to the internal map
@@ -978,12 +897,10 @@ namespace WinForms.Ribbon
             add
             {
                 EventSet.Add(s_ViewCreatedKey, value);
-                //Events.AddHandler(s_ViewCreatedKey, value);
             }
             remove
             {
                 EventSet.Remove(s_ViewCreatedKey, value);
-                //Events.RemoveHandler(s_ViewCreatedKey, value);
             }
         }
 
@@ -1003,9 +920,6 @@ namespace WinForms.Ribbon
             _qatSetting?.Load();
 
             EventSet.Raise(s_ViewCreatedKey, this, EventArgs.Empty);
-            //EventHandler? eh = Events[s_ViewCreatedKey] as EventHandler;
-            //if (eh != null)
-            //    eh(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1017,12 +931,10 @@ namespace WinForms.Ribbon
             add
             {
                 EventSet.Add(s_ViewDestroyKey, value);
-                //Events.AddHandler(s_ViewDestroyKey, value);
             }
             remove
             {
                 EventSet.Remove(s_ViewDestroyKey, value);
-                //Events.RemoveHandler(s_ViewDestroyKey, value);
             }
         }
 
@@ -1030,9 +942,6 @@ namespace WinForms.Ribbon
         {
             _qatSetting?.Save();
             EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
-            //EventHandler? eh = Events[s_ViewDestroyKey] as EventHandler;
-            //if (eh != null)
-            //    eh(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1065,21 +974,16 @@ namespace WinForms.Ribbon
             add
             {
                 EventSet.Add(s_RibbonHeightKey, value);
-                //Events.AddHandler(s_RibbonHeightKey, value);
             }
             remove
             {
                 EventSet.Remove(s_RibbonHeightKey, value);
-                //Events.RemoveHandler(s_RibbonHeightKey, value);
             }
         }
 
         internal void OnRibbonHeightChanged()
         {
             EventSet.Raise(s_RibbonHeightKey, this, EventArgs.Empty);
-            //EventHandler? eh = Events[s_RibbonHeightKey] as EventHandler;
-            //if (eh != null)
-            //    eh(this, EventArgs.Empty);
         }
 
         internal HMODULE MarkupHandleInternal
@@ -1194,6 +1098,32 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
+        /// Specifies whether the ribbon is in a collapsed or expanded state
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool Minimized
+        {
+            get
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return false;
+                }
+                return GetMinimized();
+            }
+            set
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return;
+                }
+                SetMinimized(value);
+            }
+        }
+
+        /// <summary>
         /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
         /// </summary>
         private unsafe bool GetViewable()
@@ -1227,6 +1157,32 @@ namespace WinForms.Ribbon
                     hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pViewable, &propvar);
                 if (hr.Succeeded)
                     hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool Viewable
+        {
+            get
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return false;
+                }
+                return GetViewable();
+            }
+            set
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return;
+                }
+                SetViewable(value);
             }
         }
 
@@ -1267,6 +1223,32 @@ namespace WinForms.Ribbon
             }
         }
 
+        /// <summary>
+        /// Specifies whether the quick access toolbar is docked at the top or at the bottom
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ControlDock QuickAccessToolbarDock
+        {
+            get
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return (ControlDock)UI_CONTROLDOCK.UI_CONTROLDOCK_TOP;
+                }
+                return (ControlDock)GetQuickAccessToolbarDock();
+            }
+            set
+            {
+                // check that ribbon is initialized
+                if (Framework == null)
+                {
+                    return;
+                }
+                SetQuickAccessToolbarDock((UI_CONTROLDOCK)value);
+            }
+        }
+
         private ComScope<IUIRibbon> GetIUIRibbon()
         {
             HRESULT hr;
@@ -1274,6 +1256,5 @@ namespace WinForms.Ribbon
             hr = Framework->GetView(0, IID.Get<IUIRibbon>(), (void**)&uiRibbonScope);
             return uiRibbonScope;
         }
-
     }
 }

@@ -33,18 +33,18 @@ namespace WinForms.Ribbon
         /// <param name="currentValue">the new value of the property that has changed</param>
         /// <param name="commandExecutionProperties">additional data for this execution</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
-        /// <remarks>This method is used internally by the Ribbon class and should not be called by the user.</remarks>
+        /// <remarks>This method is used internally by the RibbonStrip class and should not be called by the user.</remarks>
         HRESULT IUICommandHandler.Execute(uint commandId, UI_EXECUTIONVERB verb, PROPERTYKEY* key, PROPVARIANT_unmanaged* currentValue, IUISimplePropertySet commandExecutionProperties)
         {
 #if DEBUG
             Debug.WriteLine(string.Format("Execute verb: {0} for command {1}", verb, commandId));
 #endif
-            RibbonStripItem? item;
-            if (_ribbon.TryGetRibbonControlById(commandId, out item))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                ICommandHandler commands = item! as ICommandHandler;
+                ICommandHandler commands = (ribbonItem as ICommandHandler)!;
                 //cast PROPVARIANT_unmanaged* to PROPVARIANT* is neccessary, because it's the same struct (CsWin32 should only use PROPVARIANT)
-                return commands!.Execute(verb, key, (PROPVARIANT*)currentValue, commandExecutionProperties);
+                return commands.Execute(verb, key, (PROPVARIANT*)currentValue, commandExecutionProperties);
             }
 
             return HRESULT.S_OK;
@@ -59,25 +59,25 @@ namespace WinForms.Ribbon
         /// <param name="currentValue">A pointer to the current value for key. This parameter can be null</param>
         /// <param name="newValue">When this method returns, contains a pointer to the new value for key</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
-        /// <remarks>This method is used internally by the Ribbon class and should not be called by the user.</remarks>
+        /// <remarks>This method is used internally by the RibbonStrip class and should not be called by the user.</remarks>
         HRESULT IUICommandHandler.UpdateProperty(uint commandId, PROPERTYKEY* key, PROPVARIANT_unmanaged* currentValue, out PROPVARIANT newValue)
         {
 #if DEBUG
             Debug.WriteLine(string.Format("UpdateProperty key: {0} for command {1}", RibbonProperties.GetPropertyKeyName(*key), commandId));
 #endif
-            RibbonStripItem? item;
-            if (_ribbon.TryGetRibbonControlById(commandId, out item))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                ICommandHandler commands = item! as ICommandHandler;
+                ICommandHandler commands = (ribbonItem as ICommandHandler)!;
                 //cast PROPVARIANT_unmanaged* to PROPVARIANT* is neccessary, because it's the same struct (CsWin32 should only use PROPVARIANT)
-                return commands!.UpdateProperty(*key, (PROPVARIANT*)currentValue, out newValue);
+                return commands.UpdateProperty(*key, (PROPVARIANT*)currentValue, out newValue);
             }
             fixed (PROPVARIANT* newValueLocal = &newValue)
                 return HRESULT.S_OK;
         }
 
         /// <summary>
-        /// Called for each Command specified in the Windows Ribbon (Ribbon) framework markup to bind 
+        /// Called for each Command specified in the Windows Ribbon framework markup to bind 
         /// the Command to an IUICommandHandler. 
         /// </summary>
         /// <param name="commandId">The ID for the Command, which is specified in the markup resource file.</param>
@@ -86,22 +86,20 @@ namespace WinForms.Ribbon
         /// IUICommandHandler object. This object is a host application Command handler that is bound to one or 
         /// more Commands.</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
-        unsafe HRESULT IUIApplication.OnCreateUICommand(uint commandId, UI_COMMANDTYPE typeID, out IUICommandHandler commandHandler)
+        HRESULT IUIApplication.OnCreateUICommand(uint commandId, UI_COMMANDTYPE typeID, out IUICommandHandler commandHandler)
         {
-            RibbonStripItem? item;
-            if (_ribbon.TryGetRibbonControlById(commandId, out item))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                if (item != null)
-                {
-                    item.RaiseCreateUICommand(commandId, typeID);
-                }
+                if (ribbonItem != null)
+                    ribbonItem.RaiseCreateUICommand(commandId, typeID);
             }
             commandHandler = this;
             return HRESULT.S_OK;
         }
 
         /// <summary>
-        /// Called for each Command specified in the Windows Ribbon (Ribbon) framework markup when the 
+        /// Called for each Command specified in the Windows Ribbon framework markup when the 
         /// application window is destroyed. 
         /// </summary>
         /// <param name="commandId">The ID for the Command, which is specified in the markup resource file.</param>
@@ -110,13 +108,11 @@ namespace WinForms.Ribbon
         /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
         HRESULT IUIApplication.OnDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID, IUICommandHandler commandHandler)
         {
-            RibbonStripItem? item;
-            if (_ribbon.TryGetRibbonControlById(commandId, out item))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                if (item != null)
-                {
-                    item.RaiseDestroyUICommand(commandId, typeID);
-                }
+                if (ribbonItem != null)
+                    ribbonItem.RaiseDestroyUICommand(commandId, typeID);
             }
             return HRESULT.S_OK;
         }

@@ -30,16 +30,6 @@ namespace WinForms.Ribbon
         /// </summary>
         UICollection<GalleryItemPropertySet>? GalleryItemItemsSource { get; }
 
-        ///// <summary>
-        ///// Categories property
-        ///// </summary>
-        //IUICollection? Categories { get; }
-
-        ///// <summary>
-        ///// Items source property
-        ///// </summary>
-        //IUICollection? ItemsSource { get; }
-
         /// <summary>
         /// Invalidate GalleryCategories or Categories if one change a value
         /// </summary>
@@ -85,7 +75,8 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IGalleryPropertiesProvider
     /// </summary>
-    public sealed class GalleryPropertiesProvider : BasePropertiesProvider, IGalleryPropertiesProvider, IGalleryProvider
+    public sealed class GalleryPropertiesProvider : BasePropertiesProvider, IGalleryPropertiesProvider,
+        IGalleryProvider
     {
         private static readonly EventKey s_CategoriesReadyKey = new EventKey();
         private static readonly EventKey s_ItemsSourceReadyKey = new EventKey();
@@ -98,7 +89,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// GalleryPropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         /// <param name="ribbonItem">ribbon control that instantiate the provider</param>
         public GalleryPropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem ribbonItem)
@@ -330,7 +321,6 @@ namespace WinForms.Ribbon
             add { _eventSet.Add(s_ItemsSourceReadyKey, value); }
             remove { _eventSet.Remove(s_ItemsSourceReadyKey, value); }
         }
-
 
         #endregion
     }

@@ -33,7 +33,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// BooleanValuePropertyProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
         public BooleanValuePropertyProvider(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
@@ -93,7 +93,8 @@ namespace WinForms.Ribbon
                 _booleanValue = value;
                 if (_ribbon.Framework != null)
                 {
-                    PROPVARIANT propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+                    PROPVARIANT propvar;
+                    propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
                     HRESULT hr;
                     hr = _ribbon.Framework.SetUICommandProperty(_commandId, RibbonProperties.BooleanValue, propvar);
                 }

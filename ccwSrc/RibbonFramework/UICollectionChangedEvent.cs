@@ -3,7 +3,7 @@
 //  File:       UICollectionChangedEvent.cs
 //
 //  Contents:   Helper class that exposes an OnChanged event for a given 
-//              IUICollector instance.
+//              IUICollection instance.
 //
 //*****************************************************************************
 

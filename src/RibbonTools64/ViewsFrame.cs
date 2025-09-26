@@ -1318,9 +1318,24 @@ namespace UIRibbonTools
 
             if (node.Nodes.Count > 0)
             {
+#if !MessageBox
+                if (TaskDialog.ShowDialog(this, new TaskDialogPage()
+                {
+                    Text = RS_REMOVE_ITEM_MESSAGE,
+                    Heading = RS_REMOVE_ITEM_HEADER,
+                    Caption = "Confirm",
+                    Buttons =
+                    {
+                        TaskDialogButton.Yes,
+                        TaskDialogButton.No
+                    },
+                    Icon = TaskDialogIcon.None,
+                    DefaultButton = TaskDialogButton.Yes
+                }) != TaskDialogButton.Yes)
+#else
                 if (MessageBox.Show(RS_REMOVE_ITEM_MESSAGE, RS_REMOVE_ITEM_HEADER, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) != DialogResult.Yes)
-
-                    return;
+#endif
+                return;
             }
 
             if (!GetObject(node.Parent, out parentObj))

@@ -3,14 +3,13 @@
 //  File:       UICollectionChangedEvent.cs
 //
 //  Contents:   Helper class that exposes an OnChanged event for a given 
-//              IUICollector instance.
+//              IUICollection instance.
 //
 //*****************************************************************************
 
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Shell.PropertiesSystem;
@@ -29,9 +28,6 @@ namespace WinForms.Ribbon
         private readonly UICollection<T> _collection;
         private int _cookie;
 
-        /// <summary>
-        /// 
-        /// </summary>
         internal UICollectionChangedEvent(UICollection<T> collection)
         {
             _collection = collection;

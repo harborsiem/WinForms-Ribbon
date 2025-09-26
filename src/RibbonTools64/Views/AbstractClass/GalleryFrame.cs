@@ -57,6 +57,7 @@ namespace UIRibbonTools
 
         private void GalleryFrame_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Padding upDownMargin = _upDownItemHeight.Margin;
@@ -66,6 +67,7 @@ namespace UIRibbonTools
                 _upDownRows.Margin = margin;
                 _upDownColumns.Margin = margin;
             }
+#endif
         }
 
         private void AppMenuConstraint()

@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+### RibbonFramework V1.1.2Plus, RibbonTools64 V8.1.2
+
+#### Changed (RibbonFramework)
+
+- more equal comments, names and code between RCW and CCW version.
+- CsWin32 version 0.3.205
+
+#### Changed (RibbonTools64)
+
+- change MessageBox dialogs to modern TaskDialogs
+- using ifdef for bugfix HighDpi, maybe there is a WinForms solution in .NET10
+- Wix tools version 6.02 for setup
+- CsWin32 version 0.3.205
+
 ### RibbonFramework V1.1.2, RibbonTools64 V8.1.1
 
 #### Changed (RibbonFramework)

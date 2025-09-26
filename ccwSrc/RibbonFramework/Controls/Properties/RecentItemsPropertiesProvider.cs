@@ -18,9 +18,6 @@ using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.System.Com.StructuredStorage;
-using Windows.Win32.UI.Shell;
-using Windows.Win32.UI.Shell.Common;
-using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace WinForms.Ribbon
 {

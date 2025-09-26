@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.IO;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.LibraryLoader;
@@ -252,7 +252,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initalize ribbon framework
         /// </summary>
-        /// <param name="ribbonDllFilename">Tempory Dll name where to find ribbon resource</param>
+        /// <param name="ribbonDllFilename">Tempory Dll file name where to find ribbon resource</param>
         private unsafe void InitFramework(string ribbonDllFilename)
         {
             // dynamically load ribbon library

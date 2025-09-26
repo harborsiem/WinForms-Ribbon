@@ -85,7 +85,6 @@ namespace WinForms.Ribbon
             remove { _ribbonItem.EventSet.Remove(s_ExecuteProviderKey, value); }
         }
 
-
         #endregion
     }
 }

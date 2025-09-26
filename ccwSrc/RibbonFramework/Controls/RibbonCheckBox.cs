@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon checkbox control.
     /// </summary>
-    public sealed unsafe class RibbonCheckBox : RibbonStripItem,
+    public sealed class RibbonCheckBox : RibbonStripItem,
         IBooleanValuePropertyProvider, 
         IEnabledPropertiesProvider,
         IKeytipPropertiesProvider,

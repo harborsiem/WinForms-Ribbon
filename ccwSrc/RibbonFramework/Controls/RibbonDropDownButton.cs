@@ -13,7 +13,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a ribbon drop down button control.
     /// </summary>
-    public sealed unsafe class RibbonDropDownButton : RibbonStripItem, 
+    public sealed class RibbonDropDownButton : RibbonStripItem, 
         IEnabledPropertiesProvider, 
         IKeytipPropertiesProvider,
         ILabelPropertiesProvider,

@@ -1,14 +1,13 @@
 //#define Unused
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 using static Windows.Win32.System.Variant.VARENUM;
 using FILETIME = Windows.Win32.Foundation.FILETIME;
 
@@ -22,7 +21,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
     /// <inheritdoc cref="PROPVARIANT"/>
     unsafe partial struct PROPVARIANT : IDisposable
     {
-        // PInvoke functions InitPropVariantxxx with Vectors (C# Arrays) or Strings do a copy in the CoTaskMem memory.
+        // PInvoke functions InitPropVariantxxx with Vectors (C# Arrays) or Strings do a copy to the CoTaskMem memory.
         // I have tested this feature by the input and output pointer values.
         // So one have no trouble with fixed or GCHandle pinned variable in C# after the call InitPropVariantxxx.
         // That means that one can call GCHandle.Free() or end the fixed statement direct after PInvoke.InitPropVariantxxx

@@ -1,4 +1,3 @@
-#define unusedActivate
 //*****************************************************************************
 //
 //  File:       PreviewEventsProvider.cs
@@ -35,7 +34,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IPreviewEventsProvider
     /// </summary>
-    internal sealed unsafe class PreviewEventsProvider : BaseEventsProvider, IPreviewEventsProvider
+    internal sealed class PreviewEventsProvider : BaseEventsProvider, IPreviewEventsProvider
     {
         private readonly static EventKey s_PreviewProviderKey = new EventKey();
         private readonly static EventKey s_CancelPreviewProviderKey = new EventKey();

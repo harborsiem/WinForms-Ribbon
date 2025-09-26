@@ -29,7 +29,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps the ribbon quick access toolbar.
     /// </summary>
-    public sealed unsafe class RibbonQuickAccessToolbar : RibbonStripItem,
+    public sealed class RibbonQuickAccessToolbar : RibbonStripItem,
         IExecuteEventsProvider, IQatPropertyProvider
     {
         /// <summary>
@@ -40,7 +40,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon QuickAccessToolbar (QAT)
         /// </summary>
-        /// <param name="ribbon">Parent RibbonStrip control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         public RibbonQuickAccessToolbar(RibbonStrip ribbon, uint commandId) : base(ribbon, commandId)
         {
@@ -49,7 +49,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Initializes a new instance of the Ribbon QuickAccessToolbar (QAT)
         /// </summary>
-        /// <param name="ribbon">Parent RibbonStrip control</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">Command id attached to this control</param>
         /// <param name="customizeCommandId">Customize Command id attached to this control</param>
         public RibbonQuickAccessToolbar(RibbonStrip ribbon, uint commandId, uint customizeCommandId) : this(ribbon, commandId)
@@ -89,7 +89,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection* IQatPropertyProvider.ItemsSource
+        unsafe IUICollection* IQatPropertyProvider.ItemsSource
         {
             get
             {
@@ -125,7 +125,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Invalidate QatItemsSource or ItemsSource if one change a value
         /// </summary>
-        public void InvalidateItemsSource()
+        public unsafe void InvalidateItemsSource()
         {
             if (Ribbon.Framework != null)
             {

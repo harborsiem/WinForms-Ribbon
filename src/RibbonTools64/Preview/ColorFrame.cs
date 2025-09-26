@@ -57,6 +57,7 @@ namespace UIRibbonTools
             upDown_GorS.ValueChanged += ColorOrHsb_ValueChanged;
             upDown_BorB.ValueChanged += ColorOrHsb_ValueChanged;
             this.setColorButton.Click += SetColorButton_Click;
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Size thisSize = this.Size;
@@ -78,6 +79,7 @@ namespace UIRibbonTools
                 //this.PerformLayout();
                 //this.Parent.Height = this.Parent.Height - diffHeight;
             }
+#endif
             _upDownMargin = upDown_RorH.Margin;
             _buttonMargin = setColorButton.Margin;
         }
@@ -166,35 +168,37 @@ namespace UIRibbonTools
         {
             //frameLayout.BackColor = Color.Red;
             //this.BackColor = Color.Green;
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Size thisSize = this.Size;
                 frameLayout.Size = thisSize;
                 this.Parent.Height = this.Parent.Height - diffHeight;
             }
-                //if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
-                //{
-                //    MessageBox.Show(_upDownMargin.ToString());
-                //    Size thisSize = this.Size;
-                //    Padding upDownMargin = upDown_RorH.Margin;
-                //    Padding margin = setColorButton.Margin;
-                //    int diffHeight = (upDownMargin.Top + upDownMargin.Bottom - margin.Top - margin.Bottom) * 3;
-                //    int diffWidth = (upDownMargin.Left + upDownMargin.Right - margin.Left - margin.Right) * 3;
-                //    frameLayout.SuspendLayout();
-                //    this.SuspendLayout();
-                //    upDown_RorH.Margin = margin;
-                //    upDown_GorS.Margin = margin;
-                //    upDown_BorB.Margin = margin;
-                //    frameLayout.Size = thisSize;
-                //    frameLayout.ResumeLayout(false);
-                //    frameLayout.PerformLayout();
-                //    int endPositionY = hsbOrColorText.Location.Y + hsbOrColorText.Size.Height;
-                //    this.Size = new Size(thisSize.Width - diffWidth, endPositionY + margin.Bottom);
-                //    this.ResumeLayout(false);
-                //    this.PerformLayout();
-                //    this.Parent.Height = this.Parent.Height - diffHeight;
-                //}
-            }
+            //if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
+            //{
+            //    MessageBox.Show(_upDownMargin.ToString());
+            //    Size thisSize = this.Size;
+            //    Padding upDownMargin = upDown_RorH.Margin;
+            //    Padding margin = setColorButton.Margin;
+            //    int diffHeight = (upDownMargin.Top + upDownMargin.Bottom - margin.Top - margin.Bottom) * 3;
+            //    int diffWidth = (upDownMargin.Left + upDownMargin.Right - margin.Left - margin.Right) * 3;
+            //    frameLayout.SuspendLayout();
+            //    this.SuspendLayout();
+            //    upDown_RorH.Margin = margin;
+            //    upDown_GorS.Margin = margin;
+            //    upDown_BorB.Margin = margin;
+            //    frameLayout.Size = thisSize;
+            //    frameLayout.ResumeLayout(false);
+            //    frameLayout.PerformLayout();
+            //    int endPositionY = hsbOrColorText.Location.Y + hsbOrColorText.Size.Height;
+            //    this.Size = new Size(thisSize.Width - diffWidth, endPositionY + margin.Bottom);
+            //    this.ResumeLayout(false);
+            //    this.PerformLayout();
+            //    this.Parent.Height = this.Parent.Height - diffHeight;
+            //}
+#endif
+        }
 
         private void ColorOrHsb_ValueChanged(object sender, EventArgs e)
         {

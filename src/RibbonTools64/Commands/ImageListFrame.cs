@@ -120,8 +120,24 @@ namespace UIRibbonTools
 
             if (string.IsNullOrEmpty(_command.Owner.Filename))
             {
+#if !MessageBox
+                if (TaskDialog.ShowDialog(this, new TaskDialogPage()
+                {
+                    Text = RS_NEED_SAVE_MESSAGE,
+                    Heading = RS_NEED_SAVE_HEADER,
+                    Caption = "Confirm",
+                    Buttons =
+                    {
+                        TaskDialogButton.Yes,
+                        TaskDialogButton.No
+                    },
+                    Icon = TaskDialogIcon.None,
+                    DefaultButton = TaskDialogButton.Yes
+                }) == TaskDialogButton.No)
+#else
                 if (MessageBox.Show(RS_NEED_SAVE_MESSAGE, RS_NEED_SAVE_HEADER, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
                     == DialogResult.No)
+#endif
                     return;
 
                 Program.ApplicationForm._actionSaveAs.PerformClick();

@@ -20,7 +20,7 @@ namespace WinForms.Ribbon
     /// Base class for all events provider classes.
     /// provides common members like: SupportedEvents.
     /// </summary>
-    public abstract class BaseEventsProvider : IEventsProvider
+    internal abstract class BaseEventsProvider : IEventsProvider
     {
         /// <summary>
         /// list of supported events

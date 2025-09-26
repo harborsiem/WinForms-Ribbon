@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
-using Windows.Win32.System.Com;
 
 namespace WinForms.Ribbon
 {
@@ -18,7 +17,6 @@ namespace WinForms.Ribbon
     {
 #pragma warning disable CA1416
         private static EventKey s_LogEventKey = new EventKey();
-        private EventSet _eventSet;
         private RibbonStrip _ribbon;
         private bool _attached;
 
@@ -27,14 +25,13 @@ namespace WinForms.Ribbon
         /// </summary>
         public event EventHandler<EventLoggerEventArgs>? LogEvent
         {
-            add { _eventSet.Add(s_LogEventKey, value); }
-            remove { _eventSet.Remove(s_LogEventKey, value); }
+            add { _ribbon.EventSet.Add(s_LogEventKey, value); }
+            remove { _ribbon.EventSet.Remove(s_LogEventKey, value); }
         }
 
         internal EventLogger(RibbonStrip ribbon)
         {
             _ribbon = ribbon;
-            _eventSet = ribbon.EventSet;
         }
 
         /// <summary>
@@ -79,12 +76,7 @@ namespace WinForms.Ribbon
 
         private void OnUIEvent(EventLoggerEventArgs e)
         {
-            _eventSet.Raise(s_LogEventKey, this, e);
-            //EventHandler<EventLoggerEventArgs>? handler = LogEvent;
-            //if (handler != null)
-            //{
-            //    handler(this, e);
-            //}
+            _ribbon.EventSet.Raise(s_LogEventKey, this, e);
         }
 
         /// <summary>

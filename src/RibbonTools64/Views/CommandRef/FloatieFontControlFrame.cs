@@ -34,6 +34,7 @@ namespace UIRibbonTools
 
         private void FloatieFontControlFrame_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Padding upDownMargin = UpDownMinFontSize.Margin;
@@ -41,6 +42,7 @@ namespace UIRibbonTools
                 UpDownMinFontSize.Margin = margin;
                 UpDownMaxFontSize.Margin = margin;
             }
+#endif
         }
 
         protected override void InitComponentStep1()

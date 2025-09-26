@@ -43,6 +43,7 @@ namespace UIRibbonTools
 
         private void InRibbonGalleryFrame_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Padding upDownMargin = _upDownMinColumnsLarge.Margin;
@@ -53,6 +54,7 @@ namespace UIRibbonTools
                 _upDownMaxColumns.Margin = margin;
                 _upDownMaxRows.Margin = margin;
             }
+#endif
         }
 
         protected override void InitComponentStep1()

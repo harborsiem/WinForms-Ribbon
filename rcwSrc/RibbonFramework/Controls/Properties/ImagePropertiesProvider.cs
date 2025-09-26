@@ -47,13 +47,13 @@ namespace WinForms.Ribbon
         /// <summary>
         /// ImagePropertiesProvider ctor
         /// </summary>
-        /// <param name="ribbon">parent ribbon</param>
+        /// <param name="ribbon">Parent RibbonStrip</param>
         /// <param name="commandId">ribbon control command id</param>
-        /// <param name="item">ribbon control</param>
-        public ImagePropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem item)
+        /// <param name="ribbonItem">ribbon control</param>
+        public ImagePropertiesProvider(RibbonStrip ribbon, uint commandId, RibbonStripItem ribbonItem)
             : base(ribbon, commandId)
         {
-            _item = item;
+            _ribbonItem = ribbonItem;
             // add supported properties
             _supportedProperties.Add(RibbonProperties.LargeImage);
             _supportedProperties.Add(RibbonProperties.SmallImage);
@@ -61,7 +61,7 @@ namespace WinForms.Ribbon
             _supportedProperties.Add(RibbonProperties.SmallHighContrastImage);
         }
 
-        private readonly RibbonStripItem _item;
+        private readonly RibbonStripItem _ribbonItem;
         private UIImage? _largeImage;
         private UIImage? _smallImage;
         private UIImage? _largeHighContrastImage;
@@ -125,9 +125,9 @@ namespace WinForms.Ribbon
                 _largeImage = value;
                 if (_ribbon.Framework != null)
                 {
-                    fixed (PROPERTYKEY* imageLocal = &RibbonProperties.LargeImage)
+                    fixed (PROPERTYKEY* pKeyLargeImage = &RibbonProperties.LargeImage)
                     {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, imageLocal);
+                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeImage);
                     }
                 }
             }
@@ -147,9 +147,9 @@ namespace WinForms.Ribbon
                 _smallImage = value;
                 if (_ribbon.Framework != null)
                 {
-                    fixed (PROPERTYKEY* imageLocal = &RibbonProperties.SmallImage)
+                    fixed (PROPERTYKEY* pKeySmallImage = &RibbonProperties.SmallImage)
                     {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, imageLocal);
+                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallImage);
                     }
                 }
             }
@@ -169,9 +169,9 @@ namespace WinForms.Ribbon
                 _largeHighContrastImage = value;
                 if (_ribbon.Framework != null)
                 {
-                    fixed (PROPERTYKEY* imageLocal = &RibbonProperties.LargeHighContrastImage)
+                    fixed (PROPERTYKEY* pKeyLargeHighContrastImage = &RibbonProperties.LargeHighContrastImage)
                     {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, imageLocal);
+                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeHighContrastImage);
                     }
                 }
             }
@@ -191,9 +191,9 @@ namespace WinForms.Ribbon
                 _smallHighContrastImage = value;
                 if (_ribbon.Framework != null)
                 {
-                    fixed (PROPERTYKEY* imageLocal = &RibbonProperties.SmallHighContrastImage)
+                    fixed (PROPERTYKEY* pKeySmallHighContrastImage = &RibbonProperties.SmallHighContrastImage)
                     {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, imageLocal);
+                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallHighContrastImage);
                     }
                 }
             }

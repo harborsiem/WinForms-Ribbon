@@ -518,7 +518,7 @@ namespace WinForms.Ribbon
         //    hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColorType, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
-        //        if (propvar.vt == VARENUM.VT_I4)
+        //        if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
         //            objValue = (SwatchColorType)(int)propvar;
         //        else
         //            objValue = (SwatchColorType)(uint)propvar;
@@ -555,7 +555,7 @@ namespace WinForms.Ribbon
         //    hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColorType, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
-        //        if (propvar.vt == VARENUM.VT_I4)
+        //        if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
         //            objValue = (SwatchColorType)(int)propvar;
         //        else
         //            objValue = (SwatchColorType)(uint)propvar;

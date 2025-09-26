@@ -43,12 +43,14 @@ namespace UIRibbonTools
 
         private void ImageEditForm_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Padding idMargin = EditResourceId.Margin;
                 Padding margin = EditSymbol.Margin;
                 EditResourceId.Margin = margin;
             }
+#endif
         }
 
         private void RightButton_MouseLeave(object sender, EventArgs e)

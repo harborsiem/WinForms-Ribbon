@@ -42,6 +42,7 @@ namespace UIRibbonTools
 
         private void DropDownColorPickerFrame_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Padding upDownMargin = UpDownColumns.Margin;
@@ -51,6 +52,7 @@ namespace UIRibbonTools
                 UpDownStandardRows.Margin = margin;
                 UpDownThemeRows.Margin = margin;
             }
+#endif
         }
 
         protected override void InitComponentStep1()

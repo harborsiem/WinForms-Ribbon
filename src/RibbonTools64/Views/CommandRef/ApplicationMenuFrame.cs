@@ -35,12 +35,14 @@ namespace UIRibbonTools
 
         private void ApplicationMenuFrame_Load(object sender, EventArgs e)
         {
+#if FixHighDpi
             if (DeviceDpi != 96) //Workaround for wrong Margins of NumericUpDown
             {
                 Padding upDownMargin = _upDownMaxCount.Margin;
                 Padding margin = _checkBoxEnablePinning.Margin;
                 _upDownMaxCount.Margin = margin;
             }
+#endif
         }
 
         protected override void InitComponentStep1()

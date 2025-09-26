@@ -39,10 +39,10 @@ namespace WinForms.Ribbon
 #if DEBUG
             Debug.WriteLine(string.Format("Execute verb: {0} for command {1}", verb, commandId));
 #endif
-            RibbonStripItem item;
-            if (_ribbon.TryGetRibbonControlById(commandId, out item!))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                ICommandHandler commands = (item as ICommandHandler)!;
+                ICommandHandler commands = (ribbonItem as ICommandHandler)!;
                 return commands.Execute(verb, key, currentValue, commandExecutionProperties);
             }
 
@@ -64,38 +64,65 @@ namespace WinForms.Ribbon
 #if DEBUG
             Debug.WriteLine(string.Format("UpdateProperty key: {0} for command {1}", RibbonProperties.GetPropertyKeyName(*key), commandId));
 #endif
-            RibbonStripItem item;
-            if (_ribbon.TryGetRibbonControlById(commandId, out item!))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                ICommandHandler commands = (item as ICommandHandler)!;
+                ICommandHandler commands = (ribbonItem as ICommandHandler)!;
                 return commands.UpdateProperty(*key, currentValue, out *newValue);
             }
             return HRESULT.S_OK;
         }
 
+        /// <summary>
+        /// Called for each Command specified in the Windows Ribbon framework markup to bind 
+        /// the Command to an IUICommandHandler. 
+        /// </summary>
+        /// <param name="commandId">The ID for the Command, which is specified in the markup resource file.</param>
+        /// <param name="typeID">The Command type that is associated with a specific control.</param>
+        /// <param name="commandHandler">When this method returns, contains the address of a pointer to an
+        /// IUICommandHandler object. This object is a host application Command handler that is bound to one or 
+        /// more Commands.</param>
+        /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
         HRESULT IUIApplication.Interface.OnCreateUICommand(uint commandId, Windows.Win32.UI.Ribbon.UI_COMMANDTYPE typeID, Windows.Win32.UI.Ribbon.IUICommandHandler** commandHandler)
         {
-            RibbonStripItem control;
-            if (_ribbon.TryGetRibbonControlById(commandId, out control!))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                if (control != null)
-                    control.RaiseCreateUICommand(commandId, typeID);
+                if (ribbonItem != null)
+                    ribbonItem.RaiseCreateUICommand(commandId, typeID);
             }
             *commandHandler = ComHelpers.GetComScope<IUICommandHandler>(this);
             return HRESULT.S_OK;
         }
 
+        /// <summary>
+        /// Called for each Command specified in the Windows Ribbon framework markup when the 
+        /// application window is destroyed. 
+        /// </summary>
+        /// <param name="commandId">The ID for the Command, which is specified in the markup resource file.</param>
+        /// <param name="typeID">The Command type that is associated with a specific control.</param>
+        /// <param name="commandHandler">A pointer to an IUICommandHandler object. This value can be null.</param>
+        /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
         HRESULT IUIApplication.Interface.OnDestroyUICommand(uint commandId, Windows.Win32.UI.Ribbon.UI_COMMANDTYPE typeID, Windows.Win32.UI.Ribbon.IUICommandHandler* commandHandler)
         {
-            RibbonStripItem control;
-            if (_ribbon.TryGetRibbonControlById(commandId, out control!))
+            RibbonStripItem? ribbonItem;
+            if (_ribbon.TryGetRibbonControlById(commandId, out ribbonItem))
             {
-                if (control != null)
-                    control.RaiseDestroyUICommand(commandId, typeID);
+                if (ribbonItem != null)
+                    ribbonItem.RaiseDestroyUICommand(commandId, typeID);
             }
             return HRESULT.S_OK;
         }
 
+        /// <summary>
+        /// Called when the state of a View changes
+        /// </summary>
+        /// <param name="viewId">The ID for the View. Only a value of 0 is valid.</param>
+        /// <param name="typeID">The UI_VIEWTYPE hosted by the application.</param>
+        /// <param name="view">A pointer to the View interface.</param>
+        /// <param name="verb">The UI_VIEWVERB (or action) performed by the View.</param>
+        /// <param name="uReasonCode">Not defined.</param>
+        /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
         HRESULT IUIApplication.Interface.OnViewChanged(uint viewId, Windows.Win32.UI.Ribbon.UI_VIEWTYPE typeID, Windows.Win32.System.Com.IUnknown* view, Windows.Win32.UI.Ribbon.UI_VIEWVERB verb, int uReasonCode)
         {
             HRESULT hr = HRESULT.E_FAIL;
