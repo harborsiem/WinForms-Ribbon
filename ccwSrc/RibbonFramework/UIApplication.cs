@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 
@@ -34,7 +33,7 @@ namespace WinForms.Ribbon
         /// <param name="commandExecutionProperties">additional data for this execution</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
         /// <remarks>This method is used internally by the RibbonStrip class and should not be called by the user.</remarks>
-        HRESULT IUICommandHandler.Interface.Execute(uint commandId, Windows.Win32.UI.Ribbon.UI_EXECUTIONVERB verb, Windows.Win32.UI.Shell.PropertiesSystem.PROPERTYKEY* key, Windows.Win32.System.Com.StructuredStorage.PROPVARIANT* currentValue, Windows.Win32.UI.Ribbon.IUISimplePropertySet* commandExecutionProperties)
+        HRESULT IUICommandHandler.Interface.Execute(uint commandId, Windows.Win32.UI.Ribbon.UI_EXECUTIONVERB verb, Windows.Win32.Foundation.PROPERTYKEY* key, Windows.Win32.System.Com.StructuredStorage.PROPVARIANT* currentValue, Windows.Win32.UI.Ribbon.IUISimplePropertySet* commandExecutionProperties)
         {
 #if DEBUG
             Debug.WriteLine(string.Format("Execute verb: {0} for command {1}", verb, commandId));
@@ -59,7 +58,7 @@ namespace WinForms.Ribbon
         /// <param name="newValue">When this method returns, contains a pointer to the new value for key</param>
         /// <returns>Returns S_OK if successful, or an error value otherwise</returns>
         /// <remarks>This method is used internally by the RibbonStrip class and should not be called by the user.</remarks>
-        HRESULT IUICommandHandler.Interface.UpdateProperty(uint commandId, Windows.Win32.UI.Shell.PropertiesSystem.PROPERTYKEY* key, Windows.Win32.System.Com.StructuredStorage.PROPVARIANT* currentValue, Windows.Win32.System.Com.StructuredStorage.PROPVARIANT* newValue)
+        HRESULT IUICommandHandler.Interface.UpdateProperty(uint commandId, Windows.Win32.Foundation.PROPERTYKEY* key, Windows.Win32.System.Com.StructuredStorage.PROPVARIANT* currentValue, Windows.Win32.System.Com.StructuredStorage.PROPVARIANT* newValue)
         {
 #if DEBUG
             Debug.WriteLine(string.Format("UpdateProperty key: {0} for command {1}", RibbonProperties.GetPropertyKeyName(*key), commandId));

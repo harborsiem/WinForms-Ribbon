@@ -10,9 +10,9 @@
 using System;
 using System.Collections.Generic;
 using Windows.Win32;
+using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 
 namespace Windows.Win32.UI.Ribbon
 {

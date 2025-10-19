@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
 
-namespace Windows.Win32.UI.Shell.PropertiesSystem
+namespace Windows.Win32.Foundation
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     /// <summary>
@@ -9,6 +11,7 @@ namespace Windows.Win32.UI.Shell.PropertiesSystem
     /// Maybe in future we can delete the first partial struct.
     /// </summary>
     /// <inheritdoc cref="PROPERTYKEY"/>
+    [DebuggerDisplay("{DebuggerDisplay, nq}")]
     partial struct PROPERTYKEY
     {
         public static bool operator ==(PROPERTYKEY left, PROPERTYKEY right) =>
@@ -24,24 +27,26 @@ namespace Windows.Win32.UI.Shell.PropertiesSystem
 
         public override string ToString()
         {
-            string? value = null;
-            ToString(ref value);
-            if (value != null)
-            {
-                return value;
-            }
+            //string? value = null;
+            //ToString(ref value);
+            //if (value != null)
+            //{
+            //    return value;
+            //}
             return "PROPERTYKEY: " + fmtid.ToString() + " : " + pid.ToString(CultureInfo.InvariantCulture.NumberFormat);
         }
 
-        partial void ToString(ref string? value);
+        private string? DebuggerDisplay => RibbonProperties.KeyToString(this);
+
+        //partial void ToString(ref string? value);
     }
 
-    /// <inheritdoc cref="PROPERTYKEY"/>
-    partial struct PROPERTYKEY
-    {
-        partial void ToString(ref string? value)
-        {
-            value = RibbonProperties.KeyToString(this);
-        }
-    }
+    ///// <inheritdoc cref="PROPERTYKEY"/>
+    //partial struct PROPERTYKEY
+    //{
+    //    partial void ToString(ref string? value)
+    //    {
+    //        value = RibbonProperties.KeyToString(this);
+    //    }
+    //}
 }

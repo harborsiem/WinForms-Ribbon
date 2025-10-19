@@ -57,7 +57,7 @@
   </ItemGroup>
   
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.205</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.217</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
   
   <ItemGroup>

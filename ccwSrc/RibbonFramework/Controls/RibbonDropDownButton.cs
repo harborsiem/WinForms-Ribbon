@@ -6,7 +6,6 @@
 //
 //*****************************************************************************
 
-using Windows.Win32.UI.Ribbon;
 
 namespace WinForms.Ribbon
 {

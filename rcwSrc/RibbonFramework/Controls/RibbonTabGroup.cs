@@ -5,7 +5,6 @@
 //  Contents:   Helper class that wraps a ribbon tab group control.
 //
 //*****************************************************************************
-using Windows.Win32.UI.Ribbon;
 
 namespace WinForms.Ribbon
 {

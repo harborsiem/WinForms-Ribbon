@@ -944,26 +944,26 @@ namespace WinForms.Ribbon
             EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
         }
 
-        /// <summary>
-        /// Dispose pattern
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (_cpIUIImageFromBitmap != null)
-            {
-                IUIImageFromBitmap* localImageFromBitmap = _cpIUIImageFromBitmap;
-                _cpIUIImageFromBitmap = null;
-                localImageFromBitmap->Release();
-            }
-            if (Framework != null)
-            {
-                IUIFramework* localFramework = Framework;
-                _cpIUIFramework = null;
-                localFramework->Release();
-            }
-        }
+        ///// <summary>
+        ///// Dispose pattern
+        ///// </summary>
+        ///// <param name="disposing"></param>
+        //protected override void Dispose(bool disposing)
+        //{
+        //    base.Dispose(disposing);
+        //    if (_cpIUIImageFromBitmap != null)
+        //    {
+        //        IUIImageFromBitmap* localImageFromBitmap = _cpIUIImageFromBitmap;
+        //        _cpIUIImageFromBitmap = null;
+        //        localImageFromBitmap->Release();
+        //    }
+        //    if (Framework != null)
+        //    {
+        //        IUIFramework* localFramework = Framework;
+        //        _cpIUIFramework = null;
+        //        localFramework->Release();
+        //    }
+        //}
 
         /// <summary>
         /// Event fires when the Ribbon height changed

@@ -11,9 +11,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32;
-using Windows.Win32.UI.Ribbon;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.Foundation;
+using Windows.Win32.UI.Ribbon;
 
 namespace WinForms.Ribbon
 {

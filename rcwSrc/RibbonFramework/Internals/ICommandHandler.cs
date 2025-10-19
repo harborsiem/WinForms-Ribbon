@@ -1,6 +1,6 @@
-﻿using Windows.Win32.Foundation;
+﻿using Windows.Win32;
+using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
 
 namespace WinForms.Ribbon

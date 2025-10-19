@@ -9,10 +9,10 @@
 using System.Drawing;
 using System;
 using System.Windows.Forms;
+using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
 using Windows.Win32.System.Com.StructuredStorage;
-using Windows.Win32.UI.Shell.PropertiesSystem;
 
 namespace WinForms.Ribbon
 {
