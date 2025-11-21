@@ -140,7 +140,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Decimal value property
         /// </summary>
-        public decimal DecimalValue
+        public unsafe decimal DecimalValue
         {
             get
             {
@@ -148,7 +148,8 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
-                    hr = _ribbon.Framework.GetUICommandProperty(_commandId, RibbonProperties.DecimalValue, out propvar);
+                    fixed (PROPERTYKEY* pKeyDecimalValue = &RibbonProperties.DecimalValue)
+                        hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeyDecimalValue, out propvar);
                     if (hr.Succeeded)
                     {
                         decimal decValue = (decimal)propvar; //UIPropertyToDecimal
@@ -163,9 +164,10 @@ namespace WinForms.Ribbon
                 _decimalValue = value;
                 if (_ribbon.Framework != null)
                 {
-                    PROPVARIANT propvar = (PROPVARIANT)value;
+                    PROPVARIANT propvar = (PROPVARIANT)value; //UIInitPropertyFromDecimal
                     HRESULT hr;
-                    hr = _ribbon.Framework.SetUICommandProperty(_commandId, RibbonProperties.DecimalValue, in propvar);
+                    fixed (PROPERTYKEY* pKeyDecimalValue = &RibbonProperties.DecimalValue)
+                        hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyDecimalValue, in propvar);
                 }
             }
         }
@@ -173,7 +175,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Increment property
         /// </summary>
-        public decimal Increment
+        public unsafe decimal Increment
         {
             get
             {
@@ -185,7 +187,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.Increment);
+                    fixed (PROPERTYKEY* pKeyIncrement = &RibbonProperties.Increment)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyIncrement);
                 }
             }
         }
@@ -193,7 +196,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Max value property
         /// </summary>
-        public decimal MaxValue
+        public unsafe decimal MaxValue
         {
             get
             {
@@ -205,7 +208,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.MaxValue);
+                    fixed (PROPERTYKEY* pKeyMaxValue = &RibbonProperties.MaxValue)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMaxValue);
                 }
             }
         }
@@ -213,7 +217,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Min value property
         /// </summary>
-        public decimal MinValue
+        public unsafe decimal MinValue
         {
             get
             {
@@ -225,7 +229,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.MinValue);
+                    fixed (PROPERTYKEY* pKeyMinValue = &RibbonProperties.MinValue)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMinValue);
                 }
             }
         }
@@ -233,7 +238,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Decimal places property
         /// </summary>
-        public uint DecimalPlaces
+        public unsafe uint DecimalPlaces
         {
             get
             {
@@ -245,7 +250,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.DecimalPlaces);
+                    fixed (PROPERTYKEY* pKeyDecimalPlaces = &RibbonProperties.DecimalPlaces)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyDecimalPlaces);
                 }
             }
         }
@@ -253,7 +259,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Format string property
         /// </summary>
-        public string FormatString
+        public unsafe string FormatString
         {
             get
             {
@@ -265,7 +271,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.FormatString);
+                    fixed (PROPERTYKEY* pKeyFormatString = &RibbonProperties.FormatString)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyFormatString);
                 }
             }
         }

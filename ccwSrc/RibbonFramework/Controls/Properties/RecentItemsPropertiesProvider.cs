@@ -38,7 +38,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IRecentItemsPropertiesProvider
     /// </summary>
-    public sealed unsafe class RecentItemsPropertiesProvider : BasePropertiesProvider, IRecentItemsPropertiesProvider
+    public sealed class RecentItemsPropertiesProvider : BasePropertiesProvider, IRecentItemsPropertiesProvider
     {
         /// <summary>
         /// RecentItemsPropertiesProvider ctor

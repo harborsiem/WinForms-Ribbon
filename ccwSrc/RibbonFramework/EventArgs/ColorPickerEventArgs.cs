@@ -69,8 +69,8 @@ namespace WinForms.Ribbon
             PROPVARIANT propvar = PROPVARIANT.Empty;
             if (commandExecutionProperties != null)
             {
-                fixed (PROPERTYKEY* pColor = &RibbonProperties.Color)
-                    commandExecutionProperties->GetValue(pColor, &propvar);
+                fixed (PROPERTYKEY* pKeyColor = &RibbonProperties.Color)
+                    commandExecutionProperties->GetValue(pKeyColor, &propvar);
                 uint colorref = (uint)propvar; //PropVariantToUInt32
                 color = ColorTranslator.FromWin32((int)colorref);
             }

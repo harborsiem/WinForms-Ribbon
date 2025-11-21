@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.ComponentModel;
@@ -20,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.Buffers;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
@@ -79,6 +81,7 @@ namespace WinForms.Ribbon
         private ShortcutHandler? _shortcutHandler;
         private string? _markupResource;
         private Dictionary<ushort, MarkupResIds>? _allMarkupResIds;
+        internal readonly string[] ResourceNames;
 
         internal EventSet EventSet => _eventSet;
 
@@ -123,6 +126,7 @@ namespace WinForms.Ribbon
 
             this.SetStyle(ControlStyles.UserPaint, false);
             this.SetStyle(ControlStyles.Opaque, true);
+            ResourceNames = Assembly.GetCallingAssembly().GetManifestResourceNames();
         }
 
         #region Form Windows State change bug workaround
@@ -193,10 +197,6 @@ namespace WinForms.Ribbon
         {
             base.OnHandleCreated(e);
             CheckInitialize();
-            //if (Application.IsDarkModeEnabled)
-            //{
-            //    SetDarkModeRibbon(true);
-            //}
         }
 
         /// <summary>
@@ -347,12 +347,24 @@ namespace WinForms.Ribbon
 
             var assembly = form.GetType().Assembly;
             _markupHandler = new MarkupHandler(assembly, this);
-            _allMarkupResIds = MarkupHandler.ParseHeader(MarkupHeader, assembly);
+
+            if (!string.IsNullOrEmpty(MarkupHeader))
+            {
+                if (!ResourceNames.Contains(MarkupHeader))
+                {
+                    throw new ArgumentException($"Embedded resource not found {nameof(RibbonStrip)}.{nameof(MarkupHeader)}");
+                }
+                _allMarkupResIds = _markupHandler.ParseHeader(MarkupHeader, assembly);
+            }
 
             InitFramework(_markupHandler.ResourceIdentifier, _markupHandler.MarkupDllHandle);
 
-            if (Framework != null && _uIApplication != null)
+            if (!string.IsNullOrEmpty(ShortcutTableResourceName) && Framework != null && _uIApplication != null)
             {
+                if (!ResourceNames.Contains(ShortcutTableResourceName))
+                {
+                    throw new ArgumentException($"Embedded resource not found {nameof(RibbonStrip)}.{nameof(ShortcutTableResourceName)}");
+                }
                 _shortcutHandler = new ShortcutHandler(this, (IUICommandHandler)_uIApplication);
                 _shortcutHandler.TryCreateShortcutTable(assembly);
             }
@@ -526,7 +538,7 @@ namespace WinForms.Ribbon
                 // destroy ribbon framework
                 Framework.Destroy();
                 int refCount = Marshal.ReleaseComObject(Framework);
-                Debug.WriteLine("Destroy IUIFramework refCount: " +  refCount);
+                Debug.WriteLine("Destroy IUIFramework refCount: " + refCount);
 
                 // remove reference to framework object
                 _cpIUIFramework = null;
@@ -571,7 +583,8 @@ namespace WinForms.Ribbon
 
             PROPVARIANT propvar;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            propertyStore.GetValue(RibbonProperties.GlobalBackgroundColor, out propvar);
+            fixed (PROPERTYKEY* pKeyGlobalBackgroundColor = &RibbonProperties.GlobalBackgroundColor)
+                propertyStore.GetValue(pKeyGlobalBackgroundColor, out propvar);
             uint background = (uint)propvar; //PropVariantToUInt32
             UI_HSBCOLOR retResult = (UI_HSBCOLOR)background;
             propertyStore = null!;
@@ -581,7 +594,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Set ribbon background color
         /// </summary>
-        public void SetBackgroundColor(UI_HSBCOLOR value)
+        public unsafe void SetBackgroundColor(UI_HSBCOLOR value)
         {
             if (Framework == null)
             {
@@ -591,9 +604,10 @@ namespace WinForms.Ribbon
             uint color = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)color; //InitPropVariantFromUInt32
 
-            // set ribbon color
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            propertyStore.SetValue(RibbonProperties.GlobalBackgroundColor, propvar);
+            // set ribbon color
+            fixed (PROPERTYKEY* pKeyGlobalBackgroundColor = &RibbonProperties.GlobalBackgroundColor)
+                propertyStore.SetValue(pKeyGlobalBackgroundColor, propvar);
 
             propertyStore.Commit();
             propertyStore = null!;
@@ -611,7 +625,8 @@ namespace WinForms.Ribbon
 
             PROPVARIANT propvar;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            propertyStore.GetValue(RibbonProperties.GlobalHighlightColor, out propvar);
+            fixed (PROPERTYKEY* pKeyGlobalHighlightColor = &RibbonProperties.GlobalHighlightColor)
+                propertyStore.GetValue(pKeyGlobalHighlightColor, out propvar);
             uint highlight = (uint)propvar; //PropVariantToUInt32
             UI_HSBCOLOR retResult = (UI_HSBCOLOR)highlight;
             propertyStore = null!;
@@ -621,7 +636,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Set ribbon highlight color
         /// </summary>
-        public void SetHighlightColor(UI_HSBCOLOR value)
+        public unsafe void SetHighlightColor(UI_HSBCOLOR value)
         {
             if (Framework == null)
             {
@@ -631,9 +646,10 @@ namespace WinForms.Ribbon
             uint color = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)color; //InitPropVariantFromUInt32
 
-            // set ribbon color
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            propertyStore.SetValue(RibbonProperties.GlobalHighlightColor, propvar);
+            // set ribbon color
+            fixed (PROPERTYKEY* pKeyGlobalHighlightColor = &RibbonProperties.GlobalHighlightColor)
+                propertyStore.SetValue(pKeyGlobalHighlightColor, propvar);
 
             propertyStore.Commit();
             propertyStore = null!;
@@ -651,7 +667,8 @@ namespace WinForms.Ribbon
 
             PROPVARIANT propvar;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            propertyStore.GetValue(RibbonProperties.GlobalTextColor, out propvar);
+            fixed (PROPERTYKEY* pKeyGlobalTextColor = &RibbonProperties.GlobalTextColor)
+                propertyStore.GetValue(pKeyGlobalTextColor, out propvar);
             uint text = (uint)propvar; //PropVariantToUInt32
             UI_HSBCOLOR retResult = (UI_HSBCOLOR)text;
             propertyStore = null!;
@@ -661,7 +678,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Set ribbon text color
         /// </summary>
-        public void SetTextColor(UI_HSBCOLOR value)
+        public unsafe void SetTextColor(UI_HSBCOLOR value)
         {
             if (Framework == null)
             {
@@ -671,10 +688,11 @@ namespace WinForms.Ribbon
             uint color = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)color; //InitPropVariantFromUInt32
 
+            IPropertyStore propertyStore = (IPropertyStore)Framework;
             // set ribbon color
             HRESULT hr;
-            IPropertyStore propertyStore = (IPropertyStore)Framework;
-            hr = propertyStore.SetValue(RibbonProperties.GlobalTextColor, propvar);
+            fixed (PROPERTYKEY* pKeyGlobalTextColor = &RibbonProperties.GlobalTextColor)
+                hr = propertyStore.SetValue(pKeyGlobalTextColor, propvar);
 
             propertyStore.Commit();
             propertyStore = null!;
@@ -694,7 +712,8 @@ namespace WinForms.Ribbon
             HRESULT hr;
             PROPVARIANT propvar;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            hr = propertyStore.GetValue(RibbonProperties.ApplicationButtonColor, out propvar);
+            fixed (PROPERTYKEY* pKeyApplicationButtonColor = &RibbonProperties.ApplicationButtonColor)
+                hr = propertyStore.GetValue(pKeyApplicationButtonColor, out propvar);
             propertyStore = null!;
             if (hr.Succeeded)
             {
@@ -711,7 +730,7 @@ namespace WinForms.Ribbon
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public bool SetApplicationButtonColor(UI_HSBCOLOR value)
+        public unsafe bool SetApplicationButtonColor(UI_HSBCOLOR value)
         {
             // check that ribbon is initialized
             if (Framework == null)
@@ -720,9 +739,10 @@ namespace WinForms.Ribbon
             }
             uint hsb = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)hsb; //InitPropVariantFromUInt32
-            HRESULT hr;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            hr = propertyStore.SetValue(RibbonProperties.ApplicationButtonColor, propvar);
+            HRESULT hr;
+            fixed (PROPERTYKEY* pKeyApplicationButtonColor = &RibbonProperties.ApplicationButtonColor)
+                hr = propertyStore.SetValue(pKeyApplicationButtonColor, propvar);
             if (hr.Succeeded)
             {
                 hr = propertyStore.Commit();
@@ -749,7 +769,8 @@ namespace WinForms.Ribbon
             HRESULT hr;
             PROPVARIANT propvar;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            hr = propertyStore.GetValue(RibbonProperties.DarkModeRibbon, out propvar);
+            fixed (PROPERTYKEY* pKeyDarkModeRibbon = &RibbonProperties.DarkModeRibbon)
+                hr = propertyStore.GetValue(pKeyDarkModeRibbon, out propvar);
             propertyStore = null!;
             if (hr.Succeeded)
             {
@@ -765,7 +786,7 @@ namespace WinForms.Ribbon
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public bool SetDarkModeRibbon(bool value)
+        public unsafe bool SetDarkModeRibbon(bool value)
         {
             // check that ribbon is initialized
             if (Framework == null)
@@ -775,9 +796,10 @@ namespace WinForms.Ribbon
 
             PROPVARIANT propvar;
             propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-            HRESULT hr;
             IPropertyStore propertyStore = (IPropertyStore)Framework;
-            hr = propertyStore.SetValue(RibbonProperties.DarkModeRibbon, propvar);
+            HRESULT hr;
+            fixed (PROPERTYKEY* pKeyDarkModeRibbon = &RibbonProperties.DarkModeRibbon)
+                hr = propertyStore.SetValue(pKeyDarkModeRibbon, propvar);
             if (hr.Succeeded)
             {
                 hr = propertyStore.Commit();
@@ -837,7 +859,8 @@ namespace WinForms.Ribbon
             void* voidPtr;
             object contextualUI;
 
-            hr = Framework.GetView(contextPopupID, IIDGuidIUIContextualUI, out voidPtr);
+            fixed (Guid* guidLocal = &IIDGuidIUIContextualUI)
+                hr = Framework.GetView(contextPopupID, guidLocal, &voidPtr);
             if (hr.Succeeded)
             {
                 if ((IntPtr)voidPtr != IntPtr.Zero)
@@ -925,6 +948,10 @@ namespace WinForms.Ribbon
             _qatSetting!.Load();
 
             EventSet.Raise(s_ViewCreatedKey, this, EventArgs.Empty);
+            //if (Application.IsDarkModeEnabled)
+            //{
+            //    SetDarkModeRibbon(true);
+            //}
         }
 
         /// <summary>
@@ -1052,9 +1079,11 @@ namespace WinForms.Ribbon
             IUIRibbon uiRibbon = GetIUIRibbon();
             if (uiRibbon != null)
             {
+                HRESULT hr;
                 PROPVARIANT propvar;
                 IPropertyStore propstore = (IPropertyStore)uiRibbon;
-                HRESULT hr = propstore.GetValue(RibbonProperties.Minimized, out propvar);
+                fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
+                    hr = propstore.GetValue(pKeyMinimized, out propvar);
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
                 bool result = (bool)propvar; //PropVariantToBoolean
@@ -1067,14 +1096,17 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Specifies whether the ribbon is in a collapsed or expanded state
         /// </summary>
-        private void SetMinimized(bool value)
+        private unsafe void SetMinimized(bool value)
         {
             IUIRibbon uiRibbon = GetIUIRibbon();
             if (uiRibbon != null)
             {
-                PROPVARIANT propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+                HRESULT hr;
+                PROPVARIANT propvar;
+                propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
                 IPropertyStore propstore = (IPropertyStore)uiRibbon;
-                HRESULT hr = propstore.SetValue(RibbonProperties.Minimized, propvar);
+                fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
+                    hr = propstore.SetValue(pKeyMinimized, propvar);
                 hr = propstore.Commit();
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
@@ -1115,9 +1147,11 @@ namespace WinForms.Ribbon
             IUIRibbon uiRibbon = GetIUIRibbon();
             if (uiRibbon != null)
             {
+                HRESULT hr;
                 PROPVARIANT propvar;
                 IPropertyStore propstore = (IPropertyStore)uiRibbon;
-                HRESULT hr = propstore.GetValue(RibbonProperties.Viewable, out propvar);
+                fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
+                    hr = propstore.GetValue(pKeyViewable, out propvar);
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
                 bool result = (bool)propvar; //PropVariantToBoolean
@@ -1130,14 +1164,17 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Specifies whether the ribbon user interface (UI) is in a visible or hidden state
         /// </summary>
-        private void SetViewable(bool value)
+        private unsafe void SetViewable(bool value)
         {
             IUIRibbon uiRibbon = GetIUIRibbon();
             if (uiRibbon != null)
             {
-                PROPVARIANT propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+                HRESULT hr;
+                PROPVARIANT propvar;
+                propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
                 IPropertyStore propstore = (IPropertyStore)uiRibbon;
-                HRESULT hr = propstore.SetValue(RibbonProperties.Viewable, propvar);
+                fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
+                    hr = propstore.SetValue(pKeyViewable, propvar);
                 hr = propstore.Commit();
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
@@ -1178,9 +1215,11 @@ namespace WinForms.Ribbon
             IUIRibbon uiRibbon = GetIUIRibbon();
             if (uiRibbon != null)
             {
+                HRESULT hr;
                 PROPVARIANT propvar;
                 IPropertyStore propstore = (IPropertyStore)uiRibbon;
-                HRESULT hr = propstore.GetValue(RibbonProperties.QuickAccessToolbarDock, out propvar);
+                fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
+                    hr = propstore.GetValue(pKeyQuickAccessToolbarDock, out propvar);
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
                 uint result = (uint)propvar; //PropVariantToUInt32
@@ -1194,14 +1233,17 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Specifies whether the quick access toolbar is docked at the top or at the bottom
         /// </summary>
-        private void SetQuickAccessToolbarDock(UI_CONTROLDOCK value)
+        private unsafe void SetQuickAccessToolbarDock(UI_CONTROLDOCK value)
         {
             IUIRibbon uiRibbon = GetIUIRibbon();
             if (uiRibbon != null)
             {
-                PROPVARIANT propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
+                HRESULT hr;
+                PROPVARIANT propvar;
+                propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
                 IPropertyStore propstore = (IPropertyStore)uiRibbon;
-                HRESULT hr = propstore.SetValue(RibbonProperties.QuickAccessToolbarDock, propvar);
+                fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
+                    hr = propstore.SetValue(pKeyQuickAccessToolbarDock, propvar);
                 hr = propstore.Commit();
                 propstore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
@@ -1240,7 +1282,8 @@ namespace WinForms.Ribbon
             void* voidPtr;
             object uiRibbon;
 
-            hr = Framework.GetView(0, IIDGuidIUIRibbon, out voidPtr);
+            fixed (Guid* guidLocal = &IIDGuidIUIRibbon)
+                hr = Framework!.GetView(0, guidLocal, &voidPtr);
             if (hr.Succeeded)
             {
                 if ((IntPtr)voidPtr != IntPtr.Zero)

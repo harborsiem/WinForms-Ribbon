@@ -68,11 +68,6 @@ namespace WinForms.Ribbon
 
         public static T? DeserializeEmbeddedResource<T>(string resourceName, Assembly assembly) where T : class
         {
-            string[] resNames = assembly.GetManifestResourceNames();
-            if (!resNames.Contains(resourceName))
-            {
-                return null;
-            }
             Stream? stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null)
             {

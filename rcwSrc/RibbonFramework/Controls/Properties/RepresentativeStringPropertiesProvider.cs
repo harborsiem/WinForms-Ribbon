@@ -70,7 +70,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Representative string property
         /// </summary>
-        public string RepresentativeString
+        public unsafe string RepresentativeString
         {
             get
             {
@@ -82,7 +82,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.RepresentativeString);
+                    fixed (PROPERTYKEY* pKeyRepresentativeString = &RibbonProperties.RepresentativeString)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyRepresentativeString);
                 }
             }
         }

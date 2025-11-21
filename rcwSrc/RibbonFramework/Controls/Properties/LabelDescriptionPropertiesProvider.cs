@@ -73,7 +73,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Label description property
         /// </summary>
-        public string? LabelDescription
+        public unsafe string? LabelDescription
         {
             get
             {
@@ -90,7 +90,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.LabelDescription);
+                    fixed (PROPERTYKEY* pKeyLabelDescription = &RibbonProperties.LabelDescription)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLabelDescription);
                 }
             }
         }

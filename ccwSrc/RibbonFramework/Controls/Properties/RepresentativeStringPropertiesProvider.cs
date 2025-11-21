@@ -27,7 +27,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IRepresentativeStringPropertiesProvider
     /// </summary>
-    public sealed unsafe class RepresentativeStringPropertiesProvider : BasePropertiesProvider, IRepresentativeStringPropertiesProvider
+    public sealed class RepresentativeStringPropertiesProvider : BasePropertiesProvider, IRepresentativeStringPropertiesProvider
     {
         /// <summary>
         /// RepresentativeStringPropertiesProvider ctor
@@ -70,7 +70,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Representative string property
         /// </summary>
-        public string RepresentativeString
+        public unsafe string RepresentativeString
         {
             get
             {
@@ -82,8 +82,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pRepresentativeString = &RibbonProperties.RepresentativeString)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pRepresentativeString);
+                    fixed (PROPERTYKEY* pKeyRepresentativeString = &RibbonProperties.RepresentativeString)
+                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyRepresentativeString);
                 }
             }
         }

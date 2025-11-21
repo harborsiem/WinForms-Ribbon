@@ -27,7 +27,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of ILabelPropertiesProvider
     /// </summary>
-    public sealed unsafe class LabelPropertiesProvider : BasePropertiesProvider, ILabelPropertiesProvider
+    public sealed class LabelPropertiesProvider : BasePropertiesProvider, ILabelPropertiesProvider
     {
         /// <summary>
         /// LabelPropertiesProvider ctor
@@ -73,7 +73,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Label property
         /// </summary>
-        public string? Label
+        public unsafe string? Label
         {
             get
             {
@@ -90,8 +90,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pLabel = &RibbonProperties.Label)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pLabel);
+                    fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
+                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLabel);
                 }
             }
         }

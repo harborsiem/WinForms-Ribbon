@@ -31,8 +31,8 @@ namespace WinForms.Ribbon
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
-            fixed (PROPERTYKEY* pCommandId = &RibbonProperties.CommandId)
-                hr = cpIUISimplePropertySet->GetValue(pCommandId, &propvar);
+            fixed (PROPERTYKEY* pKeyCommandId = &RibbonProperties.CommandId)
+                hr = cpIUISimplePropertySet->GetValue(pKeyCommandId, &propvar);
             uint commandId = 0;
             if (propvar.vt == VARENUM.VT_UI4)
                 commandId = (uint)propvar;

@@ -105,6 +105,22 @@ namespace WinForms.Ribbon
             }
         }
 
+        ///// <summary>
+        ///// The mode of selected color.
+        ///// Can be: Normal or Monochrome.
+        ///// </summary>
+        //public UI_SwatchColorMode ColorMode
+        //{
+        //    get
+        //    {
+        //        return _colorPickerPropertiesProvider.ColorMode;
+        //    }
+        //    set
+        //    {
+        //        _colorPickerPropertiesProvider.ColorMode = value;
+        //    }
+        //}
+
         /// <summary>
         /// Defines the label for the "More colors..." button.
         /// </summary>

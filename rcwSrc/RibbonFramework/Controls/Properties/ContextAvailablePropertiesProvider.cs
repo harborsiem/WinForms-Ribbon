@@ -78,7 +78,8 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
-                    hr = _ribbon.Framework.GetUICommandProperty(_commandId, RibbonProperties.ContextAvailable, out propvar);
+                    fixed (PROPERTYKEY* pKeyContextAvailable = &RibbonProperties.ContextAvailable)
+                        hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeyContextAvailable, out propvar);
                     if (hr.Succeeded)
                     {
                         uint result;
@@ -100,7 +101,8 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
                     HRESULT hr;
-                    hr = _ribbon.Framework.SetUICommandProperty(_commandId, RibbonProperties.ContextAvailable, propvar);
+                    fixed (PROPERTYKEY* pKeyContextAvailable = &RibbonProperties.ContextAvailable)
+                        hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyContextAvailable, propvar);
                 }
             }
         }

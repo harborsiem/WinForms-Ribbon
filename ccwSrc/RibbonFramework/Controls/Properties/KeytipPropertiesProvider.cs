@@ -90,8 +90,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pKeytip = &RibbonProperties.Keytip)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeytip);
+                    fixed (PROPERTYKEY* pKeyKeytip = &RibbonProperties.Keytip)
+                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyKeytip);
                 }
             }
         }

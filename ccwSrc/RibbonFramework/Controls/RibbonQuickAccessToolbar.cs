@@ -17,12 +17,12 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Definition for qat property provider interface
     /// </summary>
-    internal unsafe interface IQatPropertyProvider
+    internal interface IQatPropertyProvider
     {
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection* ItemsSource { get; }
+        unsafe IUICollection* ItemsSource { get; }
     }
 
     /// <summary>
@@ -96,8 +96,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    fixed (PROPERTYKEY* pItemsSource = &RibbonProperties.ItemsSource)
-                        hr = Ribbon.Framework->GetUICommandProperty(CommandId, pItemsSource, &propvar);
+                    fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
+                        hr = Ribbon.Framework->GetUICommandProperty(CommandId, pKeyItemsSource, &propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection* result;
@@ -128,8 +128,8 @@ namespace WinForms.Ribbon
         {
             if (Ribbon.Framework != null)
             {
-                fixed (PROPERTYKEY* pItemsSource = &RibbonProperties.ItemsSource)
-                    Ribbon.Framework->InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pItemsSource);
+                fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
+                    Ribbon.Framework->InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
             }
         }
 

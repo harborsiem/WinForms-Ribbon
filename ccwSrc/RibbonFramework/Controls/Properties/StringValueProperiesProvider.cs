@@ -27,7 +27,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of IStringValuePropertiesProvider
     /// </summary>
-    public sealed unsafe class StringValuePropertiesProvider : BasePropertiesProvider, IStringValuePropertiesProvider
+    public sealed class StringValuePropertiesProvider : BasePropertiesProvider, IStringValuePropertiesProvider
     {
         /// <summary>
         /// StringValuePropertiesProvider ctor
@@ -78,8 +78,8 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pStringValue = &RibbonProperties.StringValue)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pStringValue, &propvar);
+                    fixed (PROPERTYKEY* pKeyStringValue = &RibbonProperties.StringValue)
+                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyStringValue, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -105,8 +105,8 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_stringValue, out propvar);
                     }
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pStringValue = &RibbonProperties.StringValue)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pStringValue, &propvar);
+                    fixed (PROPERTYKEY* pKeyStringValue = &RibbonProperties.StringValue)
+                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyStringValue, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }

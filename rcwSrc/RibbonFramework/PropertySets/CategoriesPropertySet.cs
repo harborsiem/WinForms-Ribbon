@@ -32,7 +32,8 @@ namespace WinForms.Ribbon
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
+            fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
+                hr = cpIUISimplePropertySet.GetValue(pKeyLabel, out propvar);
             PWSTR pwstr;
             string label = string.Empty;
             if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)
@@ -49,7 +50,8 @@ namespace WinForms.Ribbon
             }
 
             propvar = PROPVARIANT.Empty;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+            fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
+                hr = cpIUISimplePropertySet.GetValue(pKeyCategoryId, out propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX; //if VT_EMPTY
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;

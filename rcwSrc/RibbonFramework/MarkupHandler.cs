@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.IO;
+using System.Linq;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.LibraryLoader;
@@ -24,7 +25,7 @@ namespace WinForms.Ribbon
         private RibbonStrip _ribbon;
         private readonly string NameOfMarkupResource; //for Exceptions comment
         // Stash the delegate to keep it from being collected
-        private ENUMRESNAMEPROCW _enumResNameProcedure;
+        private readonly ENUMRESNAMEPROCW _enumResNameProcedure;
 
         public string? ResourceIdentifier { get; private set; }
 
@@ -36,6 +37,7 @@ namespace WinForms.Ribbon
             _ribbon = ribbon;
             ResourceIdentifier = ribbon.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
+            _enumResNameProcedure = EnumResNameProc;
             InitFramework(ribbon.MarkupResource, executingAssembly);
         }
 
@@ -299,10 +301,9 @@ namespace WinForms.Ribbon
         private unsafe string? GetResourceIdentifier()
         {
             List<string> names = new List<string>();
-            GCHandle namesHandle = GCHandle.Alloc(names);
+            GCHandle namesHandle = GCHandle.Alloc(names, GCHandleType.Pinned);
             try
             {
-                _enumResNameProcedure = EnumResNameProc;
                 //IntPtr enumResNameProc = Marshal.GetFunctionPointerForDelegate(_enumResNameProcedure);
                 fixed (char* pType = "UIFILE")
                     PInvoke.EnumResourceNames(MarkupDllHandle, pType, _enumResNameProcedure, (nint)namesHandle);
@@ -313,7 +314,7 @@ namespace WinForms.Ribbon
                     namesHandle.Free();
             }
             if (names.Count == 1)
-                return names[0];
+                return names[0]; //default value = APPLICATION_RIBBON
             return null;
         }
 
@@ -365,10 +366,8 @@ namespace WinForms.Ribbon
         /// <param name="executingAssembly"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        internal static Dictionary<ushort, MarkupResIds>? ParseHeader(string? markupHeader, Assembly executingAssembly)
+        internal Dictionary<ushort, MarkupResIds>? ParseHeader(string? markupHeader, Assembly executingAssembly)
         {
-            if (markupHeader == null)
-                return null;
             using Stream? stream = executingAssembly.GetManifestResourceStream(markupHeader);
             if (stream == null)
                 return null;

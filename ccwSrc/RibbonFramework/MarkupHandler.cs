@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.IO;
@@ -300,7 +301,7 @@ namespace WinForms.Ribbon
         private unsafe string? GetResourceIdentifier()
         {
             List<string> names = new List<string>();
-            GCHandle namesHandle = GCHandle.Alloc(names);
+            GCHandle namesHandle = GCHandle.Alloc(names, GCHandleType.Pinned);
             try
             {
                 fixed (char* pType = "UIFILE")
@@ -368,10 +369,8 @@ namespace WinForms.Ribbon
         /// <param name="executingAssembly"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        internal static Dictionary<ushort, MarkupResIds>? ParseHeader(string? markupHeader, Assembly executingAssembly)
+        internal Dictionary<ushort, MarkupResIds>? ParseHeader(string? markupHeader, Assembly executingAssembly)
         {
-            if (markupHeader == null)
-                return null;
             using Stream? stream = executingAssembly.GetManifestResourceStream(markupHeader);
             if (stream == null)
                 return null;

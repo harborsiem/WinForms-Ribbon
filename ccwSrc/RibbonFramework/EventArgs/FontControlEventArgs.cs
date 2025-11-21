@@ -91,8 +91,8 @@ namespace WinForms.Ribbon
             PROPVARIANT propvar;
             if (commandExecutionProperties != null)
             {
-                fixed (PROPERTYKEY* pFontProperties_ChangedProperties = &RibbonProperties.FontProperties_ChangedProperties)
-                    hr = commandExecutionProperties->GetValue(pFontProperties_ChangedProperties, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_ChangedProperties = &RibbonProperties.FontProperties_ChangedProperties)
+                    hr = commandExecutionProperties->GetValue(pKeyFontProperties_ChangedProperties, &propvar);
                 if (propvar.vt != VARENUM.VT_EMPTY)
                 {
                     IPropertyStore* cpPropertyStore;
@@ -380,8 +380,8 @@ namespace WinForms.Ribbon
                 hr = cpPropertyStore->GetAt(i, &key);
                 if (key == RibbonProperties.FontProperties_Family)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_Family = &RibbonProperties.FontProperties_Family)
-                        hr = cpPropertyStore->GetValue(pFontProperties_Family, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_Family, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         PWSTR pwstr;
@@ -394,8 +394,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Size)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_Size = &RibbonProperties.FontProperties_Size)
-                        hr = cpPropertyStore->GetValue(pFontProperties_Size, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_Size, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         decimal decValue = (decimal)propvar; //UIPropertyToDecimal
@@ -404,8 +404,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Bold)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
-                        hr = cpPropertyStore->GetValue(pFontProperties_Bold, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_Bold, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -415,8 +415,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Italic)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
-                        hr = cpPropertyStore->GetValue(pFontProperties_Italic, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_Italic, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -426,8 +426,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Underline)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
-                        hr = cpPropertyStore->GetValue(pFontProperties_Underline, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_Underline, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -437,8 +437,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Strikethrough)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
-                        hr = cpPropertyStore->GetValue(pFontProperties_Strikethrough, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_Strikethrough, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -448,8 +448,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_ForegroundColor)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
-                        hr = cpPropertyStore->GetValue(pFontProperties_ForegroundColor, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_ForegroundColor, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -459,8 +459,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_BackgroundColor)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
-                        hr = cpPropertyStore->GetValue(pFontProperties_BackgroundColor, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_BackgroundColor, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -470,8 +470,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_ForegroundColorType)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
-                        hr = cpPropertyStore->GetValue(pFontProperties_ForegroundColorType, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_ForegroundColorType, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
@@ -484,8 +484,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_BackgroundColorType)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
-                        hr = cpPropertyStore->GetValue(pFontProperties_BackgroundColorType, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_BackgroundColorType, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
@@ -498,8 +498,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_VerticalPositioning)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
-                        hr = cpPropertyStore->GetValue(pFontProperties_VerticalPositioning, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_VerticalPositioning, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -509,8 +509,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_DeltaSize)
                 {
-                    fixed (PROPERTYKEY* pFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
-                        hr = cpPropertyStore->GetValue(pFontProperties_DeltaSize, &propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
+                        hr = cpPropertyStore->GetValue(pKeyFontProperties_DeltaSize, &propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         if (!propvar.IsEmpty)

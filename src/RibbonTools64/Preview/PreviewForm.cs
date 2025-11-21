@@ -248,6 +248,10 @@ namespace UIRibbonTools
             backgroundColorFrame.Init(_ribbon.GetBackgroundColor(), WhichColor.Background, _ribbon.SetBackgroundColor);
             highlightColorFrame.Init(_ribbon.GetHighlightColor(), WhichColor.Highlight, _ribbon.SetHighlightColor);
             textColorFrame.Init(_ribbon.GetTextColor(), WhichColor.Text, _ribbon.SetTextColor);
+#if NET10_0_OR_GREATER
+            if (Application.ColorMode == SystemColorMode.Dark)
+                _ribbon.SetDarkModeRibbon(true);
+#endif
             //bool exist = _ribbon.SetApplicationButtonColor(_highlightDefault);
             //if (exist)
             //{

@@ -119,12 +119,14 @@ namespace WinForms.Ribbon
                     // set family
                     if ((_family == null) || (_family.Trim() == string.Empty))
                     {
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Family, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Family, in propvar);
                     }
                     else
                     {
                         UIPropVariant.UIInitPropertyFromString(_family, out propvar);
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Family, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Family, in propvar);
                         propvar.Clear(); //PropVariantClear
                     }
 
@@ -132,70 +134,80 @@ namespace WinForms.Ribbon
                     if (_size.HasValue)
                     {
                         propvar = (PROPVARIANT)_size.Value; //UIInitPropertyFromDecimal
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Size, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Size, in propvar);
                     }
 
                     // set bold
                     if (_bold.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_bold.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Bold, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Bold, in propvar);
                     }
 
                     // set italic
                     if (_italic.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_italic.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Italic, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Italic, in propvar);
                     }
 
                     // set underline
                     if (_underline.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_underline.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Underline, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Underline, in propvar);
                     }
 
                     // set strikethrough
                     if (_strikethrough.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_strikethrough.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_Strikethrough, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_Strikethrough, in propvar);
                     }
 
                     // set foregroundColor
                     if (_foregroundColor.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)ColorTranslator.ToWin32(_foregroundColor.Value); //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_ForegroundColor, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_ForegroundColor, in propvar);
                     }
 
                     // set foregroundColorType
                     if (_foregroundColorType.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_foregroundColorType.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_ForegroundColorType, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_ForegroundColorType, in propvar);
                     }
 
                     // set backgroundColor
                     if (_backgroundColor.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)ColorTranslator.ToWin32(_backgroundColor.Value); //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_BackgroundColor, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_BackgroundColor, in propvar);
                     }
 
                     // set backgroundColorType
                     if (_backgroundColorType.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_backgroundColorType.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_BackgroundColorType, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_BackgroundColorType, in propvar);
                     }
 
                     // set verticalPositioning
                     if (_verticalPositioning.HasValue)
                     {
                         propvar = (PROPVARIANT)(uint)_verticalPositioning.Value; //InitPropVariantFromUInt32
-                        cpFontPropertyStore.SetValue(RibbonProperties.FontProperties_VerticalPositioning, in propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+                            cpFontPropertyStore.SetValue(pKeyFontProperties_VerticalPositioning, in propvar);
                     }
 
                     // set new font properties
@@ -210,7 +222,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Font properties property
         /// </summary>
-        private IPropertyStore? FontProperties
+        private unsafe IPropertyStore? FontProperties
         {
             get
             {
@@ -218,7 +230,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    hr = _ribbon.Framework.GetUICommandProperty(_commandId, RibbonProperties.FontProperties, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties = &RibbonProperties.FontProperties)
+                        hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeyFontProperties, out propvar);
                     if (hr.Succeeded)
                     {
                         IPropertyStore result;
@@ -248,7 +261,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Family, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_Family, out propvar);
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
                         string result = new string(pwstr); // pwstr.ToString();
@@ -265,7 +279,7 @@ namespace WinForms.Ribbon
                 _family = value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -284,7 +298,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Size, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_Size, out propvar);
                         decimal decValue = (decimal)propvar; //UIPropertyToDecimal
                         return decValue;
                     }
@@ -297,7 +312,7 @@ namespace WinForms.Ribbon
                 _size = value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -316,7 +331,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_Bold, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                         return (FontProperties)retResult;
@@ -330,7 +346,7 @@ namespace WinForms.Ribbon
                 _bold = (UI_FONTPROPERTIES)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -349,7 +365,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_Italic, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                         return (FontProperties)retResult;
@@ -363,7 +380,7 @@ namespace WinForms.Ribbon
                 _italic = (UI_FONTPROPERTIES)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -382,7 +399,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_Underline, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTUNDERLINE retResult = (UI_FONTUNDERLINE)result;
                         return (FontUnderline)retResult;
@@ -396,7 +414,7 @@ namespace WinForms.Ribbon
                 _underline = (UI_FONTUNDERLINE)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -415,7 +433,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_Strikethrough, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                         return (FontProperties)retResult;
@@ -429,7 +448,7 @@ namespace WinForms.Ribbon
                 _strikethrough = (UI_FONTPROPERTIES)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -448,7 +467,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_ForegroundColorType, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_SWATCHCOLORTYPE swatchColorType = (UI_SWATCHCOLORTYPE)result;
 
@@ -456,7 +476,8 @@ namespace WinForms.Ribbon
                         {
                             case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_RGB:
                                 PROPVARIANT propForegroundColor;
-                                hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_ForegroundColor, out propForegroundColor);
+                                fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+                                    hr = cpIPropertyStore.GetValue(pKeyFontProperties_ForegroundColor, out propForegroundColor);
                                 uint resultRGB = (uint)propForegroundColor; //PropVariantToUInt32
                                 Color retResult = ColorTranslator.FromWin32((int)resultRGB);
                                 return retResult;
@@ -481,7 +502,7 @@ namespace WinForms.Ribbon
 
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -500,7 +521,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_BackgroundColorType, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_SWATCHCOLORTYPE swatchColorType = (UI_SWATCHCOLORTYPE)result;
 
@@ -508,7 +530,8 @@ namespace WinForms.Ribbon
                         {
                             case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_RGB:
                                 PROPVARIANT propBackgroundColor;
-                                hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_BackgroundColor, out propBackgroundColor);
+                                fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+                                    hr = cpIPropertyStore.GetValue(pKeyFontProperties_BackgroundColor, out propBackgroundColor);
                                 uint resultRGB = (uint)propBackgroundColor; //PropVariantToUInt32
                                 Color retResult = ColorTranslator.FromWin32((int)resultRGB);
                                 return retResult;
@@ -533,7 +556,7 @@ namespace WinForms.Ribbon
 
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -552,7 +575,8 @@ namespace WinForms.Ribbon
                     {
                         HRESULT hr;
                         PROPVARIANT propvar;
-                        hr = cpIPropertyStore.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
+                        fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_VerticalPositioning, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTVERTICALPOSITION retResult = (UI_FONTVERTICALPOSITION)result;
                         return (FontVerticalPosition)retResult;
@@ -566,7 +590,7 @@ namespace WinForms.Ribbon
                 _verticalPositioning = (UI_FONTVERTICALPOSITION)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, null);
+                    HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }

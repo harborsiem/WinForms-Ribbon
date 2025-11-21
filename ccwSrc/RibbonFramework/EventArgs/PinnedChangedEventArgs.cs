@@ -130,8 +130,8 @@ namespace WinForms.Ribbon
             PROPVARIANT propvar;
             // If Pinning is not set then output is null and HRESULT is not S_OK
             HRESULT hr;
-            fixed (PROPERTYKEY* pPinned = &RibbonProperties.Pinned)
-                hr = commandExecutionProperties->GetValue(pPinned, &propvar);
+            fixed (PROPERTYKEY* pKeyPinned = &RibbonProperties.Pinned)
+                hr = commandExecutionProperties->GetValue(pKeyPinned, &propvar);
             if (hr == HRESULT.S_OK)
             {
                 bool result = (bool)propvar; //PropVariantToBoolean

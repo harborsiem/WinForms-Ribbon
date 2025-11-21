@@ -19,7 +19,7 @@ namespace WinForms.Ribbon
     /// Helper class that wraps a gallery item IUISimplePropertySet.
     /// Should we have a IDisposable for IUIImage Release ???
     /// </summary>
-    public sealed unsafe class GalleryItemPropertySet : AbstractPropertySet
+    public sealed class GalleryItemPropertySet : AbstractPropertySet
     {
         private string? _label;
         private uint? _categoryId;
@@ -34,8 +34,8 @@ namespace WinForms.Ribbon
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
-            fixed (PROPERTYKEY* pLabel = &RibbonProperties.Label)
-                hr = cpIUISimplePropertySet->GetValue(pLabel, &propvar);
+            fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
+                hr = cpIUISimplePropertySet->GetValue(pKeyLabel, &propvar);
 
             PWSTR pwstr;
             string label = string.Empty;
@@ -53,16 +53,16 @@ namespace WinForms.Ribbon
             }
 
             propvar = PROPVARIANT.Empty;
-            fixed (PROPERTYKEY* pCategoryId = &RibbonProperties.CategoryId)
-                hr = cpIUISimplePropertySet->GetValue(pCategoryId, &propvar);
+            fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
+                hr = cpIUISimplePropertySet->GetValue(pKeyCategoryId, &propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;
             //categoryId = PInvoke.PropVariantToUInt32WithDefault(&propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
 
             propvar = PROPVARIANT.Empty;
-            fixed (PROPERTYKEY* pItemImage = &RibbonProperties.ItemImage)
-                hr = cpIUISimplePropertySet->GetValue(pItemImage, &propvar);
+            fixed (PROPERTYKEY* pKeyItemImage = &RibbonProperties.ItemImage)
+                hr = cpIUISimplePropertySet->GetValue(pKeyItemImage, &propvar);
             IUIImage* cpIUIImage = null;
             UIImage? uIImage = null;
             if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)

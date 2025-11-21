@@ -33,21 +33,24 @@ namespace WinForms.Ribbon
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandId, out propvar);
+            fixed (PROPERTYKEY* pKeyCommandId = &RibbonProperties.CommandId)
+                hr = cpIUISimplePropertySet.GetValue(pKeyCommandId, out propvar);
             uint commandId = 0;
             if (propvar.vt == VARENUM.VT_UI4)
                 commandId = (uint)propvar;
             //commandId = PInvoke.PropVariantToUInt32WithDefault(propvar, 0);
 
             propvar = PROPVARIANT.Empty;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+            fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
+                hr = cpIUISimplePropertySet.GetValue(pKeyCategoryId, out propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;
             //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
 
             propvar = PROPVARIANT.Empty;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CommandType, out propvar);
+            fixed (PROPERTYKEY* pKeyCommandType = &RibbonProperties.CommandType)
+                hr = cpIUISimplePropertySet.GetValue(pKeyCommandType, out propvar);
             UI_COMMANDTYPE commandType = UI_COMMANDTYPE.UI_COMMANDTYPE_UNKNOWN;
             if (propvar.vt == VARENUM.VT_UI4)
                 commandType = (UI_COMMANDTYPE)(uint)propvar;

@@ -17,7 +17,9 @@ namespace UIRibbonTools
         private bool _suspendEvent;
         private Padding _upDownMargin;
         private Padding _buttonMargin;
+#if FixHighDpi
         int diffHeight;
+#endif
         //private string[] _colorsText = { "Red", "Green", "Blue" };
         //private string[] _hsbText = { "Hue", "Sat.", "Bright." };
 

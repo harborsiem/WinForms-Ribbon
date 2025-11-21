@@ -18,7 +18,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a categories item IUISimplePropertySet.
     /// </summary>
-    public sealed unsafe class CategoriesPropertySet : AbstractPropertySet
+    public sealed class CategoriesPropertySet : AbstractPropertySet
     {
         private string? _label;
         private uint? _categoryId;
@@ -32,8 +32,8 @@ namespace WinForms.Ribbon
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
-            fixed (PROPERTYKEY* pLabel = &RibbonProperties.Label)
-                hr = cpIUISimplePropertySet->GetValue(pLabel, &propvar);
+            fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
+                hr = cpIUISimplePropertySet->GetValue(pKeyLabel, &propvar);
 
             PWSTR pwstr;
             string label = string.Empty;
@@ -51,8 +51,8 @@ namespace WinForms.Ribbon
             }
 
             propvar = PROPVARIANT.Empty;
-            fixed (PROPERTYKEY* pCategoryId = &RibbonProperties.CategoryId)
-                hr = cpIUISimplePropertySet->GetValue(pCategoryId, &propvar);
+            fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
+                hr = cpIUISimplePropertySet->GetValue(pKeyCategoryId, &propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX; //if VT_EMPTY
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;

@@ -17,7 +17,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Helper class that wraps a recent items simple property set.
     /// </summary>
-    public sealed unsafe class RecentItemsPropertySet : IUISimplePropertySet.Interface
+    public sealed class RecentItemsPropertySet : IUISimplePropertySet.Interface
     {
         private string _label;
         private string _labelDescription;

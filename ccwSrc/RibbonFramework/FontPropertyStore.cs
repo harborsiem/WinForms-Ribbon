@@ -56,8 +56,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_Family = &RibbonProperties.FontProperties_Family)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_Family, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Family, &propvar);
                 PWSTR pwstr;
                 hr = UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
                 string result = new string(pwstr); // pwstr.ToString();
@@ -70,14 +70,14 @@ namespace WinForms.Ribbon
         /// <summary>
         /// The size of the font.
         /// </summary>
-        public decimal Size
+        public unsafe decimal Size
         {
             get
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_Size = &RibbonProperties.FontProperties_Size)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_Size, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Size, &propvar);
                 decimal decValue = (decimal)propvar; //UIPropertyToDecimal
                 return decValue;
             }
@@ -92,8 +92,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_Bold, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Bold, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                 return (FontProperties)retResult;
@@ -109,8 +109,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_Italic, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Italic, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                 return (FontProperties)retResult;
@@ -126,8 +126,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_Underline, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Underline, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTUNDERLINE retResult = (UI_FONTUNDERLINE)result;
                 return (FontUnderline)retResult;
@@ -144,8 +144,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_Strikethrough, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Strikethrough, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                 return (FontProperties)retResult;
@@ -163,8 +163,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_ForegroundColor, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_ForegroundColor, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 Color retResult = ColorTranslator.FromWin32((int)result);
                 return retResult;
@@ -182,8 +182,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_ForegroundColorType, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_ForegroundColorType, &propvar);
                 uint result;
                 if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
                     result = (uint)(int)propvar;
@@ -203,8 +203,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_DeltaSize, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_DeltaSize, &propvar);
                 if (hr.Succeeded)
                 {
                     if (propvar.IsEmpty)
@@ -228,8 +228,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_BackgroundColor, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_BackgroundColor, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 Color retResult = ColorTranslator.FromWin32((int)result);
                 return retResult;
@@ -247,8 +247,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_BackgroundColorType, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_BackgroundColorType, &propvar);
                 uint result;
                 if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
                     result = (uint)(int)propvar;
@@ -269,8 +269,8 @@ namespace WinForms.Ribbon
             {
                 PROPVARIANT propvar;
                 HRESULT hr;
-                fixed (PROPERTYKEY* pFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
-                    hr = _cpPropertyStore->GetValue(pFontProperties_VerticalPositioning, &propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_VerticalPositioning, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTVERTICALPOSITION retResult = (UI_FONTVERTICALPOSITION)result;
                 return (FontVerticalPosition)retResult;

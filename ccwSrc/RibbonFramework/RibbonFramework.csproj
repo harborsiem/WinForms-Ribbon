@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>
@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.217</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.252</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

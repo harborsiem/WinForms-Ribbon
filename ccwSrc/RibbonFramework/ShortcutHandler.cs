@@ -25,9 +25,6 @@ namespace WinForms.Ribbon
         {
             _ribbonShortcutTable = null;
 
-            if (string.IsNullOrEmpty(_ribbon.ShortcutTableResourceName))
-                return;
-
             _ribbonShortcutTable = Util.DeserializeEmbeddedResource<RibbonShortcutTable>(
                 _ribbon.ShortcutTableResourceName, assembly);
             if (_ribbonShortcutTable != null)

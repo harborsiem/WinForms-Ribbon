@@ -84,7 +84,8 @@ namespace WinForms.Ribbon
             PROPVARIANT propvar;
             if (commandExecutionProperties != null)
             {
-                hr = commandExecutionProperties.GetValue(RibbonProperties.FontProperties_ChangedProperties, out propvar);
+                fixed (PROPERTYKEY* pKeyFontProperties_ChangedProperties = &RibbonProperties.FontProperties_ChangedProperties)
+                    hr = commandExecutionProperties.GetValue(pKeyFontProperties_ChangedProperties, out propvar);
                 if (propvar.vt != VARENUM.VT_EMPTY)
                 {
                     IPropertyStore cpPropertyStore;
@@ -113,7 +114,8 @@ namespace WinForms.Ribbon
         //        hr = store.GetAt(i, &key);
         //        if (key == RibbonProperties.FontProperties_Family)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+        //                hr = store.GetValue(pKeyFontProperties_Family, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                PWSTR pwstr;
@@ -125,7 +127,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Size)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Size, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+        //                hr = store.GetValue(pKeyFontProperties_Size, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.Size = (decimal)propvar;
@@ -133,7 +136,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Bold)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+        //                hr = store.GetValue(pKeyFontProperties_Bold, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.Bold = (FontProperties)(uint)propvar;
@@ -141,7 +145,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Italic)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+        //                hr = store.GetValue(pKeyFontProperties_Italic, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.Italic = (FontProperties)(uint)propvar;
@@ -149,7 +154,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Underline)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+        //                hr = store.GetValue(pKeyFontProperties_Underline, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.Underline = (FontUnderline)(uint)propvar;
@@ -157,7 +163,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Strikethrough)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+        //                hr = store.GetValue(pKeyFontProperties_Strikethrough, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.Strikethrough = (FontProperties)(uint)propvar;
@@ -165,7 +172,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_ForegroundColor)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColor, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+        //                hr = store.GetValue(pKeyFontProperties_ForegroundColor, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.ForegroundColor = ColorTranslator.FromWin32((int)(uint)propvar);
@@ -173,7 +181,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_BackgroundColor)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColor, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+        //                hr = store.GetValue(pKeyFontProperties_BackgroundColor, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.BackgroundColor = ColorTranslator.FromWin32((int)(uint)propvar);
@@ -181,7 +190,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_ForegroundColorType)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColorType, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+        //                hr = store.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                SwatchColorType colorType;
@@ -194,7 +204,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_BackgroundColorType)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColorType, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+        //                hr = store.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                SwatchColorType colorType;
@@ -207,7 +218,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_VerticalPositioning)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+        //                hr = store.GetValue(pKeyFontProperties_VerticalPositioning, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.VerticalPositioning = (FontVerticalPosition)(uint)propvar;
@@ -215,7 +227,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_DeltaSize)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_DeltaSize, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize) 
+        //                hr = store.GetValue(pKeyFontProperties_DeltaSize, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                changedFontProps.DeltaSize = (FontDeltaSize)(uint)propvar;
@@ -238,7 +251,8 @@ namespace WinForms.Ribbon
         //        hr = store.GetAt(i, &key);
         //        if (key == RibbonProperties.FontProperties_Family)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+        //                hr = store.GetValue(pKeyFontProperties_Family, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                PWSTR pwstr;
@@ -251,7 +265,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Size)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Size, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+        //                hr = store.GetValue(pKeyFontProperties_Size, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (decimal)propvar;
@@ -260,7 +275,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Bold)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+        //                hr = store.GetValue(pKeyFontProperties_Bold, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (FontProperties)(uint)propvar;
@@ -269,7 +285,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Italic)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+        //                hr = store.GetValue(pKeyFontProperties_Italic, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (FontProperties)(uint)propvar;
@@ -278,7 +295,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Underline)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+        //                hr = store.GetValue(pKeyFontProperties_Underline, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (FontUnderline)(uint)propvar;
@@ -287,7 +305,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_Strikethrough)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+        //                hr = store.GetValue(pKeyFontProperties_Strikethrough, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (FontProperties)(uint)propvar;
@@ -296,7 +315,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_ForegroundColor)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColor, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+        //                hr = store.GetValue(pKeyFontProperties_ForegroundColor, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = ColorTranslator.FromWin32((int)(uint)propvar);
@@ -305,7 +325,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_BackgroundColor)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColor, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+        //                hr = store.GetValue(pKeyFontProperties_BackgroundColor, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = ColorTranslator.FromWin32((int)(uint)propvar);
@@ -314,7 +335,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_ForegroundColorType)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColorType, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+        //                hr = store.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                if (propvar.vt == VARENUM.VT_I4)
@@ -326,7 +348,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_BackgroundColorType)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColorType, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+        //                hr = store.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                if (propvar.vt == VARENUM.VT_I4)
@@ -338,7 +361,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_VerticalPositioning)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+        //                hr = store.GetValue(pKeyFontProperties_VerticalPositioning, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (FontVerticalPosition)(uint)propvar;
@@ -347,7 +371,8 @@ namespace WinForms.Ribbon
         //        }
         //        else if (key == RibbonProperties.FontProperties_DeltaSize)
         //        {
-        //            hr = store.GetValue(RibbonProperties.FontProperties_DeltaSize, out propvar);
+        //            fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
+        //                hr = store.GetValue(pKeyFontProperties_DeltaSize, out propvar);
         //            if (hr == HRESULT.S_OK)
         //            {
         //                objValue = (FontDeltaSize)(uint)propvar;
@@ -369,10 +394,11 @@ namespace WinForms.Ribbon
             for (uint i = 0; i < count; i++)
             {
                 PROPERTYKEY key;
-                hr = cpPropertyStore.GetAt(i, out key);
+                hr = cpPropertyStore.GetAt(i, &key);
                 if (key == RibbonProperties.FontProperties_Family)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_Family, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_Family, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         PWSTR pwstr;
@@ -385,7 +411,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Size)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_Size, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_Size, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         decimal decValue = (decimal)propvar; //UIPropertyToDecimal
@@ -394,7 +421,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Bold)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_Bold, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -404,7 +432,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Italic)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_Italic, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -414,7 +443,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Underline)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_Underline, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -424,7 +454,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_Strikethrough)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_Strikethrough, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -434,7 +465,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_ForegroundColor)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_ForegroundColor, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_ForegroundColor, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -444,7 +476,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_BackgroundColor)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_BackgroundColor, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_BackgroundColor, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -454,7 +487,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_ForegroundColorType)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_ForegroundColorType, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
@@ -467,7 +501,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_BackgroundColorType)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_BackgroundColorType, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
@@ -480,7 +515,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_VerticalPositioning)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_VerticalPositioning, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         uintResult = (uint)propvar; //PropVariantToUInt32
@@ -490,7 +526,8 @@ namespace WinForms.Ribbon
                 }
                 else if (key == RibbonProperties.FontProperties_DeltaSize)
                 {
-                    hr = cpPropertyStore.GetValue(RibbonProperties.FontProperties_DeltaSize, out propvar);
+                    fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
+                        hr = cpPropertyStore.GetValue(pKeyFontProperties_DeltaSize, out propvar);
                     if (hr == HRESULT.S_OK)
                     {
                         if (!propvar.IsEmpty)
@@ -509,13 +546,15 @@ namespace WinForms.Ribbon
         //    HRESULT hr;
         //    object objValue;
         //    PROPVARIANT propvar = PROPVARIANT.Empty;
-        //    hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColor, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+        //        hr = store.GetValue(pKeyFontProperties_BackgroundColor, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = ColorTranslator.FromWin32((int)(uint)propvar);
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_BackgroundColor), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_BackgroundColorType, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+        //        hr = store.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
@@ -524,19 +563,22 @@ namespace WinForms.Ribbon
         //            objValue = (SwatchColorType)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_BackgroundColorType), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_Bold, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
+        //        hr = store.GetValue(pKeyFontProperties_Bold, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (FontProperties)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Bold), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_DeltaSize, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
+        //        hr = store.GetValue(pKeyFontProperties_DeltaSize, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (FontDeltaSize)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_DeltaSize), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_Family, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
+        //        hr = store.GetValue(pKeyFontProperties_Family, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        PWSTR pwstr;
@@ -546,13 +588,15 @@ namespace WinForms.Ribbon
         //        propvar.Clear(); //PropVariantClear
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Family), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColor, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+        //        hr = store.GetValue(pKeyFontProperties_ForegroundColor, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = ColorTranslator.FromWin32((int)(uint)propvar);
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_ForegroundColor), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_ForegroundColorType, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+        //        hr = store.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
@@ -561,31 +605,36 @@ namespace WinForms.Ribbon
         //            objValue = (SwatchColorType)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_ForegroundColorType), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_Italic, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
+        //        hr = store.GetValue(pKeyFontProperties_Italic, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (FontProperties)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Italic), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_Size, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
+        //        hr = store.GetValue(pKeyFontProperties_Size, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (decimal)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Size), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_Strikethrough, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
+        //        hr = store.GetValue(pKeyFontProperties_Strikethrough, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (FontProperties)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Strikethrough), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_Underline, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
+        //        hr = store.GetValue(pKeyFontProperties_Underline, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (FontUnderline)(uint)propvar;
         //        keys.Add(RibbonProperties.GetPropertyKeyName(RibbonProperties.FontProperties_Underline), objValue);
         //    }
-        //    hr = store.GetValue(RibbonProperties.FontProperties_VerticalPositioning, out propvar);
+        //    fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
+        //        hr = store.GetValue(pKeyFontProperties_VerticalPositioning, out propvar);
         //    if (hr == HRESULT.S_OK)
         //    {
         //        objValue = (FontVerticalPosition)(uint)propvar;

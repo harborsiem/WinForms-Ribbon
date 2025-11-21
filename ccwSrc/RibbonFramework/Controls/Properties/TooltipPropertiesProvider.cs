@@ -32,7 +32,7 @@ namespace WinForms.Ribbon
     /// <summary>
     /// Implementation of ITooltipPropertiesProvider
     /// </summary>
-    public sealed unsafe class TooltipPropertiesProvider : BasePropertiesProvider, ITooltipPropertiesProvider
+    public sealed class TooltipPropertiesProvider : BasePropertiesProvider, ITooltipPropertiesProvider
     {
         /// <summary>
         /// TooltipPropertiesProvider ctor
@@ -105,9 +105,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pTooltipTitle = &RibbonProperties.TooltipTitle)
+                    fixed (PROPERTYKEY* pKeyTooltipTitle = &RibbonProperties.TooltipTitle)
                     {
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pTooltipTitle);
+                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyTooltipTitle);
                     }
                 }
             }
@@ -133,9 +133,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pTooltipDescription = &RibbonProperties.TooltipDescription)
+                    fixed (PROPERTYKEY* pKeyTooltipDescription = &RibbonProperties.TooltipDescription)
                     {
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pTooltipDescription);
+                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyTooltipDescription);
                     }
                 }
             }

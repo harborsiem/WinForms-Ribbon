@@ -33,7 +33,8 @@ namespace WinForms.Ribbon
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.Label, out propvar);
+            fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
+                hr = cpIUISimplePropertySet.GetValue(pKeyLabel, out propvar);
             PWSTR pwstr;
             string label = string.Empty;
             if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)
@@ -50,14 +51,16 @@ namespace WinForms.Ribbon
             }
 
             propvar = PROPVARIANT.Empty;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.CategoryId, out propvar);
+            fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
+                hr = cpIUISimplePropertySet.GetValue(pKeyCategoryId, out propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;
             //categoryId = PInvoke.PropVariantToUInt32WithDefault(propvar, PInvoke.UI_COLLECTION_INVALIDINDEX);
 
             propvar = PROPVARIANT.Empty;
-            hr = cpIUISimplePropertySet.GetValue(RibbonProperties.ItemImage, out propvar);
+            fixed (PROPERTYKEY* pKeyItemImage = &RibbonProperties.ItemImage)
+                hr = cpIUISimplePropertySet.GetValue(pKeyItemImage, out propvar);
             IUIImage? cpIUIImage = null;
             UIImage? uIImage = null;
             if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)

@@ -73,7 +73,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Keytip property
         /// </summary>
-        public string? Keytip
+        public unsafe string? Keytip
         {
             get
             {
@@ -90,7 +90,8 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
-                    hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, RibbonProperties.Keytip);
+                    fixed (PROPERTYKEY* pKeyKeytip = &RibbonProperties.Keytip)
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyKeytip);
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection? ItemsSource { get; }
+        unsafe IUICollection? ItemsSource { get; }
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection? IQatPropertyProvider.ItemsSource
+        unsafe IUICollection? IQatPropertyProvider.ItemsSource
         {
             get
             {
@@ -91,7 +91,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    hr = Ribbon.Framework.GetUICommandProperty(CommandId, RibbonProperties.ItemsSource, out propvar);
+                    fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
+                        hr = Ribbon.Framework.GetUICommandProperty(CommandId, pKeyItemsSource, out propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection result;
@@ -122,8 +123,8 @@ namespace WinForms.Ribbon
         {
             if (Ribbon.Framework != null)
             {
-                fixed (PROPERTYKEY* pItemsSource = &RibbonProperties.ItemsSource)
-                    Ribbon.Framework.InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pItemsSource);
+                fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
+                    Ribbon.Framework.InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
             }
         }
 

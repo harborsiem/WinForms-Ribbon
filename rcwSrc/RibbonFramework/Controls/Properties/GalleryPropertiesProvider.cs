@@ -63,12 +63,12 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Categories property
         /// </summary>
-        IUICollection? Categories { get; }
+        unsafe IUICollection? Categories { get; }
 
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection? ItemsSource { get; }
+        unsafe IUICollection? ItemsSource { get; }
     }
 
     /// <summary>
@@ -198,7 +198,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Categories property
         /// </summary>
-        IUICollection? IGalleryProvider.Categories
+        unsafe IUICollection? IGalleryProvider.Categories
         {
             get
             {
@@ -206,7 +206,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    hr = _ribbon.Framework.GetUICommandProperty(_commandId, RibbonProperties.Categories, out propvar);
+                    fixed (PROPERTYKEY* pKeyCategories = &RibbonProperties.Categories)
+                        hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeyCategories, out propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection result;
@@ -223,7 +224,7 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Items source property
         /// </summary>
-        IUICollection? IGalleryProvider.ItemsSource
+        unsafe IUICollection? IGalleryProvider.ItemsSource
         {
             get
             {
@@ -231,7 +232,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    hr = _ribbon.Framework.GetUICommandProperty(_commandId, RibbonProperties.ItemsSource, out propvar);
+                    fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
+                        hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeyItemsSource, out propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection result;
@@ -252,8 +254,8 @@ namespace WinForms.Ribbon
         {
             if (_ribbon.Framework != null)
             {
-                fixed (PROPERTYKEY* pCategories = &RibbonProperties.Categories)
-                    _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pCategories);
+                fixed (PROPERTYKEY* pKeyCategories = &RibbonProperties.Categories)
+                    _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyCategories);
             }
         }
 
@@ -264,8 +266,8 @@ namespace WinForms.Ribbon
         {
             if (_ribbon.Framework != null)
             {
-                fixed (PROPERTYKEY* pItemsSource = &RibbonProperties.ItemsSource)
-                    _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pItemsSource);
+                fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
+                    _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
             }
         }
 
@@ -280,7 +282,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    hr = _ribbon.Framework.GetUICommandProperty(_commandId, RibbonProperties.SelectedItem, out propvar);
+                    fixed (PROPERTYKEY* pKeySelectedItem = &RibbonProperties.SelectedItem)
+                        hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeySelectedItem, out propvar);
                     if (hr.Succeeded)
                     {
                         uint result = (uint)propvar; //PropVariantToUInt32
@@ -298,7 +301,8 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
-                    hr = _ribbon.Framework.SetUICommandProperty(_commandId, RibbonProperties.SelectedItem, in propvar);
+                    fixed (PROPERTYKEY* pKeySelectedItem = &RibbonProperties.SelectedItem)
+                        hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeySelectedItem, in propvar);
                 }
             }
         }

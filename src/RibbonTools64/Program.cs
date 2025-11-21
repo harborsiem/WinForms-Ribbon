@@ -21,6 +21,10 @@ namespace UIRibbonTools
                 if (ConsoleHelper.Execute(args))
                     return;
             }
+
+#if NET10_0_OR_GREATER
+            Application.SetColorMode(SystemColorMode.System);
+#endif
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();

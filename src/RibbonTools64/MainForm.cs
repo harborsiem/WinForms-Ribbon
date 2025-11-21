@@ -331,7 +331,7 @@ namespace UIRibbonTools
             this.ResizeEnd += MainForm_ResizeEnd;
             Load += FormLoad;
             Shown += CMShowingChanged;
-            this.Closing += FormCloseQuery;
+            this.FormClosing += FormCloseQuery;
             this.FormClosed += FormClose;
             Application.ThreadException += ApplicationEventsException;
             _timerRestoreLog.Tick += TimerRestoreLogTimer;
@@ -839,7 +839,7 @@ namespace UIRibbonTools
             Application.Exit();
         }
 
-        private void FormCloseQuery(object sender, CancelEventArgs e)
+        private void FormCloseQuery(object sender, FormClosingEventArgs e)
         {
             if (!CheckSave())
                 e.Cancel = true;
