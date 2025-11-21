@@ -58,7 +58,7 @@ for CCW RibbonFramework with name **RibbonFramework.CCW** available.
 for RCW RibbonFramework with name **RibbonFramework.RCW** available.
 **.NET Framework 4.6.2** and later and **.NET 8** and later supported.
 
-You can manage it for your project with the NuGet package manager in **Visual Studio 2022**.
+You can manage it for your project with the NuGet package manager in **Visual Studio 2022** and later.
 
 
 ## Samples

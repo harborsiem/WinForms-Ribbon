@@ -347,7 +347,6 @@ namespace WinForms.Ribbon
 
             var assembly = form.GetType().Assembly;
             _markupHandler = new MarkupHandler(assembly, this);
-
             if (!string.IsNullOrEmpty(MarkupHeader))
             {
                 if (!ResourceNames.Contains(MarkupHeader))
