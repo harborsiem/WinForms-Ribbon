@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.IO;
-using System.Globalization;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.LibraryLoader;
@@ -24,8 +25,6 @@ namespace WinForms.Ribbon
 
         private RibbonStrip _ribbon;
         private readonly string NameOfMarkupResource; //for Exceptions comment
-        // Stash the delegate to keep it from being collected
-        private readonly ENUMRESNAMEPROCW _enumResNameProcedure;
 
         public string? ResourceIdentifier { get; private set; }
 
@@ -37,7 +36,6 @@ namespace WinForms.Ribbon
             _ribbon = ribbon;
             ResourceIdentifier = ribbon.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
-            _enumResNameProcedure = EnumResNameProc;
             InitFramework(ribbon.MarkupResource!, executingAssembly);
         }
 
@@ -276,6 +274,7 @@ namespace WinForms.Ribbon
             {
                 throw new ApplicationException(NameOfMarkupResource + " resource DLL exists but could not be loaded.");
             }
+            //string? ident = GetResourceIdentifier();
         }
 
         public void Dispose()
@@ -300,13 +299,14 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         private unsafe string? GetResourceIdentifier()
         {
+            ENUMRESNAMEPROCW callback = new(&EnumResNameProc);
             List<string> names = new List<string>();
-            GCHandle namesHandle = GCHandle.Alloc(names, GCHandleType.Pinned);
+            GCHandle namesHandle = GCHandle.Alloc(names);
             try
             {
                 fixed (char* pType = "UIFILE")
                     PInvoke.EnumResourceNames(MarkupDllHandle, pType,
-                        (delegate* unmanaged[Stdcall]<HMODULE, PCWSTR, PWSTR, nint, BOOL>)Marshal.GetFunctionPointerForDelegate(_enumResNameProcedure),
+                        callback,
                         (nint)namesHandle);
             }
             finally
@@ -319,10 +319,6 @@ namespace WinForms.Ribbon
             return null;
         }
 
-        //[UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        //CsWin32 did not give this delegate
-        unsafe delegate BOOL ENUMRESNAMEPROCW(HMODULE hModule, PCWSTR lpszType, PWSTR lpszName, nint lParam);
-
         /// <summary>
         /// Callback for GetResourceIdentifier
         /// </summary>
@@ -331,6 +327,7 @@ namespace WinForms.Ribbon
         /// <param name="pName"></param>
         /// <param name="param"></param>
         /// <returns></returns>
+        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
         private static unsafe BOOL EnumResNameProc(HMODULE hModule, PCWSTR pType, PWSTR pName, nint param)
         {
             if (pType.ToString() == "UIFILE")
@@ -349,7 +346,7 @@ namespace WinForms.Ribbon
             fixed (char* pName = resourceIdentifier)
             fixed (char* pType = "UIFILE")
                 hrSRC = PInvoke.FindResource(MarkupDllHandle, pName, pType);
-            if (hrSRC != IntPtr.Zero)
+            if (hrSRC != HRSRC.Null)
             {
                 imageSize = PInvoke.SizeofResource(MarkupDllHandle, hrSRC);
             }

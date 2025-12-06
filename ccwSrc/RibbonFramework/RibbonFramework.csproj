@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.252</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.259</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

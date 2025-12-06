@@ -2,12 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-### RibbonFramework V1.1.2Plus, RibbonTools64 V8.1.2
+### RibbonFramework V1.1.3, RibbonTools64 V8.1.2
 
 #### Changed (RibbonFramework)
 
 - more equal comments, names and code between RCW and CCW version.
-- CsWin32 version 0.3.252, Namespace PROPERTYKEY changed
+- CsWin32 version 0.3.259, Namespace PROPERTYKEY changed
 
 #### Changed (RibbonTools64)
 
@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - using ifdef for bugfix HighDpi, maybe there is a WinForms solution in .NET10 (not yet)
 - prepare for .NET10 DarkMode
 - Wix tools version 6.02 for setup
-- CsWin32 version 0.3.252
+- CsWin32 version 0.3.259
 
 ### RibbonFramework V1.1.2, RibbonTools64 V8.1.1
 

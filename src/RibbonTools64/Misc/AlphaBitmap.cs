@@ -301,7 +301,7 @@ namespace UIRibbonTools
         /// <returns>The Bitmap with fully transparency if available</returns>
         internal static Bitmap ImageFromResource(HMODULE resourceHandle, uint id)
         {
-            if (resourceHandle == IntPtr.Zero)
+            if (resourceHandle.IsNull)
                 throw new ArgumentNullException(nameof(resourceHandle));
             HANDLE bmpHandle = PInvoke.LoadImage(resourceHandle, (PCWSTR)(char*)id, GDI_IMAGE_TYPE.IMAGE_BITMAP, 0, 0, IMAGE_FLAGS.LR_CREATEDIBSECTION | IMAGE_FLAGS.LR_SHARED);
             if (bmpHandle != HANDLE.Null)
@@ -315,7 +315,7 @@ namespace UIRibbonTools
             {
                 hResource = PInvoke.FindResource(resourceHandle, (PCWSTR)(char*)id, imageLocal);
             }
-            if (hResource == IntPtr.Zero)
+            if (hResource.IsNull)
                 return null;
             uint imageSize = PInvoke.SizeofResource(resourceHandle, hResource);
             if (imageSize == 0)

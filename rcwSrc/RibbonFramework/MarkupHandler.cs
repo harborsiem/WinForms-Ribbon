@@ -301,7 +301,7 @@ namespace WinForms.Ribbon
         private unsafe string? GetResourceIdentifier()
         {
             List<string> names = new List<string>();
-            GCHandle namesHandle = GCHandle.Alloc(names, GCHandleType.Pinned);
+            GCHandle namesHandle = GCHandle.Alloc(names);
             try
             {
                 //IntPtr enumResNameProc = Marshal.GetFunctionPointerForDelegate(_enumResNameProcedure);
@@ -346,7 +346,7 @@ namespace WinForms.Ribbon
             fixed (char* pName = resourceIdentifier)
             fixed (char* pType = "UIFILE")
                 hrSRC = PInvoke.FindResource(MarkupDllHandle, pName, pType);
-            if (hrSRC != IntPtr.Zero)
+            if (hrSRC != HRSRC.Null)
             {
                 imageSize = PInvoke.SizeofResource(MarkupDllHandle, hrSRC);
             }
