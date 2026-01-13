@@ -261,8 +261,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyAutomaticColorLabel = &RibbonProperties.AutomaticColorLabel)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyAutomaticColorLabel, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyAutomaticColorLabel, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -287,8 +288,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_automaticColorLabel, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyAutomaticColorLabel = &RibbonProperties.AutomaticColorLabel)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyAutomaticColorLabel, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyAutomaticColorLabel, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -305,8 +307,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyColor = &RibbonProperties.Color)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyColor, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyColor, &propvar);
                     if (hr.Succeeded)
                     {
                         uint result = (uint)propvar; //PropVariantToUInt32
@@ -326,8 +329,9 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar;
                     propvar = (PROPVARIANT)(uint)ColorTranslator.ToWin32(value); //InitPropVariantFromUInt32
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyColor = &RibbonProperties.Color)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyColor, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyColor, &propvar);
                 }
             }
         }
@@ -343,8 +347,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyColorType = &RibbonProperties.ColorType)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyColorType, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyColorType, &propvar);
                     if (hr.Succeeded)
                     {
                         uint result = (uint)propvar; //PropVariantToUInt32
@@ -363,8 +368,9 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar;
                     propvar = (PROPVARIANT)((uint)value); //InitPropVariantFromUInt32
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyColorType = &RibbonProperties.ColorType)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyColorType, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyColorType, &propvar);
                 }
             }
         }
@@ -380,8 +386,9 @@ namespace WinForms.Ribbon
         //        {
         //            HRESULT hr;
         //            PROPVARIANT propvar;
+        //            using var framework = _ribbon.Framework.GetInterface();
         //            fixed (PROPERTYKEY* pKeyColorMode = &RibbonProperties.ColorMode)
-        //                hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyColorMode, &propvar);
+        //                hr = framework.Value->GetUICommandProperty(_commandId, pKeyColorMode, &propvar);
         //            if (hr.Succeeded)
         //            {
         //                uint result = (uint)propvar; //PropVariantToUInt32
@@ -400,8 +407,9 @@ namespace WinForms.Ribbon
         //            PROPVARIANT propvar;
         //            propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
         //            HRESULT hr;
+        //            using var framework = _ribbon.Framework.GetInterface();
         //            fixed (PROPERTYKEY* pKeyColorMode = &RibbonProperties.ColorMode)
-        //                hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyColorMode, &propvar);
+        //                hr = framework.Value->SetUICommandProperty(_commandId, pKeyColorMode, &propvar);
         //        }
         //    }
         //}
@@ -417,8 +425,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyMoreColorsLabel = &RibbonProperties.MoreColorsLabel)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyMoreColorsLabel, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyMoreColorsLabel, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -443,8 +452,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_moreColorsLabel, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyMoreColorsLabel = &RibbonProperties.MoreColorsLabel)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyMoreColorsLabel, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyMoreColorsLabel, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -461,8 +471,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyNoColorLabel = &RibbonProperties.NoColorLabel)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyNoColorLabel, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyNoColorLabel, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -487,8 +498,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_noColorLabel, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyNoColorLabel = &RibbonProperties.NoColorLabel)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyNoColorLabel, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyNoColorLabel, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -505,8 +517,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyRecentColorsCategoryLabel = &RibbonProperties.RecentColorsCategoryLabel)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyRecentColorsCategoryLabel, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyRecentColorsCategoryLabel, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -531,8 +544,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_recentColorsCategoryLabel, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyRecentColorsCategoryLabel = &RibbonProperties.RecentColorsCategoryLabel)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyRecentColorsCategoryLabel, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyRecentColorsCategoryLabel, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -549,8 +563,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStandardColors = &RibbonProperties.StandardColors)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyStandardColors, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyStandardColors, &propvar);
                     if (hr.Succeeded)
                     {
                         uint pcElem;
@@ -581,8 +596,9 @@ namespace WinForms.Ribbon
                         PInvoke.InitPropVariantFromUInt32Vector(prgn, (uint)uintStandardColors.Length, &propvar);
 
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStandardColors = &RibbonProperties.StandardColors)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyStandardColors, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyStandardColors, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -599,8 +615,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStandardColorsCategoryLabel = &RibbonProperties.StandardColorsCategoryLabel)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyStandardColorsCategoryLabel, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyStandardColorsCategoryLabel, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -625,8 +642,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_standardColorsCategoryLabel, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStandardColorsCategoryLabel = &RibbonProperties.StandardColorsCategoryLabel)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyStandardColorsCategoryLabel, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyStandardColorsCategoryLabel, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -643,8 +661,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStandardColorsTooltips = &RibbonProperties.StandardColorsTooltips)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyStandardColorsTooltips, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyStandardColorsTooltips, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR* pprgsz;
@@ -675,8 +694,9 @@ namespace WinForms.Ribbon
                     HRESULT hr;
                     PROPVARIANT propvar;
                     PROPVARIANT.InitPropVariantFromStringVector(value, out propvar);
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStandardColorsTooltips = &RibbonProperties.StandardColorsTooltips)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyStandardColorsTooltips, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyStandardColorsTooltips, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -693,8 +713,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyThemeColors = &RibbonProperties.ThemeColors)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyThemeColors, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyThemeColors, &propvar);
                     if (hr.Succeeded)
                     {
                         uint pcElem;
@@ -724,8 +745,9 @@ namespace WinForms.Ribbon
                         PInvoke.InitPropVariantFromUInt32Vector(prgn, (uint)uintThemeColors.Length, &propvar);
 
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyThemeColors = &RibbonProperties.ThemeColors)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyThemeColors, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyThemeColors, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -742,8 +764,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyThemeColorsCategoryLabel = &RibbonProperties.ThemeColorsCategoryLabel)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyThemeColorsCategoryLabel, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyThemeColorsCategoryLabel, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -768,8 +791,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_themeColorsCategoryLabel, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyThemeColorsCategoryLabel = &RibbonProperties.ThemeColorsCategoryLabel)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyThemeColorsCategoryLabel, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyThemeColorsCategoryLabel, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -786,8 +810,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyThemeColorsTooltips = &RibbonProperties.ThemeColorsTooltips)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyThemeColorsTooltips, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyThemeColorsTooltips, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR* pprgsz;
@@ -818,8 +843,9 @@ namespace WinForms.Ribbon
                     HRESULT hr;
                     PROPVARIANT propvar;
                     PROPVARIANT.InitPropVariantFromStringVector(value, out propvar);
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyThemeColorsTooltips = &RibbonProperties.ThemeColorsTooltips)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyThemeColorsTooltips, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyThemeColorsTooltips, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }

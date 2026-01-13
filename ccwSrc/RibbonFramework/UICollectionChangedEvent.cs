@@ -23,7 +23,6 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed unsafe class UICollectionChangedEvent<T> : IUICollectionChangedEvent.Interface where T : AbstractPropertySet, new()
     {
-        private IUICollection* _cpIUICollection;
         private readonly UICollection<T> _collection;
         private uint _cookie;
 
@@ -35,20 +34,14 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Attach to an IUICollection object events
         /// </summary>
-        /// <param name="cpIUICollection">IUICollection object</param>
-        internal void Attach(IUICollection* cpIUICollection)
+        internal void Attach()
         {
-            //uint refCount;
-            //cpIUICollection->AddRef();
-            //refCount = cpIUICollection->Release();
             if (_cookie != 0)
             {
                 Detach();
             }
 
-            _cpIUICollection = cpIUICollection;
-
-            _cookie = RegisterComEvent(cpIUICollection);
+            _cookie = RegisterComEvent();
         }
 
         /// <summary>
@@ -58,18 +51,15 @@ namespace WinForms.Ribbon
         {
             if (_cookie != 0)
             {
-                UnregisterComEvent(_cpIUICollection, _cookie);
-                //uint refCount;
-                //_cpIUICollection->AddRef();
-                //refCount = _cpIUICollection->Release();
+                UnregisterComEvent(_cookie);
                 _cookie = 0;
             }
         }
 
-        private ComScope<IConnectionPoint> GetConnectionPoint(IUICollection* cpIUICollection)
+        private ComScope<IConnectionPoint> GetConnectionPoint()
         {
-            // get connection point container
-            using ComScope<IConnectionPointContainer> connectionPointContainerScope = ComScope<IConnectionPointContainer>.QueryFrom(cpIUICollection);
+            // get connection point container from IUICollection
+            using var connectionPointContainerScope = _collection.CpIUICollection.GetInterface<IConnectionPointContainer>();
 
             // get connection point for IUICollectionChangedEvent
             ComScope<IConnectionPoint> cpIConnectionPoint = new ComScope<IConnectionPoint>(null);
@@ -78,9 +68,9 @@ namespace WinForms.Ribbon
             return cpIConnectionPoint;
         }
 
-        private uint RegisterComEvent(IUICollection* cpIUICollection)
+        private uint RegisterComEvent()
         {
-            using var connectionPointScope = GetConnectionPoint(cpIUICollection);
+            using var connectionPointScope = GetConnectionPoint();
 
             uint cookie = 0;
             using ComScope<IUnknown> punkSink = ComHelpers.GetComScope<IUnknown>(this);
@@ -88,9 +78,9 @@ namespace WinForms.Ribbon
             return cookie;
         }
 
-        private void UnregisterComEvent(IUICollection* cpIUICollection, uint cookie)
+        private void UnregisterComEvent(uint cookie)
         {
-            using var cpConnectionPointScope = GetConnectionPoint(cpIUICollection);
+            using var cpConnectionPointScope = GetConnectionPoint();
             cpConnectionPointScope.Value->Unadvise(cookie);
         }
 

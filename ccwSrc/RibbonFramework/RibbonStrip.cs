@@ -71,8 +71,6 @@ namespace WinForms.Ribbon
 
         private readonly EventSet _eventSet = new EventSet();
         private Dictionary<uint, RibbonStripItem> _mapRibbonStripItems = new Dictionary<uint, RibbonStripItem>();
-        private IUIFramework* _cpIUIFramework;
-        private IUIImageFromBitmap* _cpIUIImageFromBitmap;
         private UIApplication? _uIApplication;
         private QatSetting? _qatSetting;
         private MarkupHandler? _markupHandler;
@@ -446,16 +444,17 @@ namespace WinForms.Ribbon
         /// Get ribbon framework object
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        internal unsafe IUIFramework* Framework => _cpIUIFramework;
+        internal AgileComPointer<IUIFramework>? Framework { get; private set; }
 
         /// <summary>
         /// Create ribbon framework object
         /// </summary>
         /// <returns>ribbon framework object</returns>
-        private static void CreateRibbonFramework(IUIFramework** ppFramework)
+        private static AgileComPointer<IUIFramework> CreateRibbonFramework()
         {
             try
             {
+                IUIFramework* iUIFramework;
                 HRESULT hr;
                 Guid CLSID_UIRibbonFramework = typeof(UIRibbonFramework).GUID;
                 hr = PInvoke.CoCreateInstance(
@@ -463,7 +462,12 @@ namespace WinForms.Ribbon
                     null,
                     CLSCTX.CLSCTX_INPROC_SERVER,
                     IID.Get<IUIFramework>(),
-                    (void**)ppFramework).ThrowOnFailure();
+                    (void**)&iUIFramework).ThrowOnFailure();
+#if DEBUG
+                return new AgileComPointer<IUIFramework>(iUIFramework, true, trackDisposal: false);
+#else
+                return new AgileComPointer<IUIFramework>(iUIFramework, true);
+#endif
             }
             catch (COMException exception)
             {
@@ -475,18 +479,24 @@ namespace WinForms.Ribbon
         /// Create image-from-bitmap factory object
         /// </summary>
         /// <returns>image-from-bitmap factory object</returns>
-        private static void CreateImageFromBitmapFactory(IUIImageFromBitmap** ppImageFromBitmap)
+        private static AgileComPointer<IUIImageFromBitmap> CreateImageFromBitmapFactory()
         {
+            IUIImageFromBitmap* iUIImageFromBitmap;
             Guid CLSID_UIRibbonImageFromBitmapFactory = typeof(UIRibbonImageFromBitmapFactory).GUID;
             PInvoke.CoCreateInstance(
                 &CLSID_UIRibbonImageFromBitmapFactory,
                 null,
                 CLSCTX.CLSCTX_ALL, //.CLSCTX_INPROC_SERVER,
                 IID.Get<IUIImageFromBitmap>(),
-                (void**)ppImageFromBitmap).ThrowOnFailure();
+                (void**)&iUIImageFromBitmap).ThrowOnFailure();
+#if DEBUG
+            return new AgileComPointer<IUIImageFromBitmap>(iUIImageFromBitmap, true, trackDisposal: false);
+#else
+            return new AgileComPointer<IUIImageFromBitmap>(iUIImageFromBitmap, true);
+#endif
         }
 
-        internal IUIImageFromBitmap* CpIUIImageFromBitmap => _cpIUIImageFromBitmap;
+        internal AgileComPointer<IUIImageFromBitmap> CpIUIImageFromBitmap { get; private set; }
 
         /// <summary>
         /// Initialize ribbon framework
@@ -497,10 +507,8 @@ namespace WinForms.Ribbon
         {
             HRESULT hr;
             // create ribbon framework object
-            fixed (IUIFramework** ppFramework = &_cpIUIFramework)
-                CreateRibbonFramework(ppFramework);
-            fixed (IUIImageFromBitmap** ppImageFromBitmap = &_cpIUIImageFromBitmap)
-                CreateImageFromBitmapFactory(ppImageFromBitmap);
+            Framework = CreateRibbonFramework();
+            CpIUIImageFromBitmap = CreateImageFromBitmapFactory();
 
             if (Framework == null)
                 return;
@@ -512,13 +520,14 @@ namespace WinForms.Ribbon
             // init ribbon framework
             HWND hwnd = new HWND(this.WindowHandle);
             using ComScope<IUIApplication> cpIUIApplication = ComHelpers.GetComScope<IUIApplication>(_uIApplication);
-            hr = Framework->Initialize(hwnd, cpIUIApplication);
+            using var framework = Framework.GetInterface();
+            hr = framework.Value->Initialize(hwnd, cpIUIApplication);
             hr.ThrowOnFailure();
 
             // load ribbon ui
             fixed (char* resourceIdentifierLocal = resourceIdentifier)
             {
-                hr = Framework->LoadUI(hInstance, resourceIdentifierLocal);
+                hr = framework.Value->LoadUI(hInstance, resourceIdentifierLocal);
             }
 
             hr.ThrowOnFailure();
@@ -526,8 +535,9 @@ namespace WinForms.Ribbon
             if (!(Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor <= 1 || Environment.OSVersion.Version.Major < 6))
             {
 #pragma warning disable CA1416
-                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(Framework);
-                if (!cpEventingManager.IsNull)
+                using (var eventingManager = Framework.TryGetInterface<IUIEventingManager>(out hr))
+                { }
+                if (hr.Succeeded)
                     EventLogger = new EventLogger(this);
 #pragma warning restore CA1416
             }
@@ -543,12 +553,17 @@ namespace WinForms.Ribbon
                 EventLogger?.Destroy();
 
                 // destroy ribbon framework
-                Framework->Destroy();
-                IUIFramework* localFramework = _cpIUIFramework;
-                // remove reference to framework object
-                _cpIUIFramework = null;
-                uint refCount = localFramework->Release();
-                Debug.WriteLine("Destroy IUIFramework refCount: " + refCount.ToString());
+                using (var framework = Framework.GetInterface())
+                {
+                    framework.Value->Destroy();
+                    framework.Value->AddRef();
+                    uint refCount = framework.Value->Release() - 1;
+                    Debug.WriteLine("Destroy IUIFramework refCount: " + refCount.ToString());
+                }
+                IDisposable? localFramework = Framework;
+                Framework = null;
+                if (localFramework != null)
+                    localFramework.Dispose();
             }
 
             // Unregister event handlers
@@ -558,13 +573,18 @@ namespace WinForms.Ribbon
 
             _shortcutHandler?.Dispose();
 
-            if (_cpIUIImageFromBitmap != null)
+            using (var imageFromBitmap = CpIUIImageFromBitmap.GetInterface())
+            {
+                imageFromBitmap.Value->AddRef();
+                uint refCount = imageFromBitmap.Value->Release() - 1;
+                Debug.WriteLine("Before Dispose IUIImageFromBitmap refCount: " + refCount.ToString());
+            }
+            IDisposable? localImageFromBitmap = CpIUIImageFromBitmap;
+            CpIUIImageFromBitmap = null!;
+            if (localImageFromBitmap != null)
             {
                 // remove reference to imageFromBitmap object
-                IUIImageFromBitmap* localImageFromBitmap = _cpIUIImageFromBitmap;
-                _cpIUIImageFromBitmap = null;
-                uint refCount = localImageFromBitmap->Release();
-                Debug.WriteLine("Destroy IUIImageFromBitmap refCount: " + refCount.ToString());
+                localImageFromBitmap.Dispose();
             }
 
             // remove references to ribbon items
@@ -585,7 +605,7 @@ namespace WinForms.Ribbon
             }
 
             PROPVARIANT propvar;
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             fixed (PROPERTYKEY* pKeyGlobalBackgroundColor = &RibbonProperties.GlobalBackgroundColor)
                 cpPropertyStore.Value->GetValue(pKeyGlobalBackgroundColor, &propvar);
             uint background = (uint)propvar; //PropVariantToUInt32
@@ -606,7 +626,7 @@ namespace WinForms.Ribbon
             uint color = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)color; //InitPropVariantFromUInt32
 
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             // set ribbon color
             fixed (PROPERTYKEY* pKeyGlobalBackgroundColor = &RibbonProperties.GlobalBackgroundColor)
                 cpPropertyStore.Value->SetValue(pKeyGlobalBackgroundColor, &propvar);
@@ -625,7 +645,7 @@ namespace WinForms.Ribbon
             }
 
             PROPVARIANT propvar;
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             fixed (PROPERTYKEY* pKeyGlobalHighlightColor = &RibbonProperties.GlobalHighlightColor)
                 cpPropertyStore.Value->GetValue(pKeyGlobalHighlightColor, &propvar);
             uint highlight = (uint)propvar; //PropVariantToUInt32
@@ -646,7 +666,7 @@ namespace WinForms.Ribbon
             uint color = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)color; //InitPropVariantFromUInt32
 
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             // set ribbon color
             fixed (PROPERTYKEY* pKeyGlobalHighlightColor = &RibbonProperties.GlobalHighlightColor)
                 cpPropertyStore.Value->SetValue(pKeyGlobalHighlightColor, &propvar);
@@ -665,7 +685,7 @@ namespace WinForms.Ribbon
             }
 
             PROPVARIANT propvar;
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             fixed (PROPERTYKEY* pKeyGlobalTextColor = &RibbonProperties.GlobalTextColor)
                 cpPropertyStore.Value->GetValue(pKeyGlobalTextColor, &propvar);
             uint text = (uint)propvar; //PropVariantToUInt32
@@ -686,7 +706,7 @@ namespace WinForms.Ribbon
             uint color = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)color; //InitPropVariantFromUInt32
 
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             // set ribbon color
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyGlobalTextColor = &RibbonProperties.GlobalTextColor)
@@ -708,7 +728,7 @@ namespace WinForms.Ribbon
 
             HRESULT hr;
             PROPVARIANT propvar;
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             fixed (PROPERTYKEY* pKeyApplicationButtonColor = &RibbonProperties.ApplicationButtonColor)
                 hr = cpPropertyStore.Value->GetValue(pKeyApplicationButtonColor, &propvar);
             if (hr.Succeeded)
@@ -735,7 +755,7 @@ namespace WinForms.Ribbon
             }
             uint hsb = value.Value;
             PROPVARIANT propvar = (PROPVARIANT)hsb; //InitPropVariantFromUInt32
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyApplicationButtonColor = &RibbonProperties.ApplicationButtonColor)
                 hr = cpPropertyStore.Value->SetValue(pKeyApplicationButtonColor, &propvar);
@@ -762,7 +782,7 @@ namespace WinForms.Ribbon
 
             HRESULT hr;
             PROPVARIANT propvar;
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             fixed (PROPERTYKEY* pKeyDarkModeRibbon = &RibbonProperties.DarkModeRibbon)
                 hr = cpPropertyStore.Value->GetValue(pKeyDarkModeRibbon, &propvar);
             if (hr.Succeeded)
@@ -789,7 +809,7 @@ namespace WinForms.Ribbon
 
             PROPVARIANT propvar;
             propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-            using ComScope<IPropertyStore> cpPropertyStore = ComScope<IPropertyStore>.QueryFrom(Framework);
+            using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyDarkModeRibbon = &RibbonProperties.DarkModeRibbon)
                 hr = cpPropertyStore.Value->SetValue(pKeyDarkModeRibbon, &propvar);
@@ -829,7 +849,8 @@ namespace WinForms.Ribbon
             }
 
             // set modes
-            Framework->SetModes(compactModes);
+            using var framework = Framework.GetInterface();
+            framework.Value->SetModes(compactModes);
         }
 
         /// <summary>
@@ -848,7 +869,8 @@ namespace WinForms.Ribbon
 
             HRESULT hr;
             IUIContextualUI* cpContextualUI;
-            hr = Framework->GetView(contextPopupID, IID.Get<IUIContextualUI>(), (void**)&cpContextualUI);
+            using var framework = Framework.GetInterface();
+            hr = framework.Value->GetView(contextPopupID, IID.Get<IUIContextualUI>(), (void**)&cpContextualUI);
             if (hr.Succeeded)
             {
                 using var contextualUIScope = new ComScope<IUIContextualUI>(cpContextualUI);
@@ -980,7 +1002,7 @@ namespace WinForms.Ribbon
             EventSet.Raise(s_RibbonHeightKey, this, EventArgs.Empty);
         }
 
-        internal HMODULE MarkupHandleInternal
+        private HMODULE MarkupHandleCore
         {
             get
             {
@@ -1000,7 +1022,7 @@ namespace WinForms.Ribbon
         {
             get
             {
-                return MarkupHandleInternal;
+                return MarkupHandleCore;
             }
         }
 
@@ -1036,7 +1058,7 @@ namespace WinForms.Ribbon
             Span<char> stackBuffer = stackalloc char[512];
             int length;
             fixed (char* bufferlocal = stackBuffer)
-                length = PInvoke.LoadString(MarkupHandleInternal, id, bufferlocal, stackBuffer.Length);
+                length = PInvoke.LoadString(MarkupHandleCore, id, bufferlocal, stackBuffer.Length);
             if (length == 0)
                 return string.Empty;
             string result;
@@ -1048,7 +1070,7 @@ namespace WinForms.Ribbon
             }
             char[] buffer = ArrayPool<char>.Shared.Rent(length + 1);
             fixed (char* bufferlocal = buffer)
-                length = PInvoke.LoadString(MarkupHandleInternal, id, bufferlocal, buffer.Length);
+                length = PInvoke.LoadString(MarkupHandleCore, id, bufferlocal, buffer.Length);
             result = new string(buffer, 0, length);
             ArrayPool<char>.Shared.Return(buffer);
             return result;
@@ -1248,7 +1270,8 @@ namespace WinForms.Ribbon
         {
             HRESULT hr;
             ComScope<IUIRibbon> uiRibbonScope = new ComScope<IUIRibbon>(null);
-            hr = Framework->GetView(0, IID.Get<IUIRibbon>(), (void**)&uiRibbonScope);
+            using var framework = Framework!.GetInterface();
+            hr = framework.Value->GetView(0, IID.Get<IUIRibbon>(), (void**)&uiRibbonScope);
             return uiRibbonScope;
         }
     }

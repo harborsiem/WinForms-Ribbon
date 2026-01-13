@@ -87,7 +87,7 @@ namespace WinForms.Ribbon
                 // get selected item index
                 uint uintResult = (uint)currentValue; //PropVariantToUInt32
                 selectedItemIndex = (int)uintResult;
-                propSet = GetGalleryItemProperty(commandExecutionProperties);
+                propSet = GetGalleryItemProperty(new ComScope<IUISimplePropertySet>(commandExecutionProperties));
                 selected = new SelectedItem<GalleryItemPropertySet>(selectedItemIndex, propSet);
                 GalleryItemEventArgs e = new GalleryItemEventArgs(selected);
                 return e;
@@ -100,10 +100,10 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="commandExecutionProperties"></param>
         /// <returns>GalleryItemPropertySet</returns>
-        internal static unsafe GalleryItemPropertySet? GetGalleryItemProperty(IUISimplePropertySet* commandExecutionProperties)
+        internal static unsafe GalleryItemPropertySet? GetGalleryItemProperty(ComScope<IUISimplePropertySet> commandExecutionProperties)
         {
             GalleryItemPropertySet? propSet;
-            if (commandExecutionProperties is not null)
+            if (!commandExecutionProperties.IsNull)
             {
                 propSet = Marshal.GetObjectForIUnknown((nint)commandExecutionProperties) as GalleryItemPropertySet;
             }
@@ -118,7 +118,7 @@ namespace WinForms.Ribbon
             if (propSet == null)
                 propSet = new GalleryItemPropertySet(commandExecutionProperties);
 
-            uint refcount = commandExecutionProperties->Release(); //Release GetObjectForIUnknown
+            uint refcount = commandExecutionProperties.Value->Release(); //Release GetObjectForIUnknown
             return propSet;
         }
     }

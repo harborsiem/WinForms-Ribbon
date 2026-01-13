@@ -30,12 +30,12 @@ namespace WinForms.Ribbon
         /// </summary>
         public GalleryItemPropertySet() { }
 
-        internal unsafe GalleryItemPropertySet(IUISimplePropertySet* cpIUISimplePropertySet)
+        internal unsafe GalleryItemPropertySet(ComScope<IUISimplePropertySet> cpIUISimplePropertySet)
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
-                hr = cpIUISimplePropertySet->GetValue(pKeyLabel, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyLabel, &propvar);
 
             PWSTR pwstr;
             string label = string.Empty;
@@ -54,7 +54,7 @@ namespace WinForms.Ribbon
 
             propvar = PROPVARIANT.Empty;
             fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
-                hr = cpIUISimplePropertySet->GetValue(pKeyCategoryId, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyCategoryId, &propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;
@@ -62,7 +62,7 @@ namespace WinForms.Ribbon
 
             propvar = PROPVARIANT.Empty;
             fixed (PROPERTYKEY* pKeyItemImage = &RibbonProperties.ItemImage)
-                hr = cpIUISimplePropertySet->GetValue(pKeyItemImage, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyItemImage, &propvar);
             IUIImage* cpIUIImage = null;
             UIImage? uIImage = null;
             if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)
@@ -166,9 +166,10 @@ namespace WinForms.Ribbon
 
             if (key == RibbonProperties.ItemImage)
             {
-                if (_itemImage != null)
+                if (_itemImage != null && _itemImage.UIImageHandle != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.ItemImage, _itemImage.UIImageHandle, out value);
+                    using var iuiImage = _itemImage.UIImageHandle.GetInterface();
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.ItemImage, iuiImage, out value);
                 }
                 else
                 {

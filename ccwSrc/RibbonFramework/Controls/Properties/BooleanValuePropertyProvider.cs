@@ -78,8 +78,9 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyBooleanValue = &RibbonProperties.BooleanValue)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyBooleanValue, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyBooleanValue, &propvar);
                     if (hr.Succeeded)
                     {
                         bool result = (bool)propvar; //PropVariantToBoolean
@@ -96,8 +97,9 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar;
                     propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyBooleanValue = &RibbonProperties.BooleanValue)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyBooleanValue, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyBooleanValue, &propvar);
                 }
             }
         }

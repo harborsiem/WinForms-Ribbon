@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+### RibbonFramework V1.2.0, RibbonTools64 V8.2.0
+
+#### Changed (RibbonFramework)
+
+- Safer use of COM Pointers.
+- Rework UIImage, UICollection, UICollectionChangedEvent classes
+- CsWin32 version 0.3.264
+
+#### Changed (RibbonTools64)
+
+- Bugfix with showing images
+- CsWin32 version 0.3.264
+
 ### RibbonFramework V1.1.3, RibbonTools64 V8.1.2
 
 #### Changed (RibbonFramework)

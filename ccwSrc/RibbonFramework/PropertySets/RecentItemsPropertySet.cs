@@ -28,7 +28,7 @@ namespace WinForms.Ribbon
         /// </summary>
         public RecentItemsPropertySet() { }
 
-        //internal unsafe RecentItemsPropertySet(IUISimplePropertySet* cpIUISimplePropertySet)
+        //internal unsafe RecentItemsPropertySet(ComScope<IUISimplePropertySet> cpIUISimplePropertySet)
         //{
 
         //}

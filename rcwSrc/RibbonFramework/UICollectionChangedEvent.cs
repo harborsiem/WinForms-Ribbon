@@ -23,7 +23,6 @@ namespace WinForms.Ribbon
     public sealed class UICollectionChangedEvent<T> : IUICollectionChangedEvent where T : AbstractPropertySet, new()
     {
         private static readonly Guid IIDGuidIUICollectionChangedEvent = typeof(IUICollectionChangedEvent).GUID;
-        private IUICollection? _cpIUICollection;
         private readonly UICollection<T> _collection;
         private int _cookie;
 
@@ -35,17 +34,14 @@ namespace WinForms.Ribbon
         /// <summary>
         /// Attach to an IUICollection object events
         /// </summary>
-        /// <param name="cpIUICollection">IUICollection object</param>
-        internal void Attach(IUICollection cpIUICollection)
+        internal void Attach()
         {
             if (_cookie != 0)
             {
                 Detach();
             }
 
-            _cpIUICollection = cpIUICollection;
-
-            _cookie = RegisterComEvent(cpIUICollection);
+            _cookie = RegisterComEvent();
         }
 
         /// <summary>
@@ -55,16 +51,15 @@ namespace WinForms.Ribbon
         {
             if (_cookie != 0)
             {
-                UnregisterComEvent(_cpIUICollection, _cookie);
-                //_cpIUICollection = null;
+                UnregisterComEvent(_cookie);
                 _cookie = 0;
             }
         }
 
-        private IConnectionPoint? GetConnectionPoint(IUICollection cpIUICollection)
+        private IConnectionPoint? GetConnectionPoint()
         {
-            // get connection point container
-            IConnectionPointContainer cpIConnectionPointContainer = (IConnectionPointContainer)cpIUICollection;
+            // get connection point container from IUICollection
+            IConnectionPointContainer cpIConnectionPointContainer = (IConnectionPointContainer)_collection.CpIUICollection;
 
             // get connection point for IUICollectionChangedEvent
             Guid guid = IIDGuidIUICollectionChangedEvent;
@@ -74,9 +69,9 @@ namespace WinForms.Ribbon
             return cpIConnectionPoint;
         }
 
-        private int RegisterComEvent(IUICollection cpIUICollection)
+        private int RegisterComEvent()
         {
-            IConnectionPoint? cpIConnectionPoint = GetConnectionPoint(cpIUICollection);
+            IConnectionPoint? cpIConnectionPoint = GetConnectionPoint();
 
             int cookie = 0;
             cpIConnectionPoint?.Advise(this, out cookie);
@@ -84,9 +79,9 @@ namespace WinForms.Ribbon
             return cookie;
         }
 
-        private void UnregisterComEvent(IUICollection cpIUICollection, int cookie)
+        private void UnregisterComEvent(int cookie)
         {
-            IConnectionPoint? cpIConnectionPoint = GetConnectionPoint(cpIUICollection);
+            IConnectionPoint? cpIConnectionPoint = GetConnectionPoint();
 
             cpIConnectionPoint?.Unadvise(cookie);
         }

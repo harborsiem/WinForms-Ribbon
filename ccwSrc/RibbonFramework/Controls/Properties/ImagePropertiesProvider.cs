@@ -79,30 +79,34 @@ namespace WinForms.Ribbon
             fixed (PROPVARIANT* newValueLocal = &newValue) { }
             if (key == RibbonProperties.LargeImage)
             {
-                if (_largeImage != null)
+                if (_largeImage != null && _largeImage.UIImageHandle != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeImage, _largeImage.UIImageHandle, out newValue);
+                    using var iuiImage = _largeImage.UIImageHandle.GetInterface();
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeImage, iuiImage, out newValue);
                 }
             }
             else if (key == RibbonProperties.SmallImage)
             {
-                if (_smallImage != null)
+                if (_smallImage != null && _smallImage.UIImageHandle != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallImage, _smallImage.UIImageHandle, out newValue);
+                    using var iuiImage = _smallImage.UIImageHandle.GetInterface();
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallImage, iuiImage, out newValue);
                 }
             }
             else if (key == RibbonProperties.LargeHighContrastImage)
             {
-                if (_largeHighContrastImage != null)
+                if (_largeHighContrastImage != null && _largeHighContrastImage.UIImageHandle != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeHighContrastImage, _largeHighContrastImage.UIImageHandle, out newValue);
+                    using var iuiImage = _largeHighContrastImage.UIImageHandle.GetInterface();
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.LargeHighContrastImage, iuiImage, out newValue);
                 }
             }
             else if (key == RibbonProperties.SmallHighContrastImage)
             {
-                if (_smallHighContrastImage != null)
+                if (_smallHighContrastImage != null && _smallHighContrastImage.UIImageHandle != null)
                 {
-                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallHighContrastImage, _smallHighContrastImage.UIImageHandle, out newValue);
+                    using var iuiImage = _smallHighContrastImage.UIImageHandle.GetInterface();
+                    UIPropVariant.UIInitPropertyFromImage(RibbonProperties.SmallHighContrastImage, iuiImage, out newValue);
                 }
             }
 
@@ -125,10 +129,10 @@ namespace WinForms.Ribbon
                 _largeImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyLargeImage = &RibbonProperties.LargeImage)
-                    {
-                        HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeImage);
-                    }
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeImage);
                 }
             }
         }
@@ -147,10 +151,10 @@ namespace WinForms.Ribbon
                 _smallImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeySmallImage = &RibbonProperties.SmallImage)
-                    {
-                        HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallImage);
-                    }
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallImage);
                 }
             }
         }
@@ -169,10 +173,10 @@ namespace WinForms.Ribbon
                 _largeHighContrastImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyLargeHighContrastImage = &RibbonProperties.LargeHighContrastImage)
-                    {
-                        HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeHighContrastImage);
-                    }
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeHighContrastImage);
                 }
             }
         }
@@ -191,10 +195,10 @@ namespace WinForms.Ribbon
                 _smallHighContrastImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeySmallHighContrastImage = &RibbonProperties.SmallHighContrastImage)
-                    {
-                        HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallHighContrastImage);
-                    }
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallHighContrastImage);
                 }
             }
         }

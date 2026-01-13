@@ -54,7 +54,6 @@ namespace WinForms.Ribbon
         private static readonly EventKey s_CategoriesChangedKey = new EventKey();
         private static readonly EventKey s_ItemsSourceChangedKey = new EventKey();
         private List<T> _items;
-        private IUICollection _cpIUICollection;
         private readonly RibbonStrip _ribbon;
         private readonly EventKey _changedKey;
         //private CollectionChange marker = CollectionChange.None;
@@ -62,6 +61,7 @@ namespace WinForms.Ribbon
         private UICollectionChangedEvent<T>? _changedEvent;
         private readonly CollectionItem _collectionItem;
         private readonly RibbonStripItem _ribbonItem;
+        internal IUICollection CpIUICollection { get; private set; }
 
         /// <summary>
         /// 
@@ -76,10 +76,10 @@ namespace WinForms.Ribbon
             UI_COMMANDTYPE itemCommandType = (UI_COMMANDTYPE)ribbonItem.CommandType;
             if (ribbonItem == null || !(itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION || itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION))
                 throw new ArgumentException("Ribbon control is not a Collection or CommandCollection", nameof(ribbonItem));
-            if (Marshal.IsComObject(cpIUICollection)) /*uiCollection.ToString() == "System.__ComObject" && */
-                _cpIUICollection = cpIUICollection;
+            if (Marshal.IsComObject(cpIUICollection)) /*cpIUICollection.ToString() == "System.__ComObject" && */
+                CpIUICollection = cpIUICollection;
             else
-                throw new ArgumentException("not an IUICollection ComObject", nameof(cpIUICollection));
+                throw new ArgumentException("Not a IUICollection ComObject", nameof(cpIUICollection));
             _ribbon = ribbonItem.Ribbon;
             if (ribbonItem is RibbonQuickAccessToolbar)
             {
@@ -111,10 +111,9 @@ namespace WinForms.Ribbon
             {
                 _items.Add(propItem);
             }
-            propset.Destroy();
             _collectionItem = new CollectionItem(ribbonItem, collectionType);
             _changedEvent = new UICollectionChangedEvent<T>(this);
-            _changedEvent.Attach(_cpIUICollection);
+            _changedEvent.Attach();
         }
 
         /// <summary>
@@ -126,6 +125,12 @@ namespace WinForms.Ribbon
             {
                 _changedEvent.Detach();
                 _changedEvent = null;
+                IUICollection localUiCollection = CpIUICollection;
+                CpIUICollection = null!;
+                if (localUiCollection != null)
+                {
+                    Marshal.ReleaseComObject(localUiCollection);
+                }
             }
         }
 
@@ -135,8 +140,8 @@ namespace WinForms.Ribbon
             {
                 if (!(newItem is T newGalleryItem))
                     newGalleryItem = FromPropertySet((IUISimplePropertySet)newItem)!;
-                //if (!(e.OldItem is T oldGalleryItem))
-                //oldGalleryItem = FromPropertySet((IUISimplePropertySet)e.OldItem);
+                //if (!(oldItem is T oldGalleryItem))
+                //oldGalleryItem = FromPropertySet((IUISimplePropertySet)oldItem)!;
                 switch (action)
                 {
                     case UI_COLLECTIONCHANGE.UI_COLLECTIONCHANGE_INSERT:
@@ -186,7 +191,8 @@ namespace WinForms.Ribbon
             _items.Add(item);
             //marker = CollectionChange.Insert;
             _detachEvent = true;
-            HRESULT hr = _cpIUICollection.Add(item);
+            HRESULT hr;
+            hr = CpIUICollection.Add(item);
         }
 
         /// <summary>
@@ -198,7 +204,8 @@ namespace WinForms.Ribbon
             _items.RemoveAt(index);
             //marker = CollectionChange.Remove;
             _detachEvent = true;
-            HRESULT hr = _cpIUICollection.RemoveAt((uint)index);
+            HRESULT hr;
+            hr = CpIUICollection.RemoveAt((uint)index);
         }
 
         /// <summary>
@@ -211,7 +218,7 @@ namespace WinForms.Ribbon
             _items.Insert(index, item);
             //marker = CollectionChange.Insert;
             _detachEvent = true;
-            _cpIUICollection.Insert((uint)index, item);
+            CpIUICollection.Insert((uint)index, item);
         }
 
         /// <summary>
@@ -222,7 +229,7 @@ namespace WinForms.Ribbon
             _items.Clear();
             //marker = CollectionChange.Reset;
             _detachEvent = true;
-            _cpIUICollection.Clear();
+            CpIUICollection.Clear();
         }
 
         /// <summary>
@@ -238,7 +245,7 @@ namespace WinForms.Ribbon
                 _items[index] = value;
                 //marker = CollectionChange.Replace;
                 _detachEvent = true;
-                _cpIUICollection.Replace((uint)index, value);
+                CpIUICollection.Replace((uint)index, value);
             }
         }
 
@@ -261,7 +268,8 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         unsafe HRESULT IUICollection.GetCount(out uint count)
         {
-            HRESULT hr = _cpIUICollection.GetCount(out count);
+            HRESULT hr;
+            hr = CpIUICollection.GetCount(out count);
             return hr;
         }
 
@@ -273,7 +281,8 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         HRESULT IUICollection.GetItem(uint index, out object item)
         {
-            HRESULT hr = _cpIUICollection.GetItem(index, out item);
+            HRESULT hr;
+            hr = CpIUICollection.GetItem(index, out item);
             return hr;
         }
 
@@ -285,7 +294,7 @@ namespace WinForms.Ribbon
         HRESULT IUICollection.Add(object item)
         {
             HRESULT hr;
-            hr = _cpIUICollection.Add(item);
+            hr = CpIUICollection.Add(item);
             return hr;
             //return HRESULT.E_INVALIDARG;
         }
@@ -299,7 +308,7 @@ namespace WinForms.Ribbon
         HRESULT IUICollection.Insert(uint index, object item)
         {
             HRESULT hr;
-            hr = _cpIUICollection.Insert(index, item);
+            hr = CpIUICollection.Insert(index, item);
             return hr;
             //return HRESULT.E_INVALIDARG;
         }
@@ -311,7 +320,8 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         HRESULT IUICollection.RemoveAt(uint index)
         {
-            HRESULT hr = _cpIUICollection.RemoveAt(index);
+            HRESULT hr;
+            hr = CpIUICollection.RemoveAt(index);
             return hr;
         }
 
@@ -324,7 +334,7 @@ namespace WinForms.Ribbon
         HRESULT IUICollection.Replace(uint indexReplaced, object itemReplaceWith)
         {
             HRESULT hr;
-            hr = _cpIUICollection.Replace(indexReplaced, itemReplaceWith);
+            hr = CpIUICollection.Replace(indexReplaced, itemReplaceWith);
             return hr;
             //return HRESULT.E_INVALIDARG;
         }
@@ -335,7 +345,8 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         HRESULT IUICollection.Clear()
         {
-            HRESULT hr = _cpIUICollection.Clear();
+            HRESULT hr;
+            hr = CpIUICollection.Clear();
             return hr;
         }
 
@@ -413,7 +424,6 @@ namespace WinForms.Ribbon
         private sealed class PropertySetEnumerator : IEnumerable<T>, IEnumerator<T>
         {
             private UICollection<T> _caller;
-            private IEnumUnknown _cpIEnumUnknown;
             private T? _current;
 
             /// <summary>
@@ -423,7 +433,6 @@ namespace WinForms.Ribbon
             public PropertySetEnumerator(UICollection<T> caller)
             {
                 _caller = caller;
-                _cpIEnumUnknown = (IEnumUnknown)caller._cpIUICollection;
                 Reset();
             }
 
@@ -462,9 +471,11 @@ namespace WinForms.Ribbon
             /// <returns></returns>
             public unsafe bool MoveNext()
             {
+                HRESULT hr;
                 uint fetched;
                 object[] rgelt = new object[1];
-                _cpIEnumUnknown.Next(1, rgelt, &fetched);
+                IEnumUnknown cpIEnumUnknown = (IEnumUnknown)_caller.CpIUICollection;
+                hr = cpIEnumUnknown.Next(1, rgelt, &fetched);
                 if (fetched == 1)
                 {
                     IUISimplePropertySet cpIUISimplePropertySet = (IUISimplePropertySet)rgelt[0];
@@ -476,8 +487,7 @@ namespace WinForms.Ribbon
                 }
                 else
                 {
-                    _cpIEnumUnknown.Reset();
-                    _current = null;
+                    Reset();
                 }
                 return fetched == 0 ? false : true;
             }
@@ -492,7 +502,8 @@ namespace WinForms.Ribbon
             /// </summary>
             public void Reset()
             {
-                _cpIEnumUnknown.Reset();
+                IEnumUnknown cpIEnumUnknown = (IEnumUnknown)_caller.CpIUICollection;
+                cpIEnumUnknown.Reset();
                 _current = null;
             }
 
@@ -503,12 +514,6 @@ namespace WinForms.Ribbon
 
             void IDisposable.Dispose()
             {
-                Reset();
-            }
-
-            public void Destroy()
-            {
-                _cpIEnumUnknown = null!;
             }
         }
     }

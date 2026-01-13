@@ -148,8 +148,9 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyDecimalValue = &RibbonProperties.DecimalValue)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyDecimalValue, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyDecimalValue, &propvar);
                     if (hr.Succeeded)
                     {
                         decimal decValue = (decimal)propvar; //UIPropertyToDecimal
@@ -166,8 +167,9 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar = (PROPVARIANT)value; //UIInitPropertyFromDecimal
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyDecimalValue = &RibbonProperties.DecimalValue)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyDecimalValue, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyDecimalValue, &propvar);
                 }
             }
         }
@@ -187,8 +189,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyIncrement = &RibbonProperties.Increment)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyIncrement);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyIncrement);
                 }
             }
         }
@@ -208,8 +211,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyMaxValue = &RibbonProperties.MaxValue)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMaxValue);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMaxValue);
                 }
             }
         }
@@ -229,8 +233,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyMinValue = &RibbonProperties.MinValue)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMinValue);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMinValue);
                 }
             }
         }
@@ -250,8 +255,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyDecimalPlaces = &RibbonProperties.DecimalPlaces)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyDecimalPlaces);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyDecimalPlaces);
                 }
             }
         }
@@ -271,8 +277,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyFormatString = &RibbonProperties.FormatString)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyFormatString);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyFormatString);
                 }
             }
         }

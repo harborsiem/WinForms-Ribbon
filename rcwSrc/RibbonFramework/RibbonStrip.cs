@@ -996,7 +996,7 @@ namespace WinForms.Ribbon
             EventSet.Raise(s_RibbonHeightKey, this, EventArgs.Empty);
         }
 
-        internal HMODULE MarkupHandleInternal
+        private HMODULE MarkupHandleCore
         {
             get
             {
@@ -1016,7 +1016,7 @@ namespace WinForms.Ribbon
         {
             get
             {
-                return MarkupHandleInternal;
+                return MarkupHandleCore;
             }
         }
 
@@ -1052,7 +1052,7 @@ namespace WinForms.Ribbon
             Span<char> stackBuffer = stackalloc char[512];
             int length;
             fixed (char* bufferlocal = stackBuffer)
-                length = PInvoke.LoadString(MarkupHandleInternal, id, bufferlocal, stackBuffer.Length);
+                length = PInvoke.LoadString(MarkupHandleCore, id, bufferlocal, stackBuffer.Length);
             if (length == 0)
                 return string.Empty;
             string result;
@@ -1064,7 +1064,7 @@ namespace WinForms.Ribbon
             }
             char[] buffer = ArrayPool<char>.Shared.Rent(length + 1);
             fixed (char* bufferlocal = buffer)
-                length = PInvoke.LoadString(MarkupHandleInternal, id, bufferlocal, buffer.Length);
+                length = PInvoke.LoadString(MarkupHandleCore, id, bufferlocal, buffer.Length);
             result = new string(buffer, 0, length);
             ArrayPool<char>.Shared.Return(buffer);
             return result;

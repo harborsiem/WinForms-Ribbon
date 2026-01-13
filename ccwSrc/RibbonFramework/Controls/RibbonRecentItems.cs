@@ -53,8 +53,9 @@ namespace WinForms.Ribbon
             HRESULT hr;
             if (Ribbon.Framework != null)
             {
+                using var framework = Ribbon.Framework.GetInterface();
                 fixed (PROPERTYKEY* pKeyRecentItems = &RibbonProperties.RecentItems)
-                    hr = Ribbon.Framework->InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyRecentItems);
+                    hr = framework.Value->InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyRecentItems);
             }
         }
 

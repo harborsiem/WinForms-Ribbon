@@ -81,7 +81,7 @@ namespace WinForms.Ribbon
             // try to get from current current culture fallback satellite assembly
             found = TryGetRibbonMarkup(markupResource, executingAssembly, out data);
             if (!found)
-                throw new ArgumentException(string.Format(NameOfMarkupResource + " resource '{0}' not found in assembly '{1}'.", markupResource, executingAssembly.Location));
+                throw new ArgumentException(string.Format(NameOfMarkupResource + " resource '{0}' not found in assembly '{1}'.", markupResource, AppContext.BaseDirectory));
 
             return data;
         }

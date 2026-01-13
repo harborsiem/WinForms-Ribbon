@@ -78,8 +78,9 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStringValue = &RibbonProperties.StringValue)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyStringValue, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyStringValue, &propvar);
                     if (hr.Succeeded)
                     {
                         PWSTR pwstr;
@@ -105,8 +106,9 @@ namespace WinForms.Ribbon
                         UIPropVariant.UIInitPropertyFromString(_stringValue, out propvar);
                     }
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStringValue = &RibbonProperties.StringValue)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeyStringValue, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeyStringValue, &propvar);
                     propvar.Clear(); //PropVariantClear
                 }
             }

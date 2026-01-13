@@ -217,8 +217,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyCategories = &RibbonProperties.Categories)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyCategories, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyCategories, &propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection* result;
@@ -243,8 +244,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyItemsSource, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyItemsSource, &propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection* result;
@@ -265,8 +267,9 @@ namespace WinForms.Ribbon
         {
             if (_ribbon.Framework != null)
             {
+                using var framework = _ribbon.Framework.GetInterface();
                 fixed (PROPERTYKEY* pKeyCategories = &RibbonProperties.Categories)
-                    _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyCategories);
+                    framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyCategories);
             }
         }
 
@@ -277,8 +280,9 @@ namespace WinForms.Ribbon
         {
             if (_ribbon.Framework != null)
             {
+                using var framework = _ribbon.Framework.GetInterface();
                 fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
-                    _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
+                    framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
             }
         }
 
@@ -293,8 +297,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeySelectedItem = &RibbonProperties.SelectedItem)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeySelectedItem, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeySelectedItem, &propvar);
                     if (hr.Succeeded)
                     {
                         uint result = (uint)propvar; //PropVariantToUInt32
@@ -312,8 +317,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeySelectedItem = &RibbonProperties.SelectedItem)
-                        hr = _ribbon.Framework->SetUICommandProperty(_commandId, pKeySelectedItem, &propvar);
+                        hr = framework.Value->SetUICommandProperty(_commandId, pKeySelectedItem, &propvar);
                 }
             }
         }

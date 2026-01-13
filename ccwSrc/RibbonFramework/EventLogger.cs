@@ -41,10 +41,13 @@ namespace WinForms.Ribbon
         {
             if (!_attached)
             {
-                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(_ribbon.Framework);
-                using ComScope<IUIEventLogger> cpEventLogger = ComHelpers.GetComScope<IUIEventLogger>(this);
-                cpEventingManager.Value->SetEventLogger(cpEventLogger);
-                _attached = true;
+                if (_ribbon.Framework != null)
+                {
+                    using var cpEventingManager = _ribbon.Framework.GetInterface<IUIEventingManager>();
+                    using ComScope<IUIEventLogger> cpEventLogger = ComHelpers.GetComScope<IUIEventLogger>(this);
+                    cpEventingManager.Value->SetEventLogger(cpEventLogger);
+                    _attached = true;
+                }
             }
         }
 
@@ -55,9 +58,12 @@ namespace WinForms.Ribbon
         {
             if (_attached)
             {
-                using ComScope<IUIEventingManager> cpEventingManager = ComScope<IUIEventingManager>.QueryFrom(_ribbon.Framework);
-                cpEventingManager.Value->SetEventLogger(null);
-                _attached = false;
+                if (_ribbon.Framework != null)
+                {
+                    using var cpEventingManager = _ribbon.Framework.GetInterface<IUIEventingManager>();
+                    cpEventingManager.Value->SetEventLogger(null);
+                    _attached = false;
+                }
             }
         }
 

@@ -96,8 +96,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = Ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
-                        hr = Ribbon.Framework->GetUICommandProperty(CommandId, pKeyItemsSource, &propvar);
+                        hr = framework.Value->GetUICommandProperty(CommandId, pKeyItemsSource, &propvar);
                     if (hr.Succeeded)
                     {
                         IUICollection* result;
@@ -128,8 +129,9 @@ namespace WinForms.Ribbon
         {
             if (Ribbon.Framework != null)
             {
+                using var framework = Ribbon.Framework.GetInterface();
                 fixed (PROPERTYKEY* pKeyItemsSource = &RibbonProperties.ItemsSource)
-                    Ribbon.Framework->InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
+                    framework.Value->InvalidateUICommand(CommandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyItemsSource);
             }
         }
 

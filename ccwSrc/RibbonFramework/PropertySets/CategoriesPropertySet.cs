@@ -28,12 +28,12 @@ namespace WinForms.Ribbon
         /// </summary>
         public CategoriesPropertySet() { }
 
-        internal unsafe CategoriesPropertySet(IUISimplePropertySet* cpIUISimplePropertySet)
+        internal unsafe CategoriesPropertySet(ComScope<IUISimplePropertySet> cpIUISimplePropertySet)
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
-                hr = cpIUISimplePropertySet->GetValue(pKeyLabel, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyLabel, &propvar);
 
             PWSTR pwstr;
             string label = string.Empty;
@@ -52,7 +52,7 @@ namespace WinForms.Ribbon
 
             propvar = PROPVARIANT.Empty;
             fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
-                hr = cpIUISimplePropertySet->GetValue(pKeyCategoryId, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyCategoryId, &propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX; //if VT_EMPTY
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;

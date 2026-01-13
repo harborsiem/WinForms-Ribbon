@@ -231,8 +231,9 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyFontProperties = &RibbonProperties.FontProperties)
-                        hr = _ribbon.Framework->GetUICommandProperty(_commandId, pKeyFontProperties, &propvar);
+                        hr = framework.Value->GetUICommandProperty(_commandId, pKeyFontProperties, &propvar);
                     if (hr.Succeeded)
                     {
                         IPropertyStore* result;
@@ -281,7 +282,8 @@ namespace WinForms.Ribbon
                 _family = value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -315,7 +317,8 @@ namespace WinForms.Ribbon
                 _size = value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -350,7 +353,8 @@ namespace WinForms.Ribbon
                 _bold = (UI_FONTPROPERTIES)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -385,7 +389,8 @@ namespace WinForms.Ribbon
                 _italic = (UI_FONTPROPERTIES)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -420,7 +425,8 @@ namespace WinForms.Ribbon
                 _underline = (UI_FONTUNDERLINE)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -455,7 +461,8 @@ namespace WinForms.Ribbon
                 _strikethrough = (UI_FONTPROPERTIES)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -509,7 +516,8 @@ namespace WinForms.Ribbon
 
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -563,7 +571,8 @@ namespace WinForms.Ribbon
 
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }
@@ -598,7 +607,8 @@ namespace WinForms.Ribbon
                 _verticalPositioning = (UI_FONTVERTICALPOSITION)value;
                 if (_ribbon.Framework != null)
                 {
-                    HRESULT hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
+                    using var framework = _ribbon.Framework.GetInterface();
+                    HRESULT hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_ALLPROPERTIES, (PROPERTYKEY*)null);
                 }
             }
         }

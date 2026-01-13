@@ -23,10 +23,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RibbonMarkup.h" />
     <None Remove="RibbonMarkup.ribbon" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="RibbonMarkup.h" />
     <EmbeddedResource Include="RibbonMarkup.ribbon" />
   </ItemGroup>
 

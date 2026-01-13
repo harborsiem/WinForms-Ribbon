@@ -29,12 +29,12 @@ namespace WinForms.Ribbon
         /// </summary>
         public GalleryCommandPropertySet() { }
 
-        internal unsafe GalleryCommandPropertySet(IUISimplePropertySet* cpIUISimplePropertySet)
+        internal unsafe GalleryCommandPropertySet(ComScope<IUISimplePropertySet> cpIUISimplePropertySet)
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyCommandId = &RibbonProperties.CommandId)
-                hr = cpIUISimplePropertySet->GetValue(pKeyCommandId, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyCommandId, &propvar);
             uint commandId = 0;
             if (propvar.vt == VARENUM.VT_UI4)
                 commandId = (uint)propvar;
@@ -42,7 +42,7 @@ namespace WinForms.Ribbon
 
             propvar = PROPVARIANT.Empty;
             fixed (PROPERTYKEY* pKeyCategoryId = &RibbonProperties.CategoryId)
-                hr = cpIUISimplePropertySet->GetValue(pKeyCategoryId, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyCategoryId, &propvar);
             uint categoryId = PInvoke.UI_COLLECTION_INVALIDINDEX;
             if (propvar.vt == VARENUM.VT_UI4)
                 categoryId = (uint)propvar;
@@ -50,7 +50,7 @@ namespace WinForms.Ribbon
 
             propvar = PROPVARIANT.Empty;
             fixed (PROPERTYKEY* pKeyCommandType = &RibbonProperties.CommandType)
-                hr = cpIUISimplePropertySet->GetValue(pKeyCommandType, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyCommandType, &propvar);
             UI_COMMANDTYPE commandType = UI_COMMANDTYPE.UI_COMMANDTYPE_UNKNOWN;
             if (propvar.vt == VARENUM.VT_UI4)
                 commandType = (UI_COMMANDTYPE)(uint)propvar;

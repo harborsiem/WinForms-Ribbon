@@ -27,12 +27,12 @@ namespace WinForms.Ribbon
         /// </summary>
         public QatCommandPropertySet() { }
 
-        internal unsafe QatCommandPropertySet(IUISimplePropertySet* cpIUISimplePropertySet)
+        internal unsafe QatCommandPropertySet(ComScope<IUISimplePropertySet> cpIUISimplePropertySet)
         {
             PROPVARIANT propvar = PROPVARIANT.Empty;
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyCommandId = &RibbonProperties.CommandId)
-                hr = cpIUISimplePropertySet->GetValue(pKeyCommandId, &propvar);
+                hr = cpIUISimplePropertySet.Value->GetValue(pKeyCommandId, &propvar);
             uint commandId = 0;
             if (propvar.vt == VARENUM.VT_UI4)
                 commandId = (uint)propvar;

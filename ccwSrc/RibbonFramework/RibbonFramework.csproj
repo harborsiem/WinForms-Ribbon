@@ -20,14 +20,14 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>1.1.3</Version>
+    <Version>1.2.0</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>
     <PackageIcon>Ribbon64.png</PackageIcon>
 	<Title>Ribbon Framework for .NET WinForms</Title>
     <Description>Ribbon Framework for .NET WinForms</Description>
-    <Copyright>Copyright © 2025</Copyright>
+    <Copyright>Copyright © 2025, 2026</Copyright>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageReadmeFile>.\NugetReadme.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.259</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.264</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
-using Windows.Win32.UI.WindowsAndMessaging;
-using Windows.Win32.UI.Ribbon;
 using Windows.Win32.UI.Controls;
+using Windows.Win32.UI.Ribbon;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace WinForms.Ribbon
 {
@@ -26,7 +26,6 @@ namespace WinForms.Ribbon
         private RibbonStrip _ribbon;
         private HBITMAP _hbitmap;
         private IUIImage? _cpIUIImage;
-        private bool _suppressRelease; //suppress IUIImage release
 
         /// <summary>
         /// Finalizer
@@ -44,14 +43,13 @@ namespace WinForms.Ribbon
         }
 
         /// <summary>
-        /// Ctor with IUIImage
+        /// Ctor with IUIImage, this should not happen!!!
         /// </summary>
         /// <param name="cpIUIImage"></param>
         internal unsafe UIImage(IUIImage cpIUIImage)
         {
             if (cpIUIImage == null)
                 throw new ArgumentNullException(nameof(cpIUIImage));
-            _suppressRelease = true;
             _cpIUIImage = cpIUIImage;
             fixed (HBITMAP* phbitmap = &_hbitmap)
                 _cpIUIImage.GetBitmap(phbitmap);
@@ -64,11 +62,26 @@ namespace WinForms.Ribbon
         /// <param name="ribbon"></param>
         /// <param name="filename"></param>
         /// <param name="highContrast"></param>
+        /// <exception cref="FileNotFoundException"></exception>
         public UIImage(RibbonStrip ribbon, string filename, bool highContrast = false) : this(ribbon)
         {
             if (!File.Exists(filename))
                 throw new FileNotFoundException(nameof(filename));
             Load(filename, highContrast);
+        }
+
+        /// <summary>
+        /// Ctor for a bitmap stream (*.bmp, *.png)
+        /// </summary>
+        /// <param name="ribbon"></param>
+        /// <param name="stream"></param>
+        /// <param name="highContrast"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UIImage(RibbonStrip ribbon, Stream stream, bool highContrast = false) : this(ribbon)
+        {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+            LoadStream(stream, highContrast);
         }
 
         internal UIImage(RibbonStrip ribbon, HMODULE markupHandle, string resourceName) : this(ribbon)
@@ -110,24 +123,37 @@ namespace WinForms.Ribbon
         /// </summary>
         /// <param name="ribbon"></param>
         /// <param name="bitmap"></param>
+        /// <param name="highContrast"></param>
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
-        public unsafe UIImage(RibbonStrip ribbon, Bitmap bitmap) : this(ribbon)
+        public unsafe UIImage(RibbonStrip ribbon, Bitmap bitmap, bool highContrast = false) : this(ribbon)
         {
             if (bitmap == null)
                 throw new ArgumentNullException(nameof(bitmap));
             HRESULT hr;
-            bitmap = TryGetArgbBitmap(bitmap);
-            if (ribbon.CpIUIImageFromBitmap != null)
+            HBITMAP dibHBitmap;
+            Bitmap bmp = (Bitmap)bitmap.Clone();
+            try
             {
-                hr = ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)bitmap.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
-                if (hr.Failed)
+                //bmp = TryGetArgbBitmap(bmp);
+                if (!highContrast)
+                    ConvertToArgbBitmap(bmp);
+                dibHBitmap = GetDibHBitmap(bmp);
+                if (ribbon.CpIUIImageFromBitmap != null)
                 {
-                    bitmap.Dispose();
-                    return;
+                    hr = ribbon.CpIUIImageFromBitmap.CreateImage(dibHBitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    if (hr.Failed)
+                    {
+                        PInvoke.DeleteObject(dibHBitmap);
+                        return;
+                    }
+                    fixed (HBITMAP* phbitmap = &_hbitmap)
+                        _cpIUIImage.GetBitmap(phbitmap);
+                    GetBitmapProperties();
                 }
-                fixed (HBITMAP* phbitmap = &_hbitmap)
-                    _cpIUIImage.GetBitmap(phbitmap);
-                GetBitmapProperties();
+            }
+            finally
+            {
+                bmp?.Dispose();
             }
         }
 
@@ -136,33 +162,37 @@ namespace WinForms.Ribbon
         {
             HRESULT hr;
             Bitmap lBitmap;
+            HBITMAP dibHBitmap;
             lBitmap = new Bitmap(pImageList.ImageSize.Width, pImageList.ImageSize.Height, PixelFormat.Format32bppArgb);
             try
             {
                 Graphics g = Graphics.FromImage(lBitmap);
+                g.Clear(Color.White);
                 HDC hdc = (HDC)g.GetHdc();
                 BOOL result = PInvoke.ImageList_DrawEx((HIMAGELIST)pImageList.Handle, index, hdc, (lBitmap.Width - pImageList.ImageSize.Width) / 2,
                     (lBitmap.Height - pImageList.ImageSize.Height) / 2, 0, 0, new COLORREF(unchecked((uint)PInvoke.CLR_NONE)),
                     new COLORREF(unchecked((uint)PInvoke.CLR_NONE)), IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
                 g.ReleaseHdc();
                 g.Dispose();
+                dibHBitmap = GetDibHBitmap(lBitmap);
                 if (result == false)
                     return;
                 if (ribbon.CpIUIImageFromBitmap != null)
                 {
-                    hr = ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)lBitmap.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    hr = ribbon.CpIUIImageFromBitmap.CreateImage(dibHBitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
                     if (hr.Failed)
                     {
-                        lBitmap.Dispose();
+                        PInvoke.DeleteObject(dibHBitmap);
                         return;
                     }
                     fixed (HBITMAP* phbitmap = &_hbitmap)
                         _cpIUIImage.GetBitmap(phbitmap);
+                    GetBitmapProperties();
                 }
             }
             finally
             {
-                //lBitmap?.Dispose();
+                lBitmap?.Dispose();
             }
         }
 
@@ -182,12 +212,12 @@ namespace WinForms.Ribbon
         /// </summary>
         public ushort BitsPerPixel { get; private set; }
 
-        internal HBITMAP HBitmapInternal { get { return GetHBitmap(); } }
+        internal HBITMAP HBitmapCore { get { return GetHBitmap(); } }
 
         /// <summary>
         /// Bitmap handle HBITMAP
         /// </summary>
-        public IntPtr HBitmap { get { return HBitmapInternal; } }
+        public IntPtr HBitmap { get { return HBitmapCore; } }
 
         /// <summary>
         /// The IUIImage interface, Low-level handle to the image
@@ -196,14 +226,16 @@ namespace WinForms.Ribbon
 
         private void ConvertToArgbBitmap(Bitmap bitmap)
         {
-            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb || bitmap.Height == 0 || bitmap.Width == 0)
+            if (bitmap.PixelFormat == PixelFormat.Format32bppArgb ||
+                bitmap.PixelFormat == PixelFormat.Format32bppRgb ||
+                bitmap.Height == 0 || bitmap.Width == 0)
                 return;
             bitmap.MakeTransparent();
         }
 
         private unsafe HBITMAP GetHBitmap()
         {
-            if (_hbitmap != HBITMAP.Null)
+            if (!_hbitmap.IsNull)
                 return _hbitmap;
             if (UIImageHandle != null)
             {
@@ -217,7 +249,7 @@ namespace WinForms.Ribbon
         private unsafe void GetBitmapProperties()
         {
             BITMAP hBitmap;
-            if (PInvoke.GetObject(HBitmapInternal, sizeof(BITMAP), &hBitmap) != 0)
+            if (PInvoke.GetObject(HBitmapCore, sizeof(BITMAP), &hBitmap) != 0)
             {
                 Height = hBitmap.bmHeight;
                 Width = hBitmap.bmWidth;
@@ -291,11 +323,11 @@ namespace WinForms.Ribbon
 
         internal unsafe void Drawx(Graphics target, int xTarget, int yTarget, int wTarget, int hTarget)
         {
-            HBITMAP hBitmap = new HBITMAP();
+            HBITMAP hBitmap;
             HBITMAP oldHBitmap;
             HDC hdc;
-            hBitmap = HBitmapInternal;
-            if (hBitmap == HBITMAP.Null)
+            hBitmap = HBitmapCore;
+            if (hBitmap.IsNull)
                 return;
 
             HDC srcDc = PInvoke.CreateCompatibleDC(HDC.Null);
@@ -306,7 +338,7 @@ namespace WinForms.Ribbon
                     // AlphaBlend requires that the bitmap is pre - multiplied with the Alpha
                     // values.
                     hBitmap = CreatePreMultipliedBitmap(hBitmap);
-                    if (hBitmap == HBITMAP.Null)
+                    if (hBitmap.IsNull)
                         return;
                     try
                     {
@@ -360,39 +392,19 @@ namespace WinForms.Ribbon
         /// <returns>Bitmap</returns>
         public Bitmap? GetBitmap()
         {
-            if (_hbitmap == HBITMAP.Null)
+            if (_hbitmap.IsNull)
                 return null;
             return FromHbitmap(_hbitmap);
         }
 
         private void Load(string filename, bool highContrast)
         {
-            _cpIUIImage = null;
-            _hbitmap = HBITMAP.Null;
-            string ext = Path.GetExtension(filename).ToUpperInvariant();
-            if (ext == ".BMP")
-                LoadBmp(filename, highContrast);
-            else if (ext == ".PNG")
-                LoadPng(filename, highContrast);
-            else
-                throw new ArgumentException("Unsupported image file extensions ()", nameof(filename));
-            GetBitmapProperties();
-            DoChanged();
-        }
-
-        void DoChanged()
-        {
-
+            LoadBmp(filename, highContrast);
         }
 
         private unsafe void Load(HMODULE markupHandle, ushort resourceId)
         {
             Load(markupHandle, new PCWSTR((char*)resourceId));
-        }
-
-        void Load(ushort resourceId)
-        {
-            // ?
         }
 
         private unsafe void Load(HMODULE markupHandle, string resourceName)
@@ -405,17 +417,19 @@ namespace WinForms.Ribbon
         private unsafe void Load(HMODULE markupHandle, PCWSTR resourceName)
         {
             HRESULT hr;
-            _hbitmap = new HBITMAP((void*)PInvoke.LoadImage(markupHandle, resourceName, GDI_IMAGE_TYPE.IMAGE_BITMAP, 0, 0, IMAGE_FLAGS.LR_CREATEDIBSECTION));
+            HBITMAP dibHBitmap;
+            dibHBitmap = new HBITMAP((void*)PInvoke.LoadImage(markupHandle, resourceName, GDI_IMAGE_TYPE.IMAGE_BITMAP, 0, 0, IMAGE_FLAGS.LR_CREATEDIBSECTION));
+            //int err = Marshal.GetLastPInvokeError();
             ////With following code we can get a Bitmap stream
             ////We only have to add a BITMAPFILEHEADER in front of imageData1 array
             //BITMAPFILEHEADER bfh = BITMAPFILEHEADER.Create();
             //BITMAPINFOHEADER bih = new BITMAPINFOHEADER();
             //BITMAPINFO bi = new BITMAPINFO();
-            //if (_hbitmap != IntPtr.Zero)
+            //if (!dibHBitmap.IsNull)
             //{
             //    HRSRC hResource1;
             //    hResource1 = PInvoke.FindResource(markupHandle, resourceName, PInvoke.RT_BITMAP);
-            //    if ((IntPtr)hResource1 == IntPtr.Zero)
+            //    if (hResource1.IsNull)
             //        return;
             //    uint imageSize1 = PInvoke.SizeofResource(markupHandle, hResource1);
             //    if (imageSize1 == 0)
@@ -429,7 +443,7 @@ namespace WinForms.Ribbon
 
             //    return;
             //}
-            if (_hbitmap == HBITMAP.Null)
+            if (dibHBitmap.IsNull)
             {
                 //Lookup for the Bitmap resource in the resource folder IMAGE
                 //Maybe it is a Bitmap V5 or a PNG Bitmap
@@ -439,7 +453,7 @@ namespace WinForms.Ribbon
                 {
                     hResource = PInvoke.FindResource(markupHandle, resourceName, imageLocal);
                 }
-                if (hResource != IntPtr.Zero)
+                if (!hResource.IsNull)
                 {
                     uint imageSize = PInvoke.SizeofResource(markupHandle, hResource);
                     if (imageSize != 0)
@@ -452,7 +466,8 @@ namespace WinForms.Ribbon
                             Marshal.Copy((IntPtr)pResourceData, imageData, 0, (int)imageSize);
                             MemoryStream stream = new MemoryStream(imageData);
                             Bitmap bmp = new Bitmap(stream);
-                            _hbitmap = (HBITMAP)bmp.GetHbitmap();
+                            dibHBitmap = GetDibHBitmap(bmp);
+                            bmp.Dispose();
                         }
                         else
                             error = true;
@@ -469,10 +484,10 @@ namespace WinForms.Ribbon
             {
                 if (_ribbon.CpIUIImageFromBitmap != null)
                 {
-                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage(_hbitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage(dibHBitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
                     if (hr.Failed)
                     {
-                        PInvoke.DeleteObject(_hbitmap);
+                        PInvoke.DeleteObject(dibHBitmap);
                         _hbitmap = HBITMAP.Null;
                         return;
                     }
@@ -488,60 +503,66 @@ namespace WinForms.Ribbon
             }
         }
 
+        private unsafe void LoadStream(Stream stream, bool highContrast)
+        {
+            HRESULT hr;
+            Bitmap? bmp = null;
+            HBITMAP dibHBitmap;
+            try
+            {
+                bmp = new Bitmap(stream);
+                //bmp = TryGetArgbBitmap(bmp);
+                if (!highContrast)
+                    ConvertToArgbBitmap(bmp);
+                dibHBitmap = GetDibHBitmap(bmp);
+                if (_ribbon.CpIUIImageFromBitmap != null)
+                {
+                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage(dibHBitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    if (hr.Failed)
+                    {
+                        PInvoke.DeleteObject(dibHBitmap);
+                        return;
+                    }
+                    fixed (HBITMAP* phbitmap = &_hbitmap)
+                        _cpIUIImage.GetBitmap(phbitmap);
+                    GetBitmapProperties();
+                }
+            }
+            finally
+            {
+                bmp?.Dispose();
+            }
+        }
+
         //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
         private unsafe void LoadBmp(string filename, bool highContrast)
         {
             HRESULT hr;
             Bitmap? bmp = null;
+            HBITMAP dibHBitmap;
             try
             {
                 bmp = new Bitmap(filename);
-                bmp = TryGetArgbBitmap(bmp);
+                //bmp = TryGetArgbBitmap(bmp);
                 if (!highContrast)
                     ConvertToArgbBitmap(bmp);
+                dibHBitmap = GetDibHBitmap(bmp);
                 if (_ribbon.CpIUIImageFromBitmap != null)
                 {
-                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)bmp.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
+                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage(dibHBitmap, UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
                     if (hr.Failed)
                     {
-                        bmp?.Dispose();
+                        PInvoke.DeleteObject(dibHBitmap);
                         return;
                     }
                     fixed (HBITMAP* phbitmap = &_hbitmap)
                         _cpIUIImage.GetBitmap(phbitmap);
+                    GetBitmapProperties();
                 }
             }
             finally
             {
-                //bmp?.Dispose();
-            }
-        }
-
-        //UI_OWNERSHIP.UI_OWNERSHIP_COPY or UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER ?
-        private unsafe void LoadPng(string filename, bool highContrast)
-        {
-            HRESULT hr;
-            Bitmap? bmp = null;
-            try
-            {
-                bmp = new Bitmap(filename);
-                if (!highContrast)
-                    ConvertToArgbBitmap(bmp);
-                if (_ribbon.CpIUIImageFromBitmap != null)
-                {
-                    hr = _ribbon.CpIUIImageFromBitmap.CreateImage((HBITMAP)bmp.GetHbitmap(), UI_OWNERSHIP.UI_OWNERSHIP_TRANSFER, out _cpIUIImage);
-                    if (hr.Failed)
-                    {
-                        bmp?.Dispose();
-                        return;
-                    }
-                    fixed (HBITMAP* phbitmap = &_hbitmap)
-                        _cpIUIImage.GetBitmap(phbitmap);
-                }
-            }
-            finally
-            {
-                //bmp?.Dispose();
+                bmp?.Dispose();
             }
         }
 
@@ -557,7 +578,6 @@ namespace WinForms.Ribbon
                     bmpData = bitmap.LockBits(new Rectangle(new Point(), bitmap.Size), ImageLockMode.ReadOnly, bitmap.PixelFormat);
                     if (BitmapHasAlpha(bmpData))
                     {
-                        //alpha = new Bitmap(bitmap.Width, bitmap.Height, bmpData.Stride, PixelFormat.Format32bppArgb, bmpData.Scan0);
                         alpha = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format32bppArgb);
                         alphaData = alpha.LockBits(new Rectangle(new Point(), alpha.Size), ImageLockMode.WriteOnly, alpha.PixelFormat);
                         CopyBitmapData(bmpData, alphaData);
@@ -667,6 +687,97 @@ namespace WinForms.Ribbon
             return false;
         }
 
+        private static RGBQUAD[] RGBQUADFromColorArray(Bitmap bmp)
+        {
+            // Some programs as Axialis have problems with a reduced palette, so lets create a full palette
+            int bits = BitsFromPixelFormat(bmp.PixelFormat);
+            RGBQUAD[] rgbArray = new RGBQUAD[bits <= 8 ? (1 << bits) : 0];
+            Color[] entries = bmp.Palette.Entries;
+            for (int i = 0; i < entries.Length; i++)
+            {
+                rgbArray[i].rgbRed = entries[i].R;
+                rgbArray[i].rgbGreen = entries[i].G;
+                rgbArray[i].rgbBlue = entries[i].B;
+            }
+            return rgbArray;
+        }
+
+        private static int BitsFromPixelFormat(PixelFormat pixelFormat)
+        {
+            switch (pixelFormat)
+            {
+                case PixelFormat.Format1bppIndexed:
+                    return 1;
+                case PixelFormat.Format4bppIndexed:
+                    return 4;
+                case PixelFormat.Format8bppIndexed:
+                    return 8;
+                case PixelFormat.Format16bppArgb1555:
+                case PixelFormat.Format16bppGrayScale:
+                case PixelFormat.Format16bppRgb555:
+                case PixelFormat.Format16bppRgb565:
+                    return 16;
+                case PixelFormat.Format24bppRgb:
+                    return 24;
+                case PixelFormat.Format32bppArgb:
+                case PixelFormat.Format32bppPArgb:
+                case PixelFormat.Format32bppRgb:
+                    return 32;
+                case PixelFormat.Format64bppArgb:
+                case PixelFormat.Format64bppPArgb:
+                    return 64;
+                default:
+                    return 0;
+            }
+        }
+
+        private unsafe HBITMAP GetDibHBitmap(Bitmap bitmap)
+        {
+            RGBQUAD[] palette = RGBQUADFromColorArray(bitmap);
+            BITMAPINFOHEADER header = new BITMAPINFOHEADER();
+            header.biSize = (uint)sizeof(BITMAPINFOHEADER);
+            header.biWidth = bitmap.Width;
+            header.biHeight = -bitmap.Height;
+            header.biPlanes = 1;
+            header.biBitCount = (ushort)BitsFromPixelFormat(bitmap.PixelFormat);
+            header.biCompression = (uint)BI_COMPRESSION.BI_RGB;
+            header.biXPelsPerMeter = 0;
+            header.biYPelsPerMeter = 0;
+            header.biClrUsed = (uint)palette.Length;
+            header.biClrImportant = 0;
+            header.biSizeImage = 0;
+
+            HDC hDCScreen = PInvoke.GetDC(HWND.Null);
+            int rgbQuadLength = palette.Length;
+            byte* b = stackalloc byte[BITMAPINFO.SizeOf(rgbQuadLength)];
+            BITMAPINFO* pbi = (BITMAPINFO*)b;
+            pbi->bmiHeader = header;
+            if (rgbQuadLength > 0)
+            {
+                palette.CopyTo(pbi->bmiColors.AsSpan(rgbQuadLength));
+            }
+            HDC hDCScreenOUTBmp = PInvoke.CreateCompatibleDC(hDCScreen);
+            //bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+            long scanLength = Math.Abs(bmpData.Stride) * bmpData.Height;
+            header.biSizeImage = (uint)scanLength;
+            //IntPtr scanColor = bmpData.Scan0;
+            //byte[] XOR = new byte[Math.Abs(bmpData.Stride) * bmpData.Height];
+            //Marshal.Copy(scanColor, XOR, 0, XOR.Length);
+            void* bits;
+            HBITMAP hBitmapOUTBmp = PInvoke.CreateDIBSection(hDCScreenOUTBmp, pbi, DIB_USAGE.DIB_RGB_COLORS, &bits, HANDLE.Null, 0);
+            Buffer.MemoryCopy((void*)bmpData.Scan0, bits, scanLength, scanLength);
+            bitmap.UnlockBits(bmpData);
+
+            //Marshal.Copy(XOR, 0, (IntPtr)bits, XOR.Length);
+
+            PInvoke.ReleaseDC(HWND.Null, hDCScreen);
+            //PInvoke.DeleteObject(hBitmapOUTBmp);
+            PInvoke.DeleteDC(hDCScreenOUTBmp);
+
+            return hBitmapOUTBmp;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -682,16 +793,13 @@ namespace WinForms.Ribbon
             {
 
             }
-            if (_cpIUIImage != null)
+            IUIImage? localIUImage = _cpIUIImage;
+            _cpIUIImage = null;
+            if (localIUImage != null)
             {
-                int refCount;
-                if (!_suppressRelease)
-                {
-                    refCount = Marshal.ReleaseComObject(_cpIUIImage);
-                    Debug.WriteLine("IUIImage refCount " + refCount);
-                }
+                int refCount = Marshal.ReleaseComObject(localIUImage);
+                Debug.WriteLine("IUIImage refCount " + refCount);
                 //PInvoke.DeleteObject(_hbitmap);
-                _cpIUIImage = null;
             }
         }
     }

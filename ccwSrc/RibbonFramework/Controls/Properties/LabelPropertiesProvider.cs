@@ -90,8 +90,9 @@ namespace WinForms.Ribbon
                 if (_ribbon.Framework != null)
                 {
                     HRESULT hr;
+                    using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
-                        hr = _ribbon.Framework->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLabel);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLabel);
                 }
             }
         }

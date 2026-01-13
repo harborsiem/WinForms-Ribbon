@@ -402,6 +402,7 @@ namespace UIRibbonTools
                     {
                         bitmap = new Bitmap(_imageList.ImageSize.Width, _imageList.ImageSize.Height, PixelFormat.Format32bppArgb);
                         Graphics canvas = Graphics.FromImage(bitmap);
+                        canvas.Clear(Color.White);
 #if !UI
                         canvas.DrawImage(uIImage, 0, 0, _imageList.ImageSize.Width, _imageList.ImageSize.Height);
 #else
@@ -418,6 +419,7 @@ namespace UIRibbonTools
                             if ((uIImage.Width <= _imageList.ImageSize.Width) && (uIImage.Height <= _imageList.ImageSize.Height))
                             {
                                 Graphics canvas = Graphics.FromImage(bitmap);
+                                canvas.Clear(Color.White);
 #if !UI
                                 canvas.DrawImage(uIImage, (_imageList.ImageSize.Width - uIImage.Width) / 2,
                                 (_imageList.ImageSize.Height - uIImage.Height) / 2);
@@ -430,6 +432,7 @@ namespace UIRibbonTools
                             else
                             {
                                 Graphics canvas = Graphics.FromImage(bitmap);
+                                canvas.Clear(Color.White);
 #if !UI
                                 canvas.DrawImage(uIImage, 0, 0, _imageList.ImageSize.Width, _imageList.ImageSize.Height);
 #else
