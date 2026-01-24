@@ -21,3 +21,11 @@ internal =>
 PInvokeCore => PInvoke
 
 SR.cs added
+
+ComSafeArrayScope:
+PInvokeCore => PInvoke
+get indexer accepts now null IUnknown* values. Native UIRibbon set them into SAFEARRAY.
+
+SafeArrayScope:
+PInvokeCore => PInvoke
+comment VARIANT parts because I don't put VARIANT here.

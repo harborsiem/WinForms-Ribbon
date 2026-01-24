@@ -99,7 +99,10 @@ namespace WinForms.Ribbon
                     HRESULT hr;
                     using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyBooleanValue = &RibbonProperties.BooleanValue)
+                    {
                         hr = framework.Value->SetUICommandProperty(_commandId, pKeyBooleanValue, &propvar);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_VALUE, pKeyBooleanValue);
+                    }
                 }
             }
         }

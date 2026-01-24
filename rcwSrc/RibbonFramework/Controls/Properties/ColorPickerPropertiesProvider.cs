@@ -261,10 +261,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -282,7 +281,10 @@ namespace WinForms.Ribbon
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyAutomaticColorLabel = &RibbonProperties.AutomaticColorLabel)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyAutomaticColorLabel, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyAutomaticColorLabel);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -321,7 +323,10 @@ namespace WinForms.Ribbon
                     propvar = (PROPVARIANT)(uint)ColorTranslator.ToWin32(value); //InitPropVariantFromUInt32
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyColor = &RibbonProperties.Color)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyColor, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyColor);
+                    }
                 }
             }
         }
@@ -358,7 +363,10 @@ namespace WinForms.Ribbon
                     propvar = (PROPVARIANT)((uint)value); //InitPropVariantFromUInt32
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyColorType = &RibbonProperties.ColorType)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyColorType, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyColorType);
+                    }
                 }
             }
         }
@@ -417,10 +425,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -431,14 +438,17 @@ namespace WinForms.Ribbon
                 _moreColorsLabel = value;
                 if (_ribbon.Framework != null)
                 {
-                    PROPVARIANT propvar = PROPVARIANT.Empty;    
+                    PROPVARIANT propvar = PROPVARIANT.Empty;
                     if (!string.IsNullOrWhiteSpace(_moreColorsLabel))
                     {
                         UIPropVariant.UIInitPropertyFromString(_moreColorsLabel, out propvar);
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyMoreColorsLabel = &RibbonProperties.MoreColorsLabel)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyMoreColorsLabel, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyMoreColorsLabel);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -461,10 +471,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr);
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -482,7 +491,10 @@ namespace WinForms.Ribbon
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyNoColorLabel = &RibbonProperties.NoColorLabel)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyNoColorLabel, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyNoColorLabel);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -505,10 +517,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -526,7 +537,10 @@ namespace WinForms.Ribbon
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyRecentColorsCategoryLabel = &RibbonProperties.RecentColorsCategoryLabel)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyRecentColorsCategoryLabel, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyRecentColorsCategoryLabel);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -576,7 +590,10 @@ namespace WinForms.Ribbon
 
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyStandardColors = &RibbonProperties.StandardColors)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyStandardColors, propvar);
+                        //hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyStandardColors);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -599,10 +616,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -620,7 +636,10 @@ namespace WinForms.Ribbon
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyStandardColorsCategoryLabel = &RibbonProperties.StandardColorsCategoryLabel)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyStandardColorsCategoryLabel, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyStandardColorsCategoryLabel);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -647,12 +666,7 @@ namespace WinForms.Ribbon
                         ReadOnlySpan<PWSTR> span = new ReadOnlySpan<PWSTR>(pprgsz, (int)pcElem);
                         string[] result = new string[span.Length];
                         for (int i = 0; i < result.Length; i++)
-                            result[i] = new string(span[i]); //span[i].ToString();
-
-                        for (uint u = 0; u < pcElem; u++)
-                        {
-                            PInvoke.CoTaskMemFree(pprgsz[u]);
-                        }
+                            result[i] = span[i].ToStringAndCoTaskMemFree()!;
                         PInvoke.CoTaskMemFree(pprgsz);
                         propvar.Clear(); //PropVariantClear
                         return result;
@@ -670,7 +684,10 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar;
                     PROPVARIANT.InitPropVariantFromStringVector(value, out propvar);
                     fixed (PROPERTYKEY* pKeyStandardColorsTooltips = &RibbonProperties.StandardColorsTooltips)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyStandardColorsTooltips, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyStandardColorsTooltips);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -719,7 +736,10 @@ namespace WinForms.Ribbon
 
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyThemeColors = &RibbonProperties.ThemeColors)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyThemeColors, propvar);
+                        //hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyThemeColors);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -742,10 +762,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -763,7 +782,10 @@ namespace WinForms.Ribbon
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyThemeColorsCategoryLabel = &RibbonProperties.ThemeColorsCategoryLabel)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyThemeColorsCategoryLabel, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyThemeColorsCategoryLabel);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }
@@ -790,12 +812,7 @@ namespace WinForms.Ribbon
                         ReadOnlySpan<PWSTR> span = new ReadOnlySpan<PWSTR>(pprgsz, (int)pcElem);
                         string[] result = new string[span.Length];
                         for (int i = 0; i < result.Length; i++)
-                            result[i] = new string(span[i]); //span[i].ToString();
-
-                        for (uint u = 0; u < pcElem; u++)
-                        {
-                            PInvoke.CoTaskMemFree(pprgsz[u]);
-                        }
+                            result[i] = span[i].ToStringAndCoTaskMemFree()!;
                         PInvoke.CoTaskMemFree(pprgsz);
                         propvar.Clear(); //PropVariantClear
                         return result;
@@ -813,7 +830,10 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar;
                     PROPVARIANT.InitPropVariantFromStringVector(value, out propvar);
                     fixed (PROPERTYKEY* pKeyThemeColorsTooltips = &RibbonProperties.ThemeColorsTooltips)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyThemeColorsTooltips, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyThemeColorsTooltips);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }

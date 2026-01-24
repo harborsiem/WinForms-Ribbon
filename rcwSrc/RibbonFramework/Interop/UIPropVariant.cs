@@ -18,6 +18,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
     /// <inheritdoc cref="PROPVARIANT"/>
     unsafe partial struct UIPropVariant
     {
+#if UsedPInvoke
         private static void UsedFunctions()
         {
             PROPVARIANT pROPVARIANT = PROPVARIANT.Empty;
@@ -41,6 +42,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             //PCWSTR szdefault = new PCWSTR();
             //PInvoke.PropVariantToStringWithDefault(pROPVARIANT, szdefault); //UICollection
         }
+#endif
 
         // PInvoke functions InitPropVariantxxx with Vectors (C# Arrays) or Strings make a copy in the CoTaskMem memory.
         // I have tested this feature by the input and output pointer values.
@@ -296,8 +298,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 PWSTR pszLocal;
                 HRESULT hr;
                 hr = PInvoke.PropVariantToStringAlloc(propvarIn, &pszLocal);
-                ppszOut = pszLocal.ToString();
-                PInvoke.CoTaskMemFree(pszLocal);
+                ppszOut = pszLocal.ToStringAndCoTaskMemFree()!;
                 return hr;
             }
             else

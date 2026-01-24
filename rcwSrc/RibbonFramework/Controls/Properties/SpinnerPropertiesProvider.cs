@@ -167,7 +167,10 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar = (PROPVARIANT)value; //UIInitPropertyFromDecimal
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyDecimalValue = &RibbonProperties.DecimalValue)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyDecimalValue, in propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_VALUE, pKeyDecimalValue);
+                    }
                 }
             }
         }

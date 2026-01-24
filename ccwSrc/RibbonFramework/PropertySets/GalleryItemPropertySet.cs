@@ -42,8 +42,7 @@ namespace WinForms.Ribbon
             if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)
             {
                 UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
-                label = pwstr.ToString();
-                PInvoke.CoTaskMemFree(pwstr);
+                label = pwstr.ToStringAndCoTaskMemFree()!;
                 //fixed (char* emptyLocal = string.Empty)
                 //{
                 //    plabel = PInvoke.PropVariantToStringWithDefault(&propvar, emptyLocal);
@@ -63,13 +62,13 @@ namespace WinForms.Ribbon
             propvar = PROPVARIANT.Empty;
             fixed (PROPERTYKEY* pKeyItemImage = &RibbonProperties.ItemImage)
                 hr = cpIUISimplePropertySet.Value->GetValue(pKeyItemImage, &propvar);
-            IUIImage* cpIUIImage = null;
+            ComScope<IUIImage> cpIUIImage = new(null);
             UIImage? uIImage = null;
             if (hr == HRESULT.S_OK && propvar.vt == VARENUM.VT_UNKNOWN)
             {
-                UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, out cpIUIImage);
+                UIPropVariant.UIPropertyToImage(RibbonProperties.ItemImage, propvar, cpIUIImage);
                 propvar.Clear(); //PropVariantClear
-                if (cpIUIImage is not null)
+                if (!cpIUIImage.IsNull)
                     uIImage = new UIImage(cpIUIImage);
             }
             Label = label;

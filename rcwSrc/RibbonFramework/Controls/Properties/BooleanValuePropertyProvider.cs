@@ -36,7 +36,7 @@ namespace WinForms.Ribbon
         /// <param name="commandId">ribbon control command id</param>
         public BooleanValuePropertyProvider(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
-        { 
+        {
             // add supported properties
             _supportedProperties.Add(RibbonProperties.BooleanValue);
         }
@@ -78,7 +78,7 @@ namespace WinForms.Ribbon
                 {
                     PROPVARIANT propvar;
                     HRESULT hr;
-                    fixed (PROPERTYKEY* pKeyBooleanValue = &RibbonProperties.BooleanValue) 
+                    fixed (PROPERTYKEY* pKeyBooleanValue = &RibbonProperties.BooleanValue)
                         hr = _ribbon.Framework.GetUICommandProperty(_commandId, pKeyBooleanValue, out propvar);
                     if (hr.Succeeded)
                     {
@@ -97,7 +97,10 @@ namespace WinForms.Ribbon
                     propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyBooleanValue = &RibbonProperties.BooleanValue)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyBooleanValue, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_VALUE, pKeyBooleanValue);
+                    }
                 }
             }
         }

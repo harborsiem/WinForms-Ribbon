@@ -1,3 +1,4 @@
+#define UseArrayScope
 //*****************************************************************************
 //
 //  File:       RecentItemsPropertiesProvider.cs
@@ -89,75 +90,67 @@ namespace WinForms.Ribbon
 
         private static unsafe int GetSingleDimArrayCount(PROPVARIANT* propVarIn)
         {
-            if (propVarIn->vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
-            {
-                SAFEARRAY* psa = propVarIn->data.parray;
-                if (PInvoke.SafeArrayGetDim(psa) == 1)
-                {
-                    int lBound;
-                    int uBound;
-                    PInvoke.SafeArrayGetLBound(psa, 1, &lBound);
-                    PInvoke.SafeArrayGetUBound(psa, 1, &uBound);
-                    int count = uBound - lBound + 1;
-                    return count;
-                }
-            }
-            return 0;
+#if UseArrayScope
+            ComSafeArrayScope<IUISimplePropertySet> scope = new(propVarIn->data.parray);
+            return scope.Length;
+#else
+            return (int)propVarIn->data.parray->GetBounds().cElements;
+#endif
         }
 
         //Maybe we have to resize the list of RecentItems to MaxCount
-        //RecentItemsPropertySet[] array = _recentItems.ToArray();
-        //if (array.Length > MaxCount)
-        //    Array.Resize(ref array, MaxCount);
         private unsafe HRESULT NewValueHelper(out PROPVARIANT newValue)
         {
+            int count = 0;
+            for (int i = 0; i < _recentItems.Count; i++)
+            {
+                if (_recentItems[i] == null)
+                    break;
+                count++;
+            }
+#if UseArrayScope
+            using var scope = new ComSafeArrayScope<IUISimplePropertySet>((uint)count);
+            for (int i = 0; i < count; i++)
+            {
+                using (var item = new ComScope<IUISimplePropertySet>((IUISimplePropertySet*)Marshal.GetIUnknownForObject(_recentItems[i])))
+                {
+                    scope[i] = item;
+                }
+            }
+            UIPropVariant.UIInitPropertyFromIUnknownArray(RibbonProperties.RecentItems, scope, out newValue);
+            return HRESULT.S_OK;
+#else
             HRESULT hr;
             SAFEARRAYBOUND bounds = new()
             {
-                cElements = (uint)_recentItems.Count,
+                cElements = (uint)count,
                 lLbound = 0
             };
 
             SAFEARRAY* psa = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &bounds);
             if (psa != null)
             {
-                uint current = 0;
-                for (int i = 0; i < _recentItems.Count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     IUnknown* pUnk = null;
-                    if (_recentItems[i] != null)
-                    {
-                        pUnk = (IUnknown*)Marshal.GetIUnknownForObject(_recentItems[i]);
-                        hr = PInvoke.SafeArrayPutElement(psa, &i, pUnk);
-                        uint refCount = pUnk->Release();
+                    pUnk = (IUnknown*)Marshal.GetIUnknownForObject(_recentItems[i]);
+                    hr = PInvoke.SafeArrayPutElement(psa, &i, pUnk);
+                    uint refCount = pUnk->Release();
 //#if DEBUG
 //                        //refCount = 1 here
 //                        Debug.WriteLine("Put IUnknown refCount: " + refCount);
 //#endif
-                        if (hr != HRESULT.S_OK)
-                            break;
-                        else
-                            current++;
-                    }
-                    else
-                    {
+                    if (hr != HRESULT.S_OK)
                         break;
-                    }
                 }
-                // We will only populate items up to before the first failed item, and discard the rest.
-                SAFEARRAYBOUND sab = new SAFEARRAYBOUND()
-                {
-                    cElements = current,
-                    lLbound = 0
-                };
-                PInvoke.SafeArrayRedim(psa, &sab);
                 //fixed (PROPVARIANT* newValueLocal = &newValue)
-                    hr = UIPropVariant.UIInitPropertyFromIUnknownArray(RibbonProperties.RecentItems, psa, out newValue);
+                hr = UIPropVariant.UIInitPropertyFromIUnknownArray(RibbonProperties.RecentItems, psa, out newValue);
                 PInvoke.SafeArrayDestroy(psa);
                 return hr;
             }
             newValue = PROPVARIANT.Empty;
             return HRESULT.S_OK;
+#endif
         }
 
         #region IRecentItemsPropertiesProvider Members

@@ -123,15 +123,14 @@ namespace WinForms.Ribbon
                     categoriesReadyFired = true;
                     if (currentValue is not null)
                     {
-                        IUICollection* cpCollection;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, *currentValue, out cpCollection);
+                        ComScope<IUICollection> cpCollection = new(null);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, *currentValue, cpCollection);
 
                         //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpCollection)
                         //refCount from (native Framework + PROPVARIANT) have to be released by Framework
 
-                        ComScope<IUICollection> pCollection = new ComScope<IUICollection>(cpCollection);
                         //(*currentValue).Clear(); //PropVariantClear ??? => no
-                        GalleryCategories = new UICollection<CategoriesPropertySet>(pCollection, _ribbonItem, CollectionType.Categories);
+                        GalleryCategories = new UICollection<CategoriesPropertySet>(cpCollection, _ribbonItem, CollectionType.Categories);
                     }
                     //if (CategoriesReady != null)
                     {
@@ -154,20 +153,19 @@ namespace WinForms.Ribbon
                     itemsSourceReadyFired = true;
                     if (currentValue is not null)
                     {
-                        IUICollection* cpCollection;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, *currentValue, out cpCollection);
+                        ComScope<IUICollection> cpCollection = new(null);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, *currentValue, cpCollection);
 
                         //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpCollection)
                         //refCount from (native Framework + PROPVARIANT) have to be released by Framework
                         //cpCollection is released in UICollection.Destroy from OnDestroyUICommand
 
-                        ComScope<IUICollection> pCollection = new ComScope<IUICollection>(cpCollection);
                         //(*currentValue).Clear(); //PropVariantClear ??? => no
                         UI_COMMANDTYPE itemCommandType = (UI_COMMANDTYPE)_ribbonItem.CommandType;
                         if (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COLLECTION)
-                            GalleryItemItemsSource = new UICollection<GalleryItemPropertySet>(pCollection, _ribbonItem, CollectionType.ItemsSource);
+                            GalleryItemItemsSource = new UICollection<GalleryItemPropertySet>(cpCollection, _ribbonItem, CollectionType.ItemsSource);
                         else if (itemCommandType == UI_COMMANDTYPE.UI_COMMANDTYPE_COMMANDCOLLECTION)
-                            GalleryCommand.GalleryCommandItemsSource = new UICollection<GalleryCommandPropertySet>(pCollection, _ribbonItem, CollectionType.CommandItemsSource);
+                            GalleryCommand.GalleryCommandItemsSource = new UICollection<GalleryCommandPropertySet>(cpCollection, _ribbonItem, CollectionType.CommandItemsSource);
                     }
                     //if (ItemsSourceReady != null)
                     {
@@ -222,8 +220,8 @@ namespace WinForms.Ribbon
                         hr = framework.Value->GetUICommandProperty(_commandId, pKeyCategories, &propvar);
                     if (hr.Succeeded)
                     {
-                        IUICollection* result;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, propvar, out result);
+                        ComScope<IUICollection> result = new(null);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.Categories, propvar, result);
                         propvar.Clear(); //PropVariantClear
                         return result;
                     }
@@ -249,8 +247,8 @@ namespace WinForms.Ribbon
                         hr = framework.Value->GetUICommandProperty(_commandId, pKeyItemsSource, &propvar);
                     if (hr.Succeeded)
                     {
-                        IUICollection* result;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, propvar, out result);
+                        ComScope<IUICollection> result = new(null);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, propvar, result);
                         propvar.Clear(); //PropVariantClear
                         return result;
                     }

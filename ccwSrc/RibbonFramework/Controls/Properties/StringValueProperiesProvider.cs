@@ -85,10 +85,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -108,7 +107,10 @@ namespace WinForms.Ribbon
                     HRESULT hr;
                     using var framework = _ribbon.Framework.GetInterface();
                     fixed (PROPERTYKEY* pKeyStringValue = &RibbonProperties.StringValue)
+                    {
                         hr = framework.Value->SetUICommandProperty(_commandId, pKeyStringValue, &propvar);
+                        hr = framework.Value->InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_VALUE, pKeyStringValue);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }

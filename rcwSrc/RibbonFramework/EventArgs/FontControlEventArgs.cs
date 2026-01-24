@@ -403,8 +403,7 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        objValue = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        objValue = pwstr.ToStringAndCoTaskMemFree()!;
                         propvar.Clear(); //PropVariantClear
                         keys.Add(FontPropertiesEnum.Family, objValue);
                     }

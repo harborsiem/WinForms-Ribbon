@@ -92,7 +92,7 @@ namespace WinForms.Ribbon
         {
             if (propVarIn.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
             {
-                SAFEARRAY* psa = propVarIn.Anonymous.Anonymous.Anonymous.parray;
+                SAFEARRAY* psa = propVarIn.data.parray;
                 if (PInvoke.SafeArrayGetDim(psa) == 1)
                 {
                     int lBound;
@@ -107,50 +107,37 @@ namespace WinForms.Ribbon
         }
 
         //Maybe we have to resize the list of RecentItems to MaxCount
-        //RecentItemsPropertySet[] array = _recentItems.ToArray();
-        //if (array.Length > MaxCount)
-        //    Array.Resize(ref array, MaxCount);
         private unsafe HRESULT NewValueHelper(out PROPVARIANT newValue)
         {
+            int count = 0;
+            for (int i = 0; i < _recentItems.Count; i++)
+            {
+                if (_recentItems[i] == null)
+                    break;
+                count++;
+            }
             HRESULT hr;
             SAFEARRAYBOUND bounds = new()
             {
-                cElements = (uint)_recentItems.Count,
+                cElements = (uint)count,
                 lLbound = 0
             };
 
             SAFEARRAY* psa = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &bounds);
             if (psa != null)
             {
-                uint current = 0;
-                for (int i = 0; i < _recentItems.Count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     IntPtr pUnk = IntPtr.Zero;
-                    if (_recentItems[i] != null)
-                    {
-                        pUnk = Marshal.GetIUnknownForObject(_recentItems[i]);
-                        hr = PInvoke.SafeArrayPutElement(psa, &i, (void*)pUnk);
-                        int c = Marshal.Release(pUnk); //pUnk->Release();
-                        //#if DEBUG
-                        //  Debug.WriteLine("Put IUnknown count: " + c);
-                        //#endif
-                        if (hr != HRESULT.S_OK)
-                            break;
-                        else
-                            current++;
-                    }
-                    else
-                    {
+                    pUnk = Marshal.GetIUnknownForObject(_recentItems[i]);
+                    hr = PInvoke.SafeArrayPutElement(psa, &i, (void*)pUnk);
+                    int c = Marshal.Release(pUnk); //pUnk->Release();
+//#if DEBUG
+//  Debug.WriteLine("Put IUnknown count: " + c);
+//#endif
+                    if (hr != HRESULT.S_OK)
                         break;
-                    }
                 }
-                // We will only populate items up to before the first failed item, and discard the rest.
-                SAFEARRAYBOUND sab = new SAFEARRAYBOUND()
-                {
-                    cElements = current,
-                    lLbound = 0
-                };
-                PInvoke.SafeArrayRedim(psa, &sab);
                 hr = UIPropVariant.UIInitPropertyFromIUnknownArray(RibbonProperties.RecentItems, psa, out newValue);
                 PInvoke.SafeArrayDestroy(psa);
                 return hr;

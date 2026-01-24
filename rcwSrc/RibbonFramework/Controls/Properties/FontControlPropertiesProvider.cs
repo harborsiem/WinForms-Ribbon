@@ -8,6 +8,7 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Ribbon;
@@ -265,10 +266,10 @@ namespace WinForms.Ribbon
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_Family, out propvar);
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        Marshal.ReleaseComObject(cpIPropertyStore);
+                        return result!;
                     }
                 }
 
@@ -301,6 +302,7 @@ namespace WinForms.Ribbon
                         fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_Size, out propvar);
                         decimal decValue = (decimal)propvar; //UIPropertyToDecimal
+                        Marshal.ReleaseComObject(cpIPropertyStore);
                         return decValue;
                     }
                 }
@@ -335,6 +337,7 @@ namespace WinForms.Ribbon
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_Bold, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
+                        Marshal.ReleaseComObject(cpIPropertyStore);
                         return (FontProperties)retResult;
                     }
                 }
@@ -369,6 +372,7 @@ namespace WinForms.Ribbon
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_Italic, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
+                        Marshal.ReleaseComObject(cpIPropertyStore);
                         return (FontProperties)retResult;
                     }
                 }
@@ -403,6 +407,7 @@ namespace WinForms.Ribbon
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_Underline, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTUNDERLINE retResult = (UI_FONTUNDERLINE)result;
+                        Marshal.ReleaseComObject(cpIPropertyStore);
                         return (FontUnderline)retResult;
                     }
                 }
@@ -437,6 +442,7 @@ namespace WinForms.Ribbon
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_Strikethrough, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
+                        Marshal.ReleaseComObject(cpIPropertyStore);
                         return (FontProperties)retResult;
                     }
                 }
@@ -465,31 +471,39 @@ namespace WinForms.Ribbon
                     IPropertyStore? cpIPropertyStore = FontProperties;
                     if (cpIPropertyStore != null)
                     {
-                        HRESULT hr;
-                        PROPVARIANT propvar;
-                        fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
-                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
-                        uint result = (uint)propvar; //PropVariantToUInt32
-                        UI_SWATCHCOLORTYPE swatchColorType = (UI_SWATCHCOLORTYPE)result;
-
-                        switch (swatchColorType)
+                        try
                         {
-                            case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_RGB:
-                                PROPVARIANT propForegroundColor;
-                                fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
-                                    hr = cpIPropertyStore.GetValue(pKeyFontProperties_ForegroundColor, out propForegroundColor);
-                                uint resultRGB = (uint)propForegroundColor; //PropVariantToUInt32
-                                Color retResult = ColorTranslator.FromWin32((int)resultRGB);
-                                return retResult;
+                            HRESULT hr;
+                            PROPVARIANT propvar;
+                            fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
+                                hr = cpIPropertyStore.GetValue(pKeyFontProperties_ForegroundColorType, out propvar);
+                            uint result = (uint)propvar; //PropVariantToUInt32
+                            UI_SWATCHCOLORTYPE swatchColorType = (UI_SWATCHCOLORTYPE)result;
 
-                            case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_AUTOMATIC:
-                                return SystemColors.WindowText;
+                            switch (swatchColorType)
+                            {
+                                case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_RGB:
+                                    PROPVARIANT propForegroundColor;
+                                    fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
+                                        hr = cpIPropertyStore.GetValue(pKeyFontProperties_ForegroundColor, out propForegroundColor);
+                                    uint resultRGB = (uint)propForegroundColor; //PropVariantToUInt32
+                                    Color retResult = ColorTranslator.FromWin32((int)resultRGB);
+                                    return retResult;
 
-                            case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_NOCOLOR:
-                                throw new NotSupportedException("NoColor is not a valid value for ForegroundColor property in FontControl.");
+                                case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_AUTOMATIC:
+                                    return SystemColors.WindowText;
+
+                                case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_NOCOLOR:
+                                    throw new NotSupportedException("NoColor is not a valid value for ForegroundColor property in FontControl.");
+                            }
+
+                            return SystemColors.WindowText;
+
                         }
-
-                        return SystemColors.WindowText;
+                        finally
+                        {
+                            Marshal.ReleaseComObject(cpIPropertyStore);
+                        }
                     }
                 }
 
@@ -519,31 +533,38 @@ namespace WinForms.Ribbon
                     IPropertyStore? cpIPropertyStore = FontProperties;
                     if (cpIPropertyStore != null)
                     {
-                        HRESULT hr;
-                        PROPVARIANT propvar;
-                        fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
-                            hr = cpIPropertyStore.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
-                        uint result = (uint)propvar; //PropVariantToUInt32
-                        UI_SWATCHCOLORTYPE swatchColorType = (UI_SWATCHCOLORTYPE)result;
-
-                        switch (swatchColorType)
+                        try
                         {
-                            case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_RGB:
-                                PROPVARIANT propBackgroundColor;
-                                fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
-                                    hr = cpIPropertyStore.GetValue(pKeyFontProperties_BackgroundColor, out propBackgroundColor);
-                                uint resultRGB = (uint)propBackgroundColor; //PropVariantToUInt32
-                                Color retResult = ColorTranslator.FromWin32((int)resultRGB);
-                                return retResult;
+                            HRESULT hr;
+                            PROPVARIANT propvar;
+                            fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
+                                hr = cpIPropertyStore.GetValue(pKeyFontProperties_BackgroundColorType, out propvar);
+                            uint result = (uint)propvar; //PropVariantToUInt32
+                            UI_SWATCHCOLORTYPE swatchColorType = (UI_SWATCHCOLORTYPE)result;
 
-                            case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_AUTOMATIC:
-                                throw new NotSupportedException("Automatic is not a valid value for BackgroundColor property in FontControl.");
+                            switch (swatchColorType)
+                            {
+                                case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_RGB:
+                                    PROPVARIANT propBackgroundColor;
+                                    fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
+                                        hr = cpIPropertyStore.GetValue(pKeyFontProperties_BackgroundColor, out propBackgroundColor);
+                                    uint resultRGB = (uint)propBackgroundColor; //PropVariantToUInt32
+                                    Color retResult = ColorTranslator.FromWin32((int)resultRGB);
+                                    return retResult;
 
-                            case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_NOCOLOR:
-                                return SystemColors.Window;
+                                case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_AUTOMATIC:
+                                    throw new NotSupportedException("Automatic is not a valid value for BackgroundColor property in FontControl.");
+
+                                case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_NOCOLOR:
+                                    return SystemColors.Window;
+                            }
+
+                            return SystemColors.Window;
                         }
-
-                        return SystemColors.Window;
+                        finally
+                        {
+                            Marshal.ReleaseComObject(cpIPropertyStore);
+                        }
                     }
                 }
 
@@ -579,6 +600,7 @@ namespace WinForms.Ribbon
                             hr = cpIPropertyStore.GetValue(pKeyFontProperties_VerticalPositioning, out propvar);
                         uint result = (uint)propvar; //PropVariantToUInt32
                         UI_FONTVERTICALPOSITION retResult = (UI_FONTVERTICALPOSITION)result;
+                        Marshal.ReleaseComObject(cpIPropertyStore);
                         return (FontVerticalPosition)retResult;
                     }
                 }

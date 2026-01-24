@@ -40,8 +40,7 @@ namespace WinForms.Ribbon
             if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)
             {
                 UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                label = pwstr.ToString();
-                PInvoke.CoTaskMemFree(pwstr);
+                label = pwstr.ToStringAndCoTaskMemFree()!;
                 //fixed (char* emptyLocal = string.Empty)
                 //{
                 //    pwstr = PInvoke.PropVariantToStringWithDefault(propvar, emptyLocal);

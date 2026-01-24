@@ -36,7 +36,7 @@ namespace WinForms.Ribbon
         /// <param name="commandId">ribbon control command id</param>
         public StringValuePropertiesProvider(RibbonStrip ribbon, uint commandId)
             : base(ribbon, commandId)
-        { 
+        {
             // add supported properties
             _supportedProperties.Add(RibbonProperties.StringValue);
         }
@@ -84,10 +84,9 @@ namespace WinForms.Ribbon
                     {
                         PWSTR pwstr;
                         hr = UIPropVariant.UIPropertyToStringAlloc(propvar, out pwstr);
-                        string result = new string(pwstr); // pwstr.ToString();
-                        PInvoke.CoTaskMemFree(pwstr);
+                        string? result = pwstr.ToStringAndCoTaskMemFree();
                         propvar.Clear(); //PropVariantClear
-                        return result;
+                        return result!;
                     }
                 }
 
@@ -106,7 +105,10 @@ namespace WinForms.Ribbon
                     }
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyStringValue = &RibbonProperties.StringValue)
+                    {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyStringValue, propvar);
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_VALUE, pKeyStringValue);
+                    }
                     propvar.Clear(); //PropVariantClear
                 }
             }

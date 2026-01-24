@@ -71,15 +71,14 @@ namespace WinForms.Ribbon
                 if (currentValue is not null && QatItemsSource == null)
                 {
                     PROPVARIANT currentValueLocal = *currentValue;
-                    IUICollection* cpCollection;
-                    UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, currentValueLocal, out cpCollection);
+                    ComScope<IUICollection> cpCollection = new(null);
+                    UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, currentValueLocal, cpCollection);
 
                     //refCount = 3 here. (native Framework + PROPVARIANT currentValue + UIPropertyToInterface cpCollection)
                     //refCount from (native Framework + PROPVARIANT) have to be released by Framework
 
-                    ComScope<IUICollection> uICollectionScope = new ComScope<IUICollection>(cpCollection); //don't use using
                     //(*currentValue).Clear(); //PropVariantClear ??? => no
-                    QatItemsSource = new UICollection<QatCommandPropertySet>(uICollectionScope, this, CollectionType.QatItemsSource);
+                    QatItemsSource = new UICollection<QatCommandPropertySet>(cpCollection, this, CollectionType.QatItemsSource);
                 }
             }
             return HRESULT.S_OK;
@@ -101,8 +100,8 @@ namespace WinForms.Ribbon
                         hr = framework.Value->GetUICommandProperty(CommandId, pKeyItemsSource, &propvar);
                     if (hr.Succeeded)
                     {
-                        IUICollection* result;
-                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, propvar, out result);
+                        ComScope<IUICollection> result = new(null);
+                        UIPropVariant.UIPropertyToInterface<IUICollection>(RibbonProperties.ItemsSource, propvar, result);
                         propvar.Clear(); //PropVariantClear
                         return result;
                     }

@@ -24,132 +24,120 @@ namespace WinForms.Ribbon
     /// </summary>
     public sealed unsafe class FontPropertyStore
     {
-        private IPropertyStore* _cpPropertyStore;
-
         /// <summary>
         /// Initializes a new instance of the FontPropertyStore
         /// </summary>
         /// <param name="cpPropertyStore">Font properties</param>
-        internal FontPropertyStore(IPropertyStore* cpPropertyStore)
+        internal FontPropertyStore(ComScope<IPropertyStore> cpPropertyStore)
         {
-            if (cpPropertyStore == null)
+            if (cpPropertyStore.IsNull)
             {
                 throw new ArgumentNullException(nameof(cpPropertyStore), "Parameter cannot be null.");
             }
-            _cpPropertyStore = cpPropertyStore;
-        }
-
-        /// <summary>
-        /// Destructor
-        /// </summary>
-        ~FontPropertyStore()
-        {
-            Dispose(false);
+            Family = GetFamily(cpPropertyStore);
+            Size = GetSize(cpPropertyStore);
+            Bold = GetBold(cpPropertyStore);
+            Italic = GetItalic(cpPropertyStore);
+            Underline = GetUnderline(cpPropertyStore);
+            Strikethrough = GetStrikethrough(cpPropertyStore);
+            ForegroundColor = GetForegroundColor(cpPropertyStore);
+            ForegroundColorType = GetForegroundColorType(cpPropertyStore);
+            DeltaSize = GetDeltaSize(cpPropertyStore);
+            BackgroundColor = GetBackgroundColor(cpPropertyStore);
+            BackgroundColorType = GetBackgroundColorType(cpPropertyStore);
+            VerticalPositioning = GetVerticalPositioning(cpPropertyStore);
         }
 
         /// <summary>
         /// The selected font family name.
         /// </summary>
-        public unsafe string Family
+        public readonly string Family;
+        private unsafe string GetFamily(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Family, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_Family, &propvar);
                 PWSTR pwstr;
                 hr = UIPropVariant.UIPropertyToStringAlloc(&propvar, &pwstr);
-                string result = new string(pwstr); // pwstr.ToString();
-                PInvoke.CoTaskMemFree(pwstr);
+                string? result = pwstr.ToStringAndCoTaskMemFree();
                 propvar.Clear(); //PropVariantClear
-                return result;
-            }
+                return result!;
         }
 
         /// <summary>
         /// The size of the font.
         /// </summary>
-        public unsafe decimal Size
+        public readonly decimal Size;
+        private unsafe decimal GetSize(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_Size = &RibbonProperties.FontProperties_Size)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Size, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_Size, &propvar);
                 decimal decValue = (decimal)propvar; //UIPropertyToDecimal
                 return decValue;
-            }
         }
 
         /// <summary>
         /// Flag that indicates whether bold is selected.
         /// </summary>
-        public unsafe FontProperties Bold
+        public readonly FontProperties Bold;
+        private unsafe FontProperties GetBold(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_Bold = &RibbonProperties.FontProperties_Bold)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Bold, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_Bold, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                 return (FontProperties)retResult;
-            }
         }
 
         /// <summary>
         /// Flag that indicates whether italic is selected.
         /// </summary>
-        public unsafe FontProperties Italic
+        public readonly FontProperties Italic;
+        private unsafe FontProperties GetItalic(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_Italic = &RibbonProperties.FontProperties_Italic)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Italic, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_Italic, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                 return (FontProperties)retResult;
-            }
         }
 
         /// <summary>
         /// Flag that indicates whether underline is selected.
         /// </summary>
-        public unsafe FontUnderline Underline
+        public readonly FontUnderline Underline;
+        private unsafe FontUnderline GetUnderline(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_Underline = &RibbonProperties.FontProperties_Underline)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Underline, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_Underline, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTUNDERLINE retResult = (UI_FONTUNDERLINE)result;
                 return (FontUnderline)retResult;
-            }
         }
 
         /// <summary>
         /// Flag that indicates whether strikethrough is selected
         /// (sometimes called Strikeout).
         /// </summary>
-        public unsafe FontProperties Strikethrough
+        public readonly FontProperties Strikethrough;
+        private unsafe FontProperties GetStrikethrough(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_Strikethrough = &RibbonProperties.FontProperties_Strikethrough)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_Strikethrough, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_Strikethrough, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTPROPERTIES retResult = (UI_FONTPROPERTIES)result;
                 return (FontProperties)retResult;
-            }
         }
 
         /// <summary>
@@ -157,18 +145,16 @@ namespace WinForms.Ribbon
         /// The FontControl helper class expose this property as a .NET Color
         /// and handles internally the conversion to and from COLORREF structure.
         /// </summary>
-        public unsafe Color ForegroundColor
+        public readonly Color ForegroundColor;
+        private unsafe Color GetForegroundColor(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColor = &RibbonProperties.FontProperties_ForegroundColor)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_ForegroundColor, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_ForegroundColor, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 Color retResult = ColorTranslator.FromWin32((int)result);
                 return retResult;
-            }
         }
 
         /// <summary>
@@ -176,14 +162,13 @@ namespace WinForms.Ribbon
         /// If RGB is selected, the user should get the color from the ForegroundColor property. 
         /// If Automatic is selected the user should use SystemColors.WindowText.
         /// </summary>
-        public unsafe SwatchColorType ForegroundColorType
+        public readonly SwatchColorType ForegroundColorType;
+        private unsafe SwatchColorType GetForegroundColorType(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_ForegroundColorType = &RibbonProperties.FontProperties_ForegroundColorType)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_ForegroundColorType, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_ForegroundColorType, &propvar);
                 uint result;
                 if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
                     result = (uint)(int)propvar;
@@ -191,20 +176,18 @@ namespace WinForms.Ribbon
                     result = (uint)propvar; //PropVariantToUInt32
                 UI_SWATCHCOLORTYPE retResult = (UI_SWATCHCOLORTYPE)result;
                 return (SwatchColorType)retResult;
-            }
         }
 
         /// <summary>
         /// Indicated whether the "Grow Font" or "Shrink Font" buttons were pressed.
         /// </summary>
-        public unsafe FontDeltaSize? DeltaSize
+        public readonly FontDeltaSize? DeltaSize;
+        private unsafe FontDeltaSize? GetDeltaSize(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_DeltaSize = &RibbonProperties.FontProperties_DeltaSize)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_DeltaSize, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_DeltaSize, &propvar);
                 if (hr.Succeeded)
                 {
                     if (propvar.IsEmpty)
@@ -214,7 +197,6 @@ namespace WinForms.Ribbon
                     return (FontDeltaSize?)retResult;
                 }
                 return null;
-            }
         }
 
         /// <summary>
@@ -222,18 +204,16 @@ namespace WinForms.Ribbon
         /// The FontControl helper class expose this property as a .NET Color
         /// and handles internally the conversion to and from COLORREF structure.
         /// </summary>
-        public unsafe Color BackgroundColor
+        public readonly Color BackgroundColor;
+        private unsafe Color GetBackgroundColor(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColor = &RibbonProperties.FontProperties_BackgroundColor)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_BackgroundColor, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_BackgroundColor, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 Color retResult = ColorTranslator.FromWin32((int)result);
                 return retResult;
-            }
         }
 
         /// <summary>
@@ -241,14 +221,13 @@ namespace WinForms.Ribbon
         /// If RGB is selected, the user should get the color from the BackgroundColor property.
         /// If NoColor is selected the user should use SystemColors.Window.
         /// </summary>
-        public unsafe SwatchColorType BackgroundColorType
+        public readonly SwatchColorType BackgroundColorType;
+        private unsafe SwatchColorType GetBackgroundColorType(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_BackgroundColorType = &RibbonProperties.FontProperties_BackgroundColorType)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_BackgroundColorType, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_BackgroundColorType, &propvar);
                 uint result;
                 if (propvar.vt == VARENUM.VT_I4) //@ seems to be a bug in UIRibbon
                     result = (uint)(int)propvar;
@@ -256,35 +235,22 @@ namespace WinForms.Ribbon
                     result = (uint)propvar; //PropVariantToUInt32
                 UI_SWATCHCOLORTYPE retResult = (UI_SWATCHCOLORTYPE)result;
                 return (SwatchColorType)retResult;
-            }
         }
 
         /// <summary>
         /// Flag that indicates which one of the Subscript
         /// and Superscript buttons are selected, if any.
         /// </summary>
-        public unsafe FontVerticalPosition VerticalPositioning
+        public readonly FontVerticalPosition VerticalPositioning;
+        private unsafe FontVerticalPosition GetVerticalPositioning(ComScope<IPropertyStore> cpPropertyStore)
         {
-            get
-            {
                 PROPVARIANT propvar;
                 HRESULT hr;
                 fixed (PROPERTYKEY* pKeyFontProperties_VerticalPositioning = &RibbonProperties.FontProperties_VerticalPositioning)
-                    hr = _cpPropertyStore->GetValue(pKeyFontProperties_VerticalPositioning, &propvar);
+                    hr = cpPropertyStore.Value->GetValue(pKeyFontProperties_VerticalPositioning, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_FONTVERTICALPOSITION retResult = (UI_FONTVERTICALPOSITION)result;
                 return (FontVerticalPosition)retResult;
-            }
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (_cpPropertyStore != null)
-            {
-                
-                _cpPropertyStore->Release();
-                //_cpPropertyStore = null;
-            }
         }
     }
 }

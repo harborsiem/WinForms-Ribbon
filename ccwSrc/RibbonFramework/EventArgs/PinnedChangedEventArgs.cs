@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define UseArrayScope
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Windows.Win32;
@@ -67,16 +69,33 @@ namespace WinForms.Ribbon
             {
                 if (currentValue.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
                 {
-                    // go over recent items
                     SAFEARRAY* psa;
-                    int lBound;
-                    int uBound;
+#if UseArrayScope
                     UIPropVariant.UIPropertyToIUnknownArrayAlloc(RibbonProperties.RecentItems, currentValue, &psa);
-                    uint dim = PInvoke.SafeArrayGetDim(psa);
-                    PInvoke.SafeArrayGetLBound(psa, 1U, &lBound);
-                    PInvoke.SafeArrayGetUBound(psa, 1U, &uBound);
-                    //checks for dim = 1, lBound = 0 ?
-                    for (int i = 0; i < (uBound + 1); i++)
+                    using var scope = new ComSafeArrayScope<IUISimplePropertySet>(psa);
+                    for (int i = 0; i < scope.Length; i++)
+                    {
+                        try
+                        {
+                            using (var item = new ComScope<IUISimplePropertySet>(scope[i]))
+                            {
+                                if (item.IsNull)
+                                    break;
+                                int index = GetChangedPinned(ribbonRecentItems, item, i);
+                                if (index >= 0)
+                                    changedPinnedIndices.Add(index);
+                            }
+                        }
+                        catch (NullReferenceException)
+                        {
+                            break;
+                        }
+                    }
+#else
+                    // go over recent items
+                    UIPropVariant.UIPropertyToIUnknownArrayAlloc(RibbonProperties.RecentItems, currentValue, &psa);
+                    int count = (int)psa->GetBounds().cElements;
+                    for (int i = 0; i < count; i++)
                     {
                         IUnknown* unk;
                         PInvoke.SafeArrayGetElement(psa, &i, &unk);
@@ -95,7 +114,7 @@ namespace WinForms.Ribbon
                             int index = GetChangedPinned(ribbonRecentItems, cpIUISimplePropertySet, i);
                             if (index >= 0)
                                 changedPinnedIndices.Add(index);
-                            //cpIUISimplePropertySet.Value->AddRef();
+//                            cpIUISimplePropertySet.Value->AddRef();
 //                            refCount = cpIUISimplePropertySet.Value->Release();
 //#if DEBUG
 //                            //refCount = 5 here
@@ -104,6 +123,7 @@ namespace WinForms.Ribbon
                         }
                     }
                     HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+#endif
                 }
             }
             PinnedChangedEventArgs e = new PinnedChangedEventArgs(changedPinnedIndices);
@@ -117,7 +137,7 @@ namespace WinForms.Ribbon
         /// <param name="commandExecutionProperties"></param>
         /// <param name="index">RibbonRecentItems.RecentItems index</param>
         /// <returns></returns>
-        private static unsafe int GetChangedPinned(RibbonRecentItems ribbonRecentItems, IUISimplePropertySet* commandExecutionProperties, int index)
+        private static unsafe int GetChangedPinned(RibbonRecentItems ribbonRecentItems, ComScope<IUISimplePropertySet> commandExecutionProperties, int index)
         {
             if (index >= ribbonRecentItems.RecentItems.Count)
                 throw new ArgumentException("Internal Error", nameof(index));
@@ -131,7 +151,7 @@ namespace WinForms.Ribbon
             // If Pinning is not set then output is null and HRESULT is not S_OK
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyPinned = &RibbonProperties.Pinned)
-                hr = commandExecutionProperties->GetValue(pKeyPinned, &propvar);
+                hr = commandExecutionProperties.Value->GetValue(pKeyPinned, &propvar);
             if (hr == HRESULT.S_OK)
             {
                 bool result = (bool)propvar; //PropVariantToBoolean

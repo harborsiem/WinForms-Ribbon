@@ -18,6 +18,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
     /// <inheritdoc cref="PROPVARIANT"/>
     unsafe partial struct UIPropVariant
     {
+#if UsedPInvoke
         private static void UsedFunctions()
         {
             PROPVARIANT pROPVARIANT = PROPVARIANT.Empty;
@@ -41,7 +42,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             //PCWSTR szdefault = new PCWSTR();
             //PInvoke.PropVariantToStringWithDefault(&pROPVARIANT, szdefault); //UICollection
         }
-
+#endif
 
         // PInvoke functions InitPropVariantxxx with Vectors (C# Arrays) or Strings make a copy in the CoTaskMem memory.
         // I have tested this feature by the input and output pointer values.
@@ -302,8 +303,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 PWSTR pszLocal;
                 HRESULT hr;
                 hr = PInvoke.PropVariantToStringAlloc(propvarIn, &pszLocal);
-                ppszOut = pszLocal.ToString();
-                PInvoke.CoTaskMemFree(pszLocal);
+                ppszOut = pszLocal.ToStringAndCoTaskMemFree()!;
                 return hr;
             }
             else
@@ -318,10 +318,27 @@ namespace Windows.Win32.System.Com.StructuredStorage
             bool valid = (VARENUM)propertyKey.pid == VARENUM.VT_DECIMAL;
             if (valid && propvarIn.vt == VARENUM.VT_DECIMAL)
             {
-                pDecValue = propvarIn.Anonymous.decVal;
+                pDecValue = (decimal)propvarIn;
                 return HRESULT.S_OK;
             }
             pDecValue = 0;
+            return HRESULT.E_INVALIDARG;
+        }
+
+        internal static unsafe HRESULT UIPropertyToInterface<TInterface>(in PROPERTYKEY propertyKey, in PROPVARIANT propvarIn, TInterface** ppObj) where TInterface : unmanaged, IComIID
+        {
+            bool valid = (VARENUM)propertyKey.pid == VARENUM.VT_UNKNOWN;
+            if (valid && propvarIn.vt == VARENUM.VT_UNKNOWN)
+            {
+                if ((nint)propvarIn.data.punkVal != 0)
+                {
+                    HRESULT hr;
+                    fixed (Guid* pInterfaceGuid = &TInterface.Guid)
+                        hr = propvarIn.data.punkVal->QueryInterface(pInterfaceGuid, (void**)ppObj);
+                    return hr;
+                }
+                return HRESULT.S_OK;
+            }
             return HRESULT.E_INVALIDARG;
         }
 
@@ -345,11 +362,9 @@ namespace Windows.Win32.System.Com.StructuredStorage
             return HRESULT.E_INVALIDARG;
         }
 
-        internal static HRESULT UIPropertyToImage(in PROPERTYKEY propertyKey, in PROPVARIANT propvarIn, out IUIImage* ppImage)
+        internal static HRESULT UIPropertyToImage(in PROPERTYKEY propertyKey, in PROPVARIANT propvarIn, IUIImage** ppImage)
         {
-            IUIImage* cpIUIImage;
-            HRESULT hr = UIPropertyToInterface<IUIImage>(propertyKey, propvarIn, out cpIUIImage);
-            ppImage = cpIUIImage;
+            HRESULT hr = UIPropertyToInterface<IUIImage>(propertyKey, propvarIn, ppImage);
             return hr;
         }
 
