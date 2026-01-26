@@ -205,7 +205,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
         //    //{
         //    //    if (valid && psa.fFeatures == ADVANCED_FEATURE_FLAGS.FADF_UNKNOWN)
         //    //    {
-        //    //        hr = PInvoke.SafeArrayCopy(psa, out ppPropVar->Anonymous.Anonymous.Anonymous.parray);
+        //    //        hr = PInvoke.SafeArrayCopy(psa, out ppPropVar->data.parray);
         //    //        if (hr.Succeeded)
         //    //        {
         //    //            pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
@@ -237,8 +237,8 @@ namespace Windows.Win32.System.Com.StructuredStorage
         //            PInvoke.SafeArrayUnaccessData(psa);
         //        }
 
-        //        pPropVar.Anonymous.Anonymous.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
-        //        pPropVar.Anonymous.Anonymous.Anonymous.parray = psa;
+        //        pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
+        //        pPropVar.data.parray = psa;
         //        return HRESULT.S_OK;
         //    }
         //    return HRESULT.E_INVALIDARG;
@@ -386,7 +386,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
         //    bool valid = (VARENUM)propertyKey.pid == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN);
         //    if (valid && propvarIn.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
         //    {
-        //        SAFEARRAY* psa = propvarIn.Anonymous.Anonymous.Anonymous.parray;
+        //        SAFEARRAY* psa = propvarIn.data.parray;
         //        uint cDims = PInvoke.SafeArrayGetDim(psa);
         //        if (cDims != 1)
         //            throw new ArgumentException("Multi-dimensional SafeArrays not supported.");

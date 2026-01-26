@@ -22,7 +22,7 @@ namespace WinForms.Ribbon
     /// Helper class that wraps an IPropertyStore interface that 
     /// contains font properties
     /// </summary>
-    public sealed unsafe class FontPropertyStore
+    public sealed class FontPropertyStore
     {
         /// <summary>
         /// Initializes a new instance of the FontPropertyStore

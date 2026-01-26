@@ -163,7 +163,7 @@ namespace WinForms.Ribbon
 
             if (key == RibbonProperties.ItemImage)
             {
-                if (_itemImage != null)
+                if (_itemImage != null && _itemImage.UIImageHandle != null)
                 {
                     UIPropVariant.UIInitPropertyFromImage(RibbonProperties.ItemImage, _itemImage.UIImageHandle, out value);
                 }

@@ -93,15 +93,7 @@ namespace WinForms.Ribbon
             if (propVarIn.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
             {
                 SAFEARRAY* psa = propVarIn.data.parray;
-                if (PInvoke.SafeArrayGetDim(psa) == 1)
-                {
-                    int lBound;
-                    int uBound;
-                    PInvoke.SafeArrayGetLBound(psa, 1, &lBound);
-                    PInvoke.SafeArrayGetUBound(psa, 1, &uBound);
-                    int count = uBound - lBound + 1;
-                    return count;
-                }
+                return (int)psa->GetBounds().cElements;
             }
             return 0;
         }
@@ -131,9 +123,9 @@ namespace WinForms.Ribbon
                     IntPtr pUnk = IntPtr.Zero;
                     pUnk = Marshal.GetIUnknownForObject(_recentItems[i]);
                     hr = PInvoke.SafeArrayPutElement(psa, &i, (void*)pUnk);
-                    int c = Marshal.Release(pUnk); //pUnk->Release();
+                    int refCount = Marshal.Release(pUnk); //pUnk->Release();
 //#if DEBUG
-//  Debug.WriteLine("Put IUnknown count: " + c);
+//                    Debug.WriteLine("Put IUnknown refCount: " + refCount);
 //#endif
                     if (hr != HRESULT.S_OK)
                         break;

@@ -43,8 +43,8 @@ namespace WinForms.Ribbon
                 label = pwstr.ToStringAndCoTaskMemFree()!;
                 //fixed (char* emptyLocal = string.Empty)
                 //{
-                //    plabel = PInvoke.PropVariantToStringWithDefault(&propvar, emptyLocal);
-                //    label = plabel.ToString();
+                //    pwstr = PInvoke.PropVariantToStringWithDefault(&propvar, emptyLocal);
+                //    label = pwstr.ToString();
                 //}
                 propvar.Clear(); //PropVariantClear
             }

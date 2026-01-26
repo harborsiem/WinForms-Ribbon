@@ -31,8 +31,8 @@ namespace Windows.Win32.System.Com.StructuredStorage
             PInvoke.InitPropVariantFromUInt32Vector(prgn, cEle, out pROPVARIANT); //ColorPickerPropertiesProvider 4x
             uint* ppu;
             PInvoke.PropVariantToUInt32VectorAlloc(pROPVARIANT, &ppu, &cEle); //ColorPickerPropertiesProvider 2x
-            //PWSTR pWSTR;
-            //PInvoke.PropVariantToStringAlloc(pROPVARIANT, &pWSTR); //ColorPickerPropertiesProvider, FontControlProperiesprovider, FontControlEventArgs,
+            PWSTR pWSTR;
+            PInvoke.PropVariantToStringAlloc(pROPVARIANT, &pWSTR); //ColorPickerPropertiesProvider, FontControlProperiesprovider, FontControlEventArgs,
             //FontPropertyStore, GalleryItemEventArgs, StringValuePropertiesProvider 6x, 1x, 1x, 1x, 1x, 1x
             //UIPropVariant 2x
             PInvoke.PropVariantClear(ref pROPVARIANT); //44x
@@ -150,9 +150,9 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 {
                     ppropvar->vt = VARENUM.VT_UNKNOWN;
                     if (pUnk != null)
-                        ppropvar->Anonymous.Anonymous.Anonymous.punkVal = (IUnknown*)Marshal.GetIUnknownForObject(pUnk);
+                        ppropvar->data.punkVal = (IUnknown*)Marshal.GetIUnknownForObject(pUnk);
                     else
-                        ppropvar->Anonymous.Anonymous.Anonymous.punkVal = null;
+                        ppropvar->data.punkVal = null;
                     return HRESULT.S_OK;
                 }
                 else
@@ -179,7 +179,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 hr = PInvoke.SafeArrayCopy(psa, &ppsaOut);
                 if (hr.Succeeded)
                 {
-                    pPropVar.Anonymous.Anonymous.Anonymous.parray = ppsaOut;
+                    pPropVar.data.parray = ppsaOut;
                     pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
                 }
                 return hr;
@@ -196,10 +196,10 @@ namespace Windows.Win32.System.Com.StructuredStorage
         //    //{
         //    //    if (valid && psa.fFeatures == ADVANCED_FEATURE_FLAGS.FADF_UNKNOWN)
         //    //    {
-        //    //        hr = PInvoke.SafeArrayCopy(psa, out ppPropVar->Anonymous.Anonymous.Anonymous.parray);
+        //    //        hr = PInvoke.SafeArrayCopy(psa, out ppPropVar->data.parray);
         //    //        if (hr.Succeeded)
         //    //        {
-        //    //            pPropVar.Anonymous.Anonymous.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
+        //    //            pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
         //    //            //Todo
         //    //        }
         //    //        return hr;
@@ -228,8 +228,8 @@ namespace Windows.Win32.System.Com.StructuredStorage
         //            PInvoke.SafeArrayUnaccessData(psa);
         //        }
 
-        //        pPropVar.Anonymous.Anonymous.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
-        //        pPropVar.Anonymous.Anonymous.Anonymous.parray = psa;
+        //        pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
+        //        pPropVar.data.parray = psa;
         //        return HRESULT.S_OK;
         //    }
         //    return HRESULT.E_INVALIDARG;
@@ -326,7 +326,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             bool valid = (VARENUM)propertyKey.pid == VARENUM.VT_UNKNOWN;
             if (valid && propvarIn.vt == VARENUM.VT_UNKNOWN)
             {
-                if ((IntPtr)propvarIn.Anonymous.Anonymous.Anonymous.punkVal != IntPtr.Zero)
+                if ((IntPtr)propvarIn.data.punkVal != IntPtr.Zero)
                 {
                     ppObj = (TInterface)Marshal.GetObjectForIUnknown((IntPtr)propvarIn.Anonymous.Anonymous.Anonymous.punkVal);
                     return HRESULT.S_OK;
@@ -350,7 +350,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             {
                 HRESULT hr;
                 fixed (SAFEARRAY** pppsa = &ppsa)
-                    hr = PInvoke.SafeArrayCopy(propvarIn.Anonymous.Anonymous.Anonymous.parray, pppsa);
+                    hr = PInvoke.SafeArrayCopy(propvarIn.data.parray, pppsa);
                 return hr;
             }
             ppsa = null;
@@ -362,7 +362,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
         //    bool valid = (VARENUM)propertyKey.pid == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN);
         //    if (valid && propvarIn.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
         //    {
-        //        SAFEARRAY* psa = propvarIn.Anonymous.Anonymous.Anonymous.parray;
+        //        SAFEARRAY* psa = propvarIn.data.parray;
         //        uint cDims = PInvoke.SafeArrayGetDim(psa);
         //        if (cDims != 1)
         //            throw new ArgumentException("Multi-dimensional SafeArrays not supported.");

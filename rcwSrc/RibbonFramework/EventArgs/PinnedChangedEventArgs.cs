@@ -68,23 +68,19 @@ namespace WinForms.Ribbon
             {
                 if (currentValue.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
                 {
-                    // go over recent items
                     SAFEARRAY* psa;
-                    int lBound;
-                    int uBound;
+
+                    // go over recent items
                     UIPropVariant.UIPropertyToIUnknownArrayAlloc(RibbonProperties.RecentItems, currentValue, out psa);
-                    uint dim = PInvoke.SafeArrayGetDim(psa);
-                    PInvoke.SafeArrayGetLBound(psa, 1U, &lBound);
-                    PInvoke.SafeArrayGetUBound(psa, 1U, &uBound);
-                    //checks for dim = 1, lBound = 0 ?
-                    for (int i = 0; i < (uBound + 1); i++)
+                    int count = (int)psa->GetBounds().cElements;
+                    for (int i = 0; i < count; i++)
                     {
-                        IntPtr value;
-                        PInvoke.SafeArrayGetElement(psa, &i, &value);
-                        if (value == IntPtr.Zero)
+                        IntPtr unk;
+                        PInvoke.SafeArrayGetElement(psa, &i, &unk);
+                        if (unk == IntPtr.Zero)
                             break;
-                        IUISimplePropertySet? cpIUISimplePropertySet = Marshal.GetObjectForIUnknown(value) as IUISimplePropertySet;
-                        Marshal.Release(value);
+                        IUISimplePropertySet? cpIUISimplePropertySet = Marshal.GetObjectForIUnknown(unk) as IUISimplePropertySet;
+                        Marshal.Release(unk);
 
                         if (cpIUISimplePropertySet != null)
                         {

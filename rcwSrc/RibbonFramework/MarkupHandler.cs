@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.LibraryLoader;
@@ -276,6 +276,7 @@ namespace WinForms.Ribbon
             {
                 throw new ApplicationException(NameOfMarkupResource + " resource DLL exists but could not be loaded.");
             }
+            //string? ident = GetResourceIdentifier();
         }
 
         public void Dispose()
@@ -304,9 +305,10 @@ namespace WinForms.Ribbon
             GCHandle namesHandle = GCHandle.Alloc(names);
             try
             {
-                //IntPtr enumResNameProc = Marshal.GetFunctionPointerForDelegate(_enumResNameProcedure);
                 fixed (char* pType = "UIFILE")
-                    PInvoke.EnumResourceNames(MarkupDllHandle, pType, _enumResNameProcedure, (nint)namesHandle);
+                    PInvoke.EnumResourceNames(MarkupDllHandle, pType,
+                        _enumResNameProcedure,
+                        (nint)namesHandle);
             }
             finally
             {
@@ -317,8 +319,6 @@ namespace WinForms.Ribbon
                 return names[0]; //default value = APPLICATION_RIBBON
             return null;
         }
-
-        //delegate BOOL ENUMRESNAMEPROCW(HMODULE hModule, PCWSTR lpszType, PWSTR lpszName, nint lParam);
 
         /// <summary>
         /// Callback for GetResourceIdentifier

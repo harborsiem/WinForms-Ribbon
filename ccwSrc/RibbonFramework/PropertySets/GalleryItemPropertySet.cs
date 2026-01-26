@@ -17,7 +17,6 @@ namespace WinForms.Ribbon
 {
     /// <summary>
     /// Helper class that wraps a gallery item IUISimplePropertySet.
-    /// Should we have a IDisposable for IUIImage Release ???
     /// </summary>
     public sealed class GalleryItemPropertySet : AbstractPropertySet
     {
@@ -45,8 +44,8 @@ namespace WinForms.Ribbon
                 label = pwstr.ToStringAndCoTaskMemFree()!;
                 //fixed (char* emptyLocal = string.Empty)
                 //{
-                //    plabel = PInvoke.PropVariantToStringWithDefault(&propvar, emptyLocal);
-                //    label = plabel.ToString();
+                //    pwstr = PInvoke.PropVariantToStringWithDefault(&propvar, emptyLocal);
+                //    label = pwstr.ToString();
                 //}
                 propvar.Clear(); //PropVariantClear
             }
