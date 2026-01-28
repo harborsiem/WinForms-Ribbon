@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - More safer use of COM Pointers.
 - Issue with FontPropertyStore
+- Issue with decimal
 - CsWin32 version 0.3.269
 
 ### RibbonFramework V1.2.0, RibbonTools64 V8.2.0

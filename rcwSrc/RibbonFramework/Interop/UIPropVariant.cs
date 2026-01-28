@@ -28,13 +28,19 @@ namespace Windows.Win32.System.Com.StructuredStorage
             //PInvoke.PropVariantToBoolean(in pROPVARIANT, &pb);
             uint* prgn = null;
             uint cEle = 2;
-            PInvoke.InitPropVariantFromUInt32Vector(prgn, cEle, out pROPVARIANT); //ColorPickerPropertiesProvider 4x
+            PInvoke.InitPropVariantFromUInt32Vector(prgn, cEle, out pROPVARIANT);
+            //ColorPickerPropertiesProvider 4x
+
             uint* ppu;
-            PInvoke.PropVariantToUInt32VectorAlloc(pROPVARIANT, &ppu, &cEle); //ColorPickerPropertiesProvider 2x
+            PInvoke.PropVariantToUInt32VectorAlloc(pROPVARIANT, &ppu, &cEle);
+            //ColorPickerPropertiesProvider 2x
+
             PWSTR pWSTR;
-            PInvoke.PropVariantToStringAlloc(pROPVARIANT, &pWSTR); //ColorPickerPropertiesProvider, FontControlProperiesprovider, FontControlEventArgs,
+            PInvoke.PropVariantToStringAlloc(pROPVARIANT, &pWSTR);
+            //ColorPickerPropertiesProvider, FontControlProperiesprovider, FontControlEventArgs,
             //FontPropertyStore, GalleryItemEventArgs, StringValuePropertiesProvider 6x, 1x, 1x, 1x, 1x, 1x
             //UIPropVariant 2x
+
             PInvoke.PropVariantClear(ref pROPVARIANT); //44x
             PWSTR* str1;
             PInvoke.PropVariantToStringVectorAlloc(pROPVARIANT, &str1, &puint32); //ColorPickerPropertiesProvider 2x
@@ -188,53 +194,6 @@ namespace Windows.Win32.System.Com.StructuredStorage
             return HRESULT.E_INVALIDARG;
         }
 
-        //public static unsafe HRESULT UIInitPropertyFromIUnknownArray(in PROPERTYKEY propertyKey, Array array, out PROPVARIANT pPropVar)
-        //{
-        //    bool valid = (VARENUM)propertyKey.pid == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN);
-        //    //HRESULT hr;
-        //    //fixed (PROPVARIANT* ppPropVar = &pPropVar)
-        //    //{
-        //    //    if (valid && psa.fFeatures == ADVANCED_FEATURE_FLAGS.FADF_UNKNOWN)
-        //    //    {
-        //    //        hr = PInvoke.SafeArrayCopy(psa, out ppPropVar->data.parray);
-        //    //        if (hr.Succeeded)
-        //    //        {
-        //    //            pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
-        //    //            //Todo
-        //    //        }
-        //    //        return hr;
-        //    //    }
-        //    //    pPropVar = PROPVARIANT.Empty;
-        //    //    return HRESULT.E_INVALIDARG;
-        //    //}
-
-        //    pPropVar = PROPVARIANT.Empty;
-        //    if (valid && array != null && array.Length > 0)
-        //    {
-        //        SAFEARRAY* psa = PInvoke.SafeArrayCreateVector(VARENUM.VT_UNKNOWN, 0, (uint)array.Length);
-        //        void* pvData;
-        //        PInvoke.SafeArrayAccessData(psa, &pvData);
-        //        try // to remember to release lock on data
-        //        {
-        //            for (int i = 0; i < array.Length; i++)
-        //            {
-        //                object? obj = array.GetValue(i);
-        //                IntPtr punk = (obj != null) ? Marshal.GetIUnknownForObject(obj) : IntPtr.Zero;
-        //                Marshal.WriteIntPtr((IntPtr)pvData, i * IntPtr.Size, punk);
-        //            }
-        //        }
-        //        finally
-        //        {
-        //            PInvoke.SafeArrayUnaccessData(psa);
-        //        }
-
-        //        pPropVar.vt = VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN;
-        //        pPropVar.data.parray = psa;
-        //        return HRESULT.S_OK;
-        //    }
-        //    return HRESULT.E_INVALIDARG;
-        //}
-
         public static HRESULT UIPropertyToBoolean(in PROPERTYKEY propertyKey, in PROPVARIANT propvarIn, out bool pfRet)
         {
             bool valid = (VARENUM)propertyKey.pid == VARENUM.VT_BOOL;
@@ -328,7 +287,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
             {
                 if ((IntPtr)propvarIn.data.punkVal != IntPtr.Zero)
                 {
-                    ppObj = (TInterface)Marshal.GetObjectForIUnknown((IntPtr)propvarIn.Anonymous.Anonymous.Anonymous.punkVal);
+                    ppObj = (TInterface)Marshal.GetObjectForIUnknown((IntPtr)propvarIn.data.punkVal);
                     return HRESULT.S_OK;
                 }
             }
@@ -356,37 +315,5 @@ namespace Windows.Win32.System.Com.StructuredStorage
             ppsa = null;
             return HRESULT.E_INVALIDARG;
         }
-
-        //public static unsafe HRESULT UIPropertyToIUnknownArrayAlloc<TInterface>(in PROPERTYKEY propertyKey, in PROPVARIANT propvarIn, out TInterface[]? ppsa) where TInterface : class
-        //{
-        //    bool valid = (VARENUM)propertyKey.pid == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN);
-        //    if (valid && propvarIn.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))
-        //    {
-        //        SAFEARRAY* psa = propvarIn.data.parray;
-        //        uint cDims = PInvoke.SafeArrayGetDim(psa);
-        //        if (cDims != 1)
-        //            throw new ArgumentException("Multi-dimensional SafeArrays not supported.");
-
-        //        int lBound;
-        //        PInvoke.SafeArrayGetLBound(psa, 1U, &lBound);
-        //        int uBound;
-        //        PInvoke.SafeArrayGetUBound(psa, 1U, &uBound);
-
-        //        int n = uBound - lBound + 1; // uBound is inclusive
-
-        //        TInterface[] array = new TInterface[n];
-
-        //        IntPtr value = new IntPtr();
-        //        for (int i = lBound; i <= uBound; i++)
-        //        {
-        //            PInvoke.SafeArrayGetElement(psa, &i, &value);
-        //            array[i] = (value == IntPtr.Zero) ? null! : (TInterface)Marshal.GetObjectForIUnknown(value);
-        //        }
-        //        ppsa = array;
-        //        return HRESULT.S_OK;
-        //    }
-        //    ppsa = null;
-        //    return HRESULT.E_INVALIDARG;
-        //}
     }
 }

@@ -105,7 +105,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
         {
             if (vt == VT_DECIMAL)
             {
-                return (decimal)Anonymous.decVal;
+                return Anonymous.decVal.ToDecimal();
             }
 
             fixed (PROPVARIANT* thisVariant = &this)
@@ -202,7 +202,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
 
                     return Marshal.GetObjectForIUnknown((nint)pInterface);
                 case VT_DECIMAL:
-                    return (decimal)*((DECIMAL*)data); //@@@ ??? wrong address for decimal!, but decimal is handled before
+                    return ((DECIMAL*)data)->ToDecimal(); //@@@ ??? wrong address for DECIMAL!, but DECIMAL is handled before
                 case VT_BOOL:
                     return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.VARIANT_FALSE;
                 case VT_VARIANT:
