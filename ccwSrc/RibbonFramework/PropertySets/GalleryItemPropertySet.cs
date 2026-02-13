@@ -35,7 +35,6 @@ namespace WinForms.Ribbon
             HRESULT hr;
             fixed (PROPERTYKEY* pKeyLabel = &RibbonProperties.Label)
                 hr = cpIUISimplePropertySet.Value->GetValue(pKeyLabel, &propvar);
-
             PWSTR pwstr;
             string label = string.Empty;
             if (propvar.vt == VARENUM.VT_LPWSTR || propvar.vt == VARENUM.VT_BSTR)

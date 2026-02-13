@@ -6,6 +6,8 @@ global using System.IO;
 global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Threading;
+global using System.Runtime.InteropServices;
+global using System.Runtime.CompilerServices;
 //global using System.Private.Windows;
 global using Windows.Win32;
 global using Windows.Win32.Foundation;

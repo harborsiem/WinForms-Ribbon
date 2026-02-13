@@ -1,6 +1,14 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
+
+### RibbonFramework Vnext, RibbonTools64 V8.2.0
+
+#### Changed (RibbonFramework)
+
+- more equal comments, names and code between RCW and CCW version.
+- new StringParameterArray
 
 ### RibbonFramework V1.2.1, RibbonTools64 V8.2.0
 
@@ -88,7 +96,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - MarkupHeader (RibbonStrip) added for Embedded Resource of RibbonMarkup.h
 - Parser for RibbonMarkup.h to get all resource Ids
 - For all string values like Label, LabelDescription, TooltipTitle, TooltipDescription, Keytip in RibbonButton
- and other controls we can get the displayed values if you use RibbonStrip.MarkupHeader
+  and other controls we can get the displayed values if you use RibbonStrip.MarkupHeader
 - bugfixes and internal optimizations
 
 #### Changed (RibbonTools64)

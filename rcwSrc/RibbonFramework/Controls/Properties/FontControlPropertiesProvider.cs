@@ -115,11 +115,11 @@ namespace WinForms.Ribbon
                     PROPVARIANT propvar = PROPVARIANT.Empty;
                     IPropertyStore cpFontPropertyStore;
                     UIPropVariant.UIPropertyToInterface<IPropertyStore>(RibbonProperties.FontProperties, *currentValue, out cpFontPropertyStore!);
-                    //(*currentValue).Clear(); //PropVariantClear ???
 
                     // set family
                     if ((_family == null) || (_family.Trim() == string.Empty))
                     {
+                        //Set an empty family ???
                         fixed (PROPERTYKEY* pKeyFontProperties_Family = &RibbonProperties.FontProperties_Family)
                             cpFontPropertyStore.SetValue(pKeyFontProperties_Family, in propvar);
                     }
@@ -496,9 +496,7 @@ namespace WinForms.Ribbon
                                 case UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_NOCOLOR:
                                     throw new NotSupportedException("NoColor is not a valid value for ForegroundColor property in FontControl.");
                             }
-
                             return SystemColors.WindowText;
-
                         }
                         finally
                         {

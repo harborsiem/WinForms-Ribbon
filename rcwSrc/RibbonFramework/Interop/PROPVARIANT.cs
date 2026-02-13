@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Windows.Win32;
@@ -1112,46 +1114,6 @@ BeginMainLoop:
                     internal CA ca;
                 }
             }
-        }
-
-
-        /// <summary>
-        /// Converts a string array to a PROPVARIANT
-        /// with pinned strings, so the GC can't move the strings in memory till PInvoke function is called
-        /// used in ColorPickerPropertiesProvider
-        /// </summary>
-        /// <param name="strings"></param>
-        /// <param name="propVar"></param>
-        /// <returns></returns>
-        internal static unsafe HRESULT InitPropVariantFromStringVector(string[] strings, out PROPVARIANT propVar)
-        {
-            if (strings == null || strings.Length == 0)
-                throw new ArgumentNullException(nameof(strings));
-            HRESULT hr = HRESULT.E_FAIL;
-            PCWSTR[] array = new PCWSTR[strings.Length];
-            GCHandle[] pins = new GCHandle[strings.Length];
-            try
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    if (strings[i] != null)
-                        pins[i] = GCHandle.Alloc(strings[i], GCHandleType.Pinned);
-                    else
-                        pins[i] = GCHandle.Alloc(string.Empty, GCHandleType.Pinned);
-                    array[i] = (char*)pins[i].AddrOfPinnedObject();
-                }
-                fixed (PCWSTR* parray = array)
-                    hr = PInvoke.InitPropVariantFromStringVector(parray, (uint)strings.Length, out propVar);
-            }
-            finally
-            {
-                for (int i = 0; i < pins.Length; i++)
-                {
-                    if (pins[i].IsAllocated)
-                        pins[i].Free();
-                }
-            }
-            return hr;
         }
     }
 }

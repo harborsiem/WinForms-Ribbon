@@ -12,7 +12,7 @@ Supported Windows versions are Windows 7 and later versions.
 See also [Microsoft documentation](https://learn.microsoft.com/en-us/windows/win32/windowsribbon/-uiplat-windowsribbon-entry)
 
 This project is a **REDESIGN** of the [WindowsRibbon](https://github.com/harborsiem/WindowsRibbon) project. It uses [Microsoft CsWin32](https://github.com/microsoft/CsWin32) for COM interfaces and all other native functions.
-It also uses some internal classes and structs from Microsoft WinForms project on [Github](https://github.com/dotnet/winforms) for easier handling of COM interfaces.
+It also uses some internal classes and structs from Microsoft WinForms project on [Github](https://github.com/dotnet/winforms) and from [Jeremy Kuhne](https://github.com/JeremyKuhne/madowaku) for easier handling of native functions and COM interfaces.
 
 ![PrintPreview](./Images/PrintPreview.png)
 

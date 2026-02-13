@@ -125,10 +125,9 @@ namespace WinForms.Ribbon
                 _largeImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
                     fixed (PROPERTYKEY* pKeyLargeImage = &RibbonProperties.LargeImage)
-                    {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeImage);
-                    }
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeImage);
                 }
             }
         }
@@ -147,10 +146,9 @@ namespace WinForms.Ribbon
                 _smallImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
                     fixed (PROPERTYKEY* pKeySmallImage = &RibbonProperties.SmallImage)
-                    {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallImage);
-                    }
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallImage);
                 }
             }
         }
@@ -169,10 +167,9 @@ namespace WinForms.Ribbon
                 _largeHighContrastImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
                     fixed (PROPERTYKEY* pKeyLargeHighContrastImage = &RibbonProperties.LargeHighContrastImage)
-                    {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeHighContrastImage);
-                    }
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyLargeHighContrastImage);
                 }
             }
         }
@@ -191,10 +188,9 @@ namespace WinForms.Ribbon
                 _smallHighContrastImage = value;
                 if (_ribbon.Framework != null)
                 {
+                    HRESULT hr;
                     fixed (PROPERTYKEY* pKeySmallHighContrastImage = &RibbonProperties.SmallHighContrastImage)
-                    {
-                        HRESULT hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallHighContrastImage);
-                    }
+                        hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeySmallHighContrastImage);
                 }
             }
         }

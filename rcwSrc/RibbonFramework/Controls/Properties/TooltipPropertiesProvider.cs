@@ -106,9 +106,7 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyTooltipTitle = &RibbonProperties.TooltipTitle)
-                    {
                         hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyTooltipTitle);
-                    }
                 }
             }
         }
@@ -134,9 +132,7 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     fixed (PROPERTYKEY* pKeyTooltipDescription = &RibbonProperties.TooltipDescription)
-                    {
                         hr = _ribbon.Framework.InvalidateUICommand(_commandId, UI_INVALIDATIONS.UI_INVALIDATIONS_PROPERTY, pKeyTooltipDescription);
-                    }
                 }
             }
         }

@@ -210,7 +210,10 @@ namespace WinForms.Ribbon
                 if (_standardColorsTooltips != null)
                 {
                     HRESULT hr;
-                    hr = PROPVARIANT.InitPropVariantFromStringVector(_standardColorsTooltips, out newValue);
+                    using (StringParameterArray stringArray = new(_standardColorsTooltips))
+                    {
+                            hr = PInvoke.InitPropVariantFromStringVector((PCWSTR*)(char**)stringArray, (uint)_standardColorsTooltips.Length, out newValue);
+                    }
                 }
             }
             else if (key == RibbonProperties.ThemeColors)
@@ -235,7 +238,10 @@ namespace WinForms.Ribbon
                 if (_themeColorsTooltips != null)
                 {
                     HRESULT hr;
-                    hr = PROPVARIANT.InitPropVariantFromStringVector(_themeColorsTooltips, out newValue);
+                    using (StringParameterArray stringArray = new(_themeColorsTooltips))
+                    {
+                        hr = PInvoke.InitPropVariantFromStringVector((PCWSTR*)(char**)stringArray, (uint)_themeColorsTooltips.Length, out newValue);
+                    }
                 }
             }
 
@@ -682,7 +688,10 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    PROPVARIANT.InitPropVariantFromStringVector(value, out propvar);
+                    using (StringParameterArray stringArray = new(value))
+                    {
+                        hr = PInvoke.InitPropVariantFromStringVector((PCWSTR*)(char**)stringArray, (uint)value.Length, out propvar);
+                    }
                     fixed (PROPERTYKEY* pKeyStandardColorsTooltips = &RibbonProperties.StandardColorsTooltips)
                     {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyStandardColorsTooltips, propvar);
@@ -828,7 +837,10 @@ namespace WinForms.Ribbon
                 {
                     HRESULT hr;
                     PROPVARIANT propvar;
-                    PROPVARIANT.InitPropVariantFromStringVector(value, out propvar);
+                    using (StringParameterArray stringArray = new(value))
+                    {
+                        hr = PInvoke.InitPropVariantFromStringVector((PCWSTR*)(char**)stringArray, (uint)value.Length, out propvar);
+                    }
                     fixed (PROPERTYKEY* pKeyThemeColorsTooltips = &RibbonProperties.ThemeColorsTooltips)
                     {
                         hr = _ribbon.Framework.SetUICommandProperty(_commandId, pKeyThemeColorsTooltips, propvar);
