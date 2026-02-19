@@ -868,20 +868,15 @@ namespace WinForms.Ribbon
             }
 
             HRESULT hr;
-            IUIContextualUI* cpContextualUI;
+            using ComScope<IUIContextualUI> cpContextualUI = new ComScope<IUIContextualUI>(null);
             using var framework = Framework.GetInterface();
-            hr = framework.Value->GetView(contextPopupID, IID.Get<IUIContextualUI>(), (void**)&cpContextualUI);
+            hr = framework.Value->GetView(contextPopupID, IID.Get<IUIContextualUI>(), cpContextualUI).ThrowOnFailure();
             if (hr.Succeeded)
             {
-                using var contextualUIScope = new ComScope<IUIContextualUI>(cpContextualUI);
-                if (!contextualUIScope.IsNull)
+                if (!cpContextualUI.IsNull)
                 {
-                    contextualUIScope.Value->ShowAtLocation(x, y);
+                    cpContextualUI.Value->ShowAtLocation(x, y);
                 }
-            }
-            else
-            {
-                Marshal.ThrowExceptionForHR((int)hr);
             }
         }
 
@@ -1081,13 +1076,14 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe bool GetMinimized()
         {
-            using var uiRibbonScope = new UIRibbonScope(this);
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
             if (!uiRibbonScope.IsNull)
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
+                using ComScope<IPropertyStore> ribbonStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->GetValue(pKeyMinimized, &propvar);
+                    hr = ribbonStore.Value->GetValue(pKeyMinimized, &propvar);
                 bool result = (bool)propvar; //PropVariantToBoolean
                 return result;
             }
@@ -1100,17 +1096,15 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe void SetMinimized(bool value)
         {
-            using var uiRibbonScope = new UIRibbonScope(this);
-            if (!uiRibbonScope.IsNull)
-            {
-                HRESULT hr;
-                PROPVARIANT propvar;
-                propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-                fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pKeyMinimized, &propvar);
-                if (hr.Succeeded)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
-            }
+            HRESULT hr;
+            PROPVARIANT propvar;
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
+            using ComScope<IPropertyStore> ribbonStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+            propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+            fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
+                hr = ribbonStore.Value->SetValue(pKeyMinimized, &propvar);
+            if (hr.Succeeded)
+                hr = ribbonStore.Value->Commit();
         }
 
         /// <summary>
@@ -1144,13 +1138,14 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe bool GetViewable()
         {
-            using var uiRibbonScope = new UIRibbonScope(this);
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
             if (!uiRibbonScope.IsNull)
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
+                using ComScope<IPropertyStore> ribbonStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->GetValue(pKeyViewable, &propvar);
+                    hr = ribbonStore.Value->GetValue(pKeyViewable, &propvar);
                 bool result = (bool)propvar; //PropVariantToBoolean
                 return result;
             }
@@ -1163,17 +1158,15 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe void SetViewable(bool value)
         {
-            using var uiRibbonScope = new UIRibbonScope(this);
-            if (!uiRibbonScope.IsNull)
-            {
-                HRESULT hr;
-                PROPVARIANT propvar;
-                propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-                fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pKeyViewable, &propvar);
-                if (hr.Succeeded)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
-            }
+            HRESULT hr;
+            PROPVARIANT propvar;
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
+            using ComScope<IPropertyStore> ribbonStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+            propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
+            fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
+                hr = ribbonStore.Value->SetValue(pKeyViewable, &propvar);
+            if (hr.Succeeded)
+                hr = ribbonStore.Value->Commit();
         }
 
         /// <summary>
@@ -1207,13 +1200,14 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe UI_CONTROLDOCK GetQuickAccessToolbarDock()
         {
-            using var uiRibbonScope = new UIRibbonScope(this);
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
             if (!uiRibbonScope.IsNull)
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
+                using ComScope<IPropertyStore> ribbonStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
                 fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->GetValue(pKeyQuickAccessToolbarDock, &propvar);
+                    hr = ribbonStore.Value->GetValue(pKeyQuickAccessToolbarDock, &propvar);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_CONTROLDOCK retResult = (UI_CONTROLDOCK)result;
                 return retResult;
@@ -1227,17 +1221,15 @@ namespace WinForms.Ribbon
         /// </summary>
         private unsafe void SetQuickAccessToolbarDock(UI_CONTROLDOCK value)
         {
-            using var uiRibbonScope = new UIRibbonScope(this);
-            if (!uiRibbonScope.IsNull)
-            {
-                HRESULT hr;
-                PROPVARIANT propvar;
-                propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
-                fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->SetValue(pKeyQuickAccessToolbarDock, &propvar);
-                if (hr.Succeeded)
-                    hr = uiRibbonScope.PropertyStoreScope.Value->Commit();
-            }
+            HRESULT hr;
+            PROPVARIANT propvar;
+            using ComScope<IUIRibbon> uiRibbonScope = GetIUIRibbon();
+            using ComScope<IPropertyStore> ribbonStore = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);
+            propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
+            fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
+                hr = ribbonStore.Value->SetValue(pKeyQuickAccessToolbarDock, &propvar);
+            if (hr.Succeeded)
+                hr = ribbonStore.Value->Commit();
         }
 
         /// <summary>
@@ -1269,10 +1261,10 @@ namespace WinForms.Ribbon
         private ComScope<IUIRibbon> GetIUIRibbon()
         {
             HRESULT hr;
-            ComScope<IUIRibbon> uiRibbonScope = new ComScope<IUIRibbon>(null);
+            ComScope<IUIRibbon> scope = new ComScope<IUIRibbon>(null);
             using var framework = Framework!.GetInterface();
-            hr = framework.Value->GetView(0, IID.Get<IUIRibbon>(), (void**)&uiRibbonScope);
-            return uiRibbonScope;
+            hr = framework.Value->GetView(0, IID.Get<IUIRibbon>(), scope).ThrowOnFailure();
+            return scope;
         }
     }
 }

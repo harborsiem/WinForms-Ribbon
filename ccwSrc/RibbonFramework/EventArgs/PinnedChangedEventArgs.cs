@@ -64,7 +64,7 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         internal static unsafe PinnedChangedEventArgs Create(RibbonRecentItems ribbonRecentItems, in PROPERTYKEY key, in PROPVARIANT currentValue, IUISimplePropertySet* commandExecutionProperties)
         {
-            IList<int>? changedPinnedIndices = new List<int>();
+            IList<int> changedPinnedIndices = new List<int>();
             if (key == RibbonProperties.RecentItems)
             {
                 if (currentValue.vt == (VARENUM.VT_ARRAY | VARENUM.VT_UNKNOWN))

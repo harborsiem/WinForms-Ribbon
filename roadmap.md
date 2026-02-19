@@ -19,6 +19,8 @@ Integrate the struct extensions from PInvoke.cs into a suitable Microsoft assemb
 Replace PInvoke functions in UIImage with Microsoft assembly functions (DeleteObject, ...).
 Implement COLORREF macros GetRValue, ...
 
+Update ComSafeArrayScope in item get (allow null pointers).
+
 Is IManagedWrapper interface necessary in 
  EventLogger,
  RecentItemsPropertySet,

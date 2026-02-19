@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 #### Changed (RibbonFramework)
 
+- Refactoring
 - more equal comments, names and code between RCW and CCW version.
 - new StringParameterArray
 

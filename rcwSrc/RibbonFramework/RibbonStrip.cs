@@ -1080,10 +1080,10 @@ namespace WinForms.Ribbon
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
-                IPropertyStore propstore = (IPropertyStore)uiRibbon;
+                IPropertyStore ribbonStore = (IPropertyStore)uiRibbon;
                 fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
-                    hr = propstore.GetValue(pKeyMinimized, out propvar);
-                propstore = null!;
+                    hr = ribbonStore.GetValue(pKeyMinimized, out propvar);
+                ribbonStore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
                 bool result = (bool)propvar; //PropVariantToBoolean
                 return result;
@@ -1103,11 +1103,11 @@ namespace WinForms.Ribbon
                 HRESULT hr;
                 PROPVARIANT propvar;
                 propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-                IPropertyStore propstore = (IPropertyStore)uiRibbon;
+                IPropertyStore ribbonStore = (IPropertyStore)uiRibbon;
                 fixed (PROPERTYKEY* pKeyMinimized = &RibbonProperties.Minimized)
-                    hr = propstore.SetValue(pKeyMinimized, propvar);
-                hr = propstore.Commit();
-                propstore = null!;
+                    hr = ribbonStore.SetValue(pKeyMinimized, propvar);
+                hr = ribbonStore.Commit();
+                ribbonStore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
             }
         }
@@ -1148,10 +1148,10 @@ namespace WinForms.Ribbon
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
-                IPropertyStore propstore = (IPropertyStore)uiRibbon;
+                IPropertyStore ribbonStore = (IPropertyStore)uiRibbon;
                 fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
-                    hr = propstore.GetValue(pKeyViewable, out propvar);
-                propstore = null!;
+                    hr = ribbonStore.GetValue(pKeyViewable, out propvar);
+                ribbonStore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
                 bool result = (bool)propvar; //PropVariantToBoolean
                 return result;
@@ -1171,11 +1171,11 @@ namespace WinForms.Ribbon
                 HRESULT hr;
                 PROPVARIANT propvar;
                 propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
-                IPropertyStore propstore = (IPropertyStore)uiRibbon;
+                IPropertyStore ribbonStore = (IPropertyStore)uiRibbon;
                 fixed (PROPERTYKEY* pKeyViewable = &RibbonProperties.Viewable)
-                    hr = propstore.SetValue(pKeyViewable, propvar);
-                hr = propstore.Commit();
-                propstore = null!;
+                    hr = ribbonStore.SetValue(pKeyViewable, propvar);
+                hr = ribbonStore.Commit();
+                ribbonStore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
             }
         }
@@ -1216,10 +1216,10 @@ namespace WinForms.Ribbon
             {
                 HRESULT hr;
                 PROPVARIANT propvar;
-                IPropertyStore propstore = (IPropertyStore)uiRibbon;
+                IPropertyStore ribbonStore = (IPropertyStore)uiRibbon;
                 fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
-                    hr = propstore.GetValue(pKeyQuickAccessToolbarDock, out propvar);
-                propstore = null!;
+                    hr = ribbonStore.GetValue(pKeyQuickAccessToolbarDock, out propvar);
+                ribbonStore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
                 uint result = (uint)propvar; //PropVariantToUInt32
                 UI_CONTROLDOCK retResult = (UI_CONTROLDOCK)result;
@@ -1240,11 +1240,11 @@ namespace WinForms.Ribbon
                 HRESULT hr;
                 PROPVARIANT propvar;
                 propvar = (PROPVARIANT)(uint)value; //InitPropVariantFromUInt32
-                IPropertyStore propstore = (IPropertyStore)uiRibbon;
+                IPropertyStore ribbonStore = (IPropertyStore)uiRibbon;
                 fixed (PROPERTYKEY* pKeyQuickAccessToolbarDock = &RibbonProperties.QuickAccessToolbarDock)
-                    hr = propstore.SetValue(pKeyQuickAccessToolbarDock, propvar);
-                hr = propstore.Commit();
-                propstore = null!;
+                    hr = ribbonStore.SetValue(pKeyQuickAccessToolbarDock, propvar);
+                hr = ribbonStore.Commit();
+                ribbonStore = null!;
                 Marshal.ReleaseComObject(uiRibbon);
             }
         }
