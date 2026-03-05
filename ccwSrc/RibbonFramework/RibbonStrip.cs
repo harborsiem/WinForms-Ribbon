@@ -553,6 +553,7 @@ namespace WinForms.Ribbon
                 EventLogger?.Destroy();
 
                 // destroy ribbon framework
+#if DEBUG
                 using (var framework = Framework.GetInterface())
                 {
                     framework.Value->Destroy();
@@ -560,6 +561,7 @@ namespace WinForms.Ribbon
                     uint refCount = framework.Value->Release() - 1;
                     Debug.WriteLine("Destroy IUIFramework refCount: " + refCount.ToString());
                 }
+#endif
                 IDisposable? localFramework = Framework;
                 Framework = null;
                 if (localFramework != null)
@@ -573,20 +575,24 @@ namespace WinForms.Ribbon
 
             _shortcutHandler?.Dispose();
 
-            using (var imageFromBitmap = CpIUIImageFromBitmap.GetInterface())
+            if (CpIUIImageFromBitmap != null)
             {
-                imageFromBitmap.Value->AddRef();
-                uint refCount = imageFromBitmap.Value->Release() - 1;
-                Debug.WriteLine("Before Dispose IUIImageFromBitmap refCount: " + refCount.ToString());
+#if DEBUG
+                using (var imageFromBitmap = CpIUIImageFromBitmap.GetInterface())
+                {
+                    imageFromBitmap.Value->AddRef();
+                    uint refCount = imageFromBitmap.Value->Release() - 1;
+                    Debug.WriteLine("Before Dispose IUIImageFromBitmap refCount: " + refCount.ToString());
+                }
+#endif
+                IDisposable? localImageFromBitmap = CpIUIImageFromBitmap;
+                CpIUIImageFromBitmap = null!;
+                if (localImageFromBitmap != null)
+                {
+                    // remove reference to imageFromBitmap object
+                    localImageFromBitmap.Dispose();
+                }
             }
-            IDisposable? localImageFromBitmap = CpIUIImageFromBitmap;
-            CpIUIImageFromBitmap = null!;
-            if (localImageFromBitmap != null)
-            {
-                // remove reference to imageFromBitmap object
-                localImageFromBitmap.Dispose();
-            }
-
             // remove references to ribbon items
             _mapRibbonStripItems.Clear();
 

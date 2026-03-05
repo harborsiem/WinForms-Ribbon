@@ -14,6 +14,7 @@ namespace UIRibbonTools
         private Color _color;
         private WhichColor _whichColor;
         private Action<UI_HSBCOLOR> _setRibbonColor;
+        private Func<UI_HSBCOLOR, bool> _setAppButtonColor;
         private bool _suspendEvent;
         private Padding _upDownMargin;
         private Padding _buttonMargin;
@@ -90,6 +91,22 @@ namespace UIRibbonTools
         {
             _whichColor = whichColor;
             _setRibbonColor = setRibbonColor;
+            HsbDefault = hsbColorDefault;
+            HsbCurrent = hsbColorDefault;
+            HsbSelected = hsbColorDefault;
+            Color color = HsbCurrent.ToColor();
+            _color = color;
+            colorPanel.BackColor = color;
+            ColorSelection = ColorSelection.Color;
+            //SetUpDownsText();
+            //SetUpDownsValue(HsbCurrent);
+            //SetHsbOrColor();
+        }
+
+        public void Init1(UI_HSBCOLOR hsbColorDefault, WhichColor whichColor, Func<UI_HSBCOLOR, bool> setRibbonColor)
+        {
+            _whichColor = whichColor;
+            _setAppButtonColor = setRibbonColor;
             HsbDefault = hsbColorDefault;
             HsbCurrent = hsbColorDefault;
             HsbSelected = hsbColorDefault;
@@ -231,7 +248,10 @@ namespace UIRibbonTools
 
         public void SetThisColor(UI_HSBCOLOR hsbColor)
         {
-            _setRibbonColor(HsbCurrent = hsbColor);
+            if (_whichColor == WhichColor.AppButton)
+                _setAppButtonColor(HsbCurrent = hsbColor);
+            else
+                _setRibbonColor(HsbCurrent = hsbColor);
             //_ribbon.SetBackgroundColor(HsbCurrent = hsbColor);
             SetHsbOrColor();
         }

@@ -47,6 +47,8 @@ namespace UIRibbonTools
             highlightColorFrame = new ColorFrame();
             textColorGroup = new System.Windows.Forms.GroupBox();
             textColorFrame = new ColorFrame();
+            appButtonColorGroup = new System.Windows.Forms.GroupBox();
+            appButtonColorFrame = new ColorFrame();
             setColorsButton = new System.Windows.Forms.Button();
             setDefaultColorsButton = new System.Windows.Forms.Button();
             tabControl = new System.Windows.Forms.TabControl();
@@ -58,6 +60,7 @@ namespace UIRibbonTools
             backgroundGroup.SuspendLayout();
             highlightGroup.SuspendLayout();
             textColorGroup.SuspendLayout();
+            appButtonColorGroup.SuspendLayout();
             tabControl.SuspendLayout();
             SuspendLayout();
             // 
@@ -82,7 +85,7 @@ namespace UIRibbonTools
             checkedListBoxAppModes.Location = new System.Drawing.Point(9, 22);
             checkedListBoxAppModes.MultiColumn = true;
             checkedListBoxAppModes.Name = "checkedListBoxAppModes";
-            checkedListBoxAppModes.Size = new System.Drawing.Size(905, 292);
+            checkedListBoxAppModes.Size = new System.Drawing.Size(1624, 508);
             checkedListBoxAppModes.TabIndex = 1;
             // 
             // labelAppModes
@@ -115,7 +118,7 @@ namespace UIRibbonTools
             checkedListBoxContextTabs.Location = new System.Drawing.Point(9, 22);
             checkedListBoxContextTabs.MultiColumn = true;
             checkedListBoxContextTabs.Name = "checkedListBoxContextTabs";
-            checkedListBoxContextTabs.Size = new System.Drawing.Size(905, 292);
+            checkedListBoxContextTabs.Size = new System.Drawing.Size(1624, 508);
             checkedListBoxContextTabs.TabIndex = 1;
             // 
             // labelContextTabs
@@ -145,7 +148,7 @@ namespace UIRibbonTools
             listBoxContextPopups.ItemHeight = 15;
             listBoxContextPopups.Location = new System.Drawing.Point(9, 22);
             listBoxContextPopups.Name = "listBoxContextPopups";
-            listBoxContextPopups.Size = new System.Drawing.Size(905, 289);
+            listBoxContextPopups.Size = new System.Drawing.Size(1630, 514);
             listBoxContextPopups.TabIndex = 1;
             // 
             // labelContextPopups
@@ -197,18 +200,20 @@ namespace UIRibbonTools
             // 
             colorizeLayout.AutoSize = true;
             colorizeLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            colorizeLayout.ColumnCount = 3;
+            colorizeLayout.ColumnCount = 4;
+            colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             colorizeLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             colorizeLayout.Controls.Add(backgroundGroup, 0, 0);
             colorizeLayout.Controls.Add(highlightGroup, 1, 0);
             colorizeLayout.Controls.Add(textColorGroup, 2, 0);
+            colorizeLayout.Controls.Add(appButtonColorGroup, 3, 0);
             colorizeLayout.Location = new System.Drawing.Point(8, 5);
             colorizeLayout.Name = "colorizeLayout";
             colorizeLayout.RowCount = 1;
             colorizeLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            colorizeLayout.Size = new System.Drawing.Size(456, 225);
+            colorizeLayout.Size = new System.Drawing.Size(608, 225);
             colorizeLayout.TabIndex = 0;
             // 
             // backgroundGroup
@@ -277,6 +282,28 @@ namespace UIRibbonTools
             textColorFrame.Size = new System.Drawing.Size(140, 179);
             textColorFrame.TabIndex = 0;
             // 
+            // appButtonColorGroup
+            // 
+            appButtonColorGroup.Controls.Add(appButtonColorFrame);
+            appButtonColorGroup.Dock = System.Windows.Forms.DockStyle.Fill;
+            appButtonColorGroup.Location = new System.Drawing.Point(459, 3);
+            appButtonColorGroup.Name = "appButtonColorGroup";
+            appButtonColorGroup.Size = new System.Drawing.Size(146, 219);
+            appButtonColorGroup.TabIndex = 3;
+            appButtonColorGroup.TabStop = false;
+            appButtonColorGroup.Text = "AppButtonColor";
+            // 
+            // appButtonColorFrame
+            // 
+            appButtonColorFrame.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            appButtonColorFrame.AutoSize = true;
+            appButtonColorFrame.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            appButtonColorFrame.Location = new System.Drawing.Point(3, 22);
+            appButtonColorFrame.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            appButtonColorFrame.Name = "appButtonColorFrame";
+            appButtonColorFrame.Size = new System.Drawing.Size(140, 179);
+            appButtonColorFrame.TabIndex = 0;
+            // 
             // setColorsButton
             // 
             setColorsButton.Location = new System.Drawing.Point(8, 236);
@@ -333,6 +360,8 @@ namespace UIRibbonTools
             highlightGroup.PerformLayout();
             textColorGroup.ResumeLayout(false);
             textColorGroup.PerformLayout();
+            appButtonColorGroup.ResumeLayout(false);
+            appButtonColorGroup.PerformLayout();
             tabControl.ResumeLayout(false);
             ResumeLayout(false);
 
@@ -355,11 +384,13 @@ namespace UIRibbonTools
         private System.Windows.Forms.GroupBox backgroundGroup;
         private System.Windows.Forms.GroupBox highlightGroup;
         private System.Windows.Forms.GroupBox textColorGroup;
+        private System.Windows.Forms.GroupBox appButtonColorGroup;
         private System.Windows.Forms.Button setColorsButton;
         private System.Windows.Forms.Button setDefaultColorsButton;
         private ColorFrame backgroundColorFrame;
         private ColorFrame highlightColorFrame;
         private ColorFrame textColorFrame;
+        private ColorFrame appButtonColorFrame;
         private System.Windows.Forms.RadioButton radioHSB;
         private System.Windows.Forms.RadioButton radioRGB;
     }

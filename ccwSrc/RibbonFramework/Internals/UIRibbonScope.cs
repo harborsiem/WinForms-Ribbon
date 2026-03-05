@@ -19,7 +19,7 @@ namespace WinForms.Ribbon
             HRESULT hr;
             ComScope<IUIRibbon> uiRibbonScope = new ComScope<IUIRibbon>(null);
             using var framework = ribbon.Framework!.GetInterface();
-            hr = framework.Value->GetView(0, IID.Get<IUIRibbon>(), (void**)&uiRibbonScope);
+            hr = framework.Value->GetView(0, IID.Get<IUIRibbon>(), uiRibbonScope);
             hr.ThrowOnFailure();
             BaseScope = uiRibbonScope;
             ComScope<IPropertyStore> scope = ComScope<IPropertyStore>.QueryFrom(uiRibbonScope.Value);

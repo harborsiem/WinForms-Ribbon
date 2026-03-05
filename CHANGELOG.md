@@ -3,13 +3,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-### RibbonFramework Vnext, RibbonTools64 V8.2.0
+### RibbonFramework V1.2.2, RibbonTools64 V8.2.2
 
 #### Changed (RibbonFramework)
 
+- Bugfix: VisualStudio message when Ribbon Form opened in designer (only CCW version)
 - Refactoring
 - more equal comments, names and code between RCW and CCW version.
 - new StringParameterArray
+
+#### Changed (RibbonTools64)
+
+- AppButtonColor added in Preview
+- CsWin32 version 0.3.269
 
 ### RibbonFramework V1.2.1, RibbonTools64 V8.2.0
 

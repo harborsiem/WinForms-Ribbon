@@ -11,6 +11,7 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using static Windows.Win32.System.Variant.VARENUM;
 using FILETIME = Windows.Win32.Foundation.FILETIME;
+using InteropMarshal = System.Runtime.InteropServices.Marshal;
 
 namespace Windows.Win32.System.Com.StructuredStorage
 {
@@ -29,36 +30,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
         // Have a look to some implementations in this file.
         // The copy in CoTaskMem will be free'd by a call PInvoke.PropVariantClear(ref PROPVARIANT)
 
-        // (PInvoke)PropVariantClear calls CoTaskMemFree on the following types:
-        //
-        //     - VT_LPWSTR, VT_LPSTR, VT_CLSID (psvVal)
-        //     - VT_BSTR_BLOB (bstrblobVal.pData)
-        //     - VT_CF (pclipdata->pClipData, pclipdata)
-        //     - VT_BLOB, VT_BLOB_OBJECT (blob.pData)
-        //     - VT_STREAM, VT_STREAMED_OBJECT (pStream)
-        //     - VT_VERSIONED_STREAM (pVersionedStream->pStream, pVersionedStream)
-        //     - VT_STORAGE, VT_STORED_OBJECT (pStorage)
-        //
-        // If the VARTYPE is a VT_VECTOR, the contents are cleared as above and CoTaskMemFree is also called on
-        // cabstr.pElems.
-        //
-        // https://learn.microsoft.com/windows/win32/api/oleauto/nf-oleauto-variantclear#remarks
-        //
-        //     - VT_BSTR (SysFreeString)
-        //     - VT_DISPATCH / VT_UNKOWN (->Release(), if not VT_BYREF)
-
         public static PROPVARIANT Empty { get; } //PropVariantInit
-
-        public static PROPVARIANT True { get; } = CreateBoolVariant(value: true);
-
-        public static PROPVARIANT False { get; } = CreateBoolVariant(value: false);
-
-        private static PROPVARIANT CreateBoolVariant(bool value)
-        {
-            PROPVARIANT variant = new() { vt = VT_BOOL };
-            variant.data.boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE;
-            return variant;
-        }
 
         public bool IsEmpty => vt == VT_EMPTY && data.uhVal == 0;
 
@@ -92,13 +64,18 @@ namespace Windows.Win32.System.Com.StructuredStorage
             //     - VT_BSTR (SysFreeString)
             //     - VT_DISPATCH / VT_UNKNOWN (->Release(), if not VT_BYREF)
 
+            if (IsEmpty)
+            {
+                return;
+            }
+
             fixed (PROPVARIANT* t = &this)
             {
                 PInvoke.PropVariantClear(t); //@@@ PInvokeCore
             }
 
-            Anonymous.Anonymous.vt = VT_EMPTY;
-            Anonymous.Anonymous.Anonymous = default;
+            vt = VT_EMPTY;
+            data = default;
         }
 
         public void Dispose() => Clear();
@@ -128,7 +105,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 // Note that the following check also covers VT_ILLEGAL.
                 if ((vt & ~(VT_BYREF | VT_ARRAY | VT_VECTOR)) >= (VARENUM)0x80)
                 {
-                    throw new InvalidOleVariantTypeException();
+                    throw new InvalidCastException();
                 }
 
                 if ((vt & VT_VECTOR) != 0)
@@ -191,9 +168,9 @@ namespace Windows.Win32.System.Com.StructuredStorage
                     return DateTime.FromOADate(date);
                 case VT_BSTR:
                 case VT_LPWSTR:
-                    return Marshal.PtrToStringUni(*(IntPtr*)data);
+                    return InteropMarshal.PtrToStringUni(*(IntPtr*)data);
                 case VT_LPSTR:
-                    return Marshal.PtrToStringAnsi(*(IntPtr*)data);
+                    return InteropMarshal.PtrToStringAnsi(*(IntPtr*)data);
                 case VT_DISPATCH:
                 case VT_UNKNOWN:
                     IUnknown* pInterface = *(IUnknown**)data;
@@ -202,7 +179,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                         return null;
                     }
 
-                    return ComHelpers.GetObjectForIUnknown(pInterface);
+                    return InteropMarshal.GetObjectForIUnknown((nint)pInterface);
                 case VT_DECIMAL:
                     return ((DECIMAL*)data)->ToDecimal(); //@@@ ??? wrong address for DECIMAL!, but DECIMAL is handled before
                 case VT_BOOL:
@@ -245,7 +222,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                     //IStream* (VT_STREAM), IStorage* (VT_STORAGE), VERSIONEDSTREAM* (VT_STREAMED_OBJECT ?)
             }
 
-            throw new ArgumentException(string.Format(SR.COM2UnhandledVT, type));
+            throw new ArgumentException("Unsupported VARENUM");
         }
 
         private static Array? ToArray(SAFEARRAY* psa, VARENUM vt)
@@ -256,183 +233,164 @@ namespace Windows.Win32.System.Com.StructuredStorage
             }
 
             VARENUM arrayType = vt & ~VT_ARRAY;
-
-            if (arrayType == VT_RECORD)
-            {
-                // Exit early so we don't have to consider this in the helper methods.
-                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
-            }
-
             Array array = CreateArrayFromSafeArray(psa, arrayType);
-
-            GCHandle pin = default;
-
-            try
-            {
-                pin = GCHandle.Alloc(array, GCHandleType.Pinned);
-            }
-            catch (ArgumentException)
-            {
-            }
 
             HRESULT hr = PInvoke.SafeArrayLock(psa); //@@@ PInvokeCore
             Debug.Assert(hr == HRESULT.S_OK);
 
             try
             {
-                if (array.Rank == 1)
+                if (array.Rank != 1)
                 {
-                    switch (arrayType)
+                    if (array.Length != 0)
                     {
-                        case VT_I1:
-                            new Span<sbyte>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<sbyte>(array));
-                            break;
-                        case VT_UI1:
-                            new Span<byte>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<byte>(array));
-                            break;
-                        case VT_I2:
-                            new Span<short>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<short>(array));
-                            break;
-                        case VT_UI2:
-                            new Span<ushort>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<ushort>(array));
-                            break;
-                        case VT_I4:
-                        case VT_INT:
-                            new Span<int>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<int>(array));
-                            break;
-                        case VT_UI4:
-                        case VT_UINT:
-                        case VT_ERROR: // Not explicitly mentioned in the docs but trivial to implement.
-                            new Span<uint>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<uint>(array));
-                            break;
-                        case VT_I8:
-                            new Span<long>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<long>(array));
-                            break;
-                        case VT_UI8:
-                            new Span<ulong>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<ulong>(array));
-                            break;
-                        case VT_R4:
-                            new Span<float>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<float>(array));
-                            break;
-                        case VT_R8:
-                            new Span<double>(psa->pvData, array.Length)
-                                .CopyTo(GetSpan<double>(array));
-                            break;
-                        case VT_BOOL:
-                            {
-                                Span<VARIANT_BOOL> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<bool>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
-                                }
-
-                                break;
-                            }
-
-                        case VT_DECIMAL:
-                            {
-                                Span<DECIMAL> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<decimal>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = (decimal)data[i];
-                                }
-
-                                break;
-                            }
-
-                        case VT_CY:
-                            {
-                                Span<long> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<decimal>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = decimal.FromOACurrency(data[i]);
-                                }
-
-                                break;
-                            }
-
-                        case VT_DATE:
-                            {
-                                Span<double> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<DateTime>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = DateTime.FromOADate(data[i]);
-                                }
-
-                                break;
-                            }
-
-                        case VT_BSTR:
-                            {
-                                Span<IntPtr> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<string?>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = Marshal.PtrToStringUni(data[i]);
-                                }
-
-                                break;
-                            }
-
-                        case VT_DISPATCH:
-                        case VT_UNKNOWN:
-                            {
-                                Span<IntPtr> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<object?>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = data[i] == IntPtr.Zero ? null : ComHelpers.GetObjectForIUnknown((IUnknown*)data[i]);
-                                }
-
-                                break;
-                            }
-
-                        case VT_VARIANT:
-                            {
-                                Span<PROPVARIANT> data = new(psa->pvData, array.Length);
-                                var result = GetSpan<object?>(array);
-                                for (int i = 0; i < data.Length; i++)
-                                {
-                                    result[i] = data[i].ToObject();
-                                }
-
-                                break;
-                            }
-
-                        default:
-                            throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
+                        // CLR arrays are laid out in row-major order.
+                        // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
+                        // However, SAFEARRAYs are laid out in column-major order.
+                        // See https://docs.microsoft.com/previous-versions/windows/desktop/automat/array-manipulation-functions
+                        // Therefore, we need to transpose data.
+                        TransposeArray(psa, array, arrayType);
                     }
+
+                    return array;
                 }
-                else if (array.Length != 0)
+
+                switch (arrayType)
                 {
-                    // CLR arrays are laid out in row-major order.
-                    // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
-                    // However, SAFEARRAYs are laid out in column-major order.
-                    // See https://docs.microsoft.com/previous-versions/windows/desktop/automat/array-manipulation-functions
-                    // Therefore, we need to transpose data.
-                    TransposeArray(psa, array, arrayType);
+                    case VT_I1:
+                        new Span<sbyte>(psa->pvData, array.Length)
+                            .CopyTo((sbyte[])array);
+                        break;
+                    case VT_UI1:
+                        new Span<byte>(psa->pvData, array.Length)
+                            .CopyTo((byte[])array);
+                        break;
+                    case VT_I2:
+                        new Span<short>(psa->pvData, array.Length)
+                            .CopyTo((short[])array);
+                        break;
+                    case VT_UI2:
+                        new Span<ushort>(psa->pvData, array.Length)
+                            .CopyTo((ushort[])array);
+                        break;
+                    case VT_I4:
+                    case VT_INT:
+                        new Span<int>(psa->pvData, array.Length)
+                            .CopyTo((int[])array);
+                        break;
+                    case VT_UI4:
+                    case VT_UINT:
+                    case VT_ERROR: // Not explicitly mentioned in the docs but trivial to implement.
+                        new Span<uint>(psa->pvData, array.Length)
+                            .CopyTo((uint[])array);
+                        break;
+                    case VT_I8:
+                        new Span<long>(psa->pvData, array.Length)
+                            .CopyTo((long[])array);
+                        break;
+                    case VT_UI8:
+                        new Span<ulong>(psa->pvData, array.Length)
+                            .CopyTo((ulong[])array);
+                        break;
+                    case VT_R4:
+                        new Span<float>(psa->pvData, array.Length)
+                            .CopyTo((float[])array);
+                        break;
+                    case VT_R8:
+                        new Span<double>(psa->pvData, array.Length)
+                            .CopyTo((double[])array);
+                        break;
+                    case VT_BOOL:
+                        {
+                            Span<VARIANT_BOOL> data = new(psa->pvData, array.Length);
+                            bool[] result = (bool[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
+                            }
+
+                            break;
+                        }
+
+                    case VT_DECIMAL:
+                        {
+                            Span<DECIMAL> data = new(psa->pvData, array.Length);
+                            decimal[] result = (decimal[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = (decimal)data[i];
+                            }
+
+                            break;
+                        }
+
+                    case VT_CY:
+                        {
+                            Span<long> data = new(psa->pvData, array.Length);
+                            decimal[] result = (decimal[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = decimal.FromOACurrency(data[i]);
+                            }
+
+                            break;
+                        }
+
+                    case VT_DATE:
+                        {
+                            Span<double> data = new(psa->pvData, array.Length);
+                            DateTime[] result = (DateTime[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = DateTime.FromOADate(data[i]);
+                            }
+
+                            break;
+                        }
+
+                    case VT_BSTR:
+                        {
+                            Span<nint> data = new(psa->pvData, array.Length);
+                            string[] result = (string[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = InteropMarshal.PtrToStringUni(data[i])!;
+                            }
+
+                            break;
+                        }
+
+                    case VT_DISPATCH:
+                    case VT_UNKNOWN:
+                        {
+                            Span<IntPtr> data = new(psa->pvData, array.Length);
+                            object?[] result = (object?[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i] == IntPtr.Zero ? null : InteropMarshal.GetObjectForIUnknown(data[i]);
+                            }
+
+                            break;
+                        }
+
+                    case VT_VARIANT:
+                        {
+                            Span<PROPVARIANT> data = new(psa->pvData, array.Length);
+                            object?[] result = (object?[])array;
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i].ToObject();
+                            }
+
+                            break;
+                        }
+
+                    default:
+                        throw new ArgumentException(null, nameof(vt));
                 }
             }
             finally
             {
-                if (pin.IsAllocated)
-                {
-                    pin.Free();
-                }
-
                 hr = PInvoke.SafeArrayUnlock(psa); //@@@ PInvokeCore
                 Debug.Assert(hr == HRESULT.S_OK);
             }
@@ -462,9 +420,9 @@ namespace Windows.Win32.System.Com.StructuredStorage
 
             static void HeapTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
             {
-                int[] indices = new int[array.Rank];
-                int[] lower = new int[array.Rank];
-                int[] upper = new int[array.Rank];
+                var indices = new int[array.Rank];
+                var lower = new int[array.Rank];
+                var upper = new int[array.Rank];
                 InternalTransposeArray(psa, array, arrayType, indices, lower, upper);
             }
 
@@ -511,7 +469,7 @@ BeginMainLoop:
             {
                 // CLR arrays are laid out in row-major order.
                 // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
-                var span = GetSpan<T>(array);
+                T[] span = (T[])array;
                 int offset = 0;
                 int multiplier = 1;
                 for (int i = array.Rank; i >= 1; i--)
@@ -590,7 +548,7 @@ BeginMainLoop:
                 case VT_BSTR:
                     {
                         IntPtr data = psa->GetValue<IntPtr>(indices);
-                        SetValue(array, Marshal.PtrToStringUni(data), indices, lowerBounds);
+                        SetValue(array, InteropMarshal.PtrToStringUni(data), indices, lowerBounds);
                         break;
                     }
 
@@ -604,7 +562,7 @@ BeginMainLoop:
                         }
                         else
                         {
-                            SetValue(array, ComHelpers.GetObjectForIUnknown((IUnknown*)data), indices, lowerBounds);
+                            SetValue(array, InteropMarshal.GetObjectForIUnknown(data), indices, lowerBounds);
                         }
 
                         break;
@@ -618,7 +576,7 @@ BeginMainLoop:
                     }
 
                 default:
-                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
+                    throw new ArgumentException(null, nameof(arrayType));
             }
         }
 
@@ -648,7 +606,7 @@ BeginMainLoop:
                 && !(vt == VT_UNKNOWN && arrayVarType == VT_DISPATCH)
                 && !(arrayVarType == VT_RECORD))
             {
-                // To match CLR behavior.
+                // To match CLR behaviour.
                 throw new SafeArrayTypeMismatchException();
             }
 
@@ -669,7 +627,7 @@ BeginMainLoop:
                 VT_DATE => typeof(DateTime),
                 VT_BSTR => typeof(string),
                 VT_DISPATCH or VT_UNKNOWN or VT_VARIANT => typeof(object),
-                _ => throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt)),
+                _ => throw new ArgumentException(null, nameof(vt)),
             };
 
             if (psa->cDims == 1 && psa->GetBounds().lLbound == 0)
@@ -831,7 +789,7 @@ BeginMainLoop:
                         string?[] result = new string?[data.Length];
                         for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = Marshal.PtrToStringUni(data[i]);
+                            result[i] = InteropMarshal.PtrToStringUni(data[i]);
                         }
 
                         return result;
@@ -843,7 +801,7 @@ BeginMainLoop:
                         string?[] result = new string?[data.Length];
                         for (int i = 0; i < data.Length; i++)
                         {
-                            result[i] = Marshal.PtrToStringAnsi(data[i]);
+                            result[i] = InteropMarshal.PtrToStringAnsi(data[i]);
                         }
 
                         return result;
@@ -864,12 +822,9 @@ BeginMainLoop:
                 case VT_CF: // Not implemented.
                 case VT_BSTR_BLOB: // System use only.
                 default: // Documentation does not specify any other types that are supported.
-                    throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
+                    throw new ArgumentException(null, nameof(vectorType));
             }
         }
-
-        private static Span<T> GetSpan<T>(Array array)
-            => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToPointer()), array.Length);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator bool(PROPVARIANT value)
@@ -877,7 +832,11 @@ BeginMainLoop:
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator PROPVARIANT(bool value)
-            => value ? True : False;
+        => new()
+        {
+            vt = VT_BOOL,
+            data = new() { boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE }
+        };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator short(PROPVARIANT value)

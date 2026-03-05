@@ -17,7 +17,7 @@ namespace UIRibbonTools
         private List<RibbonTabGroup> _tabGroups = new List<RibbonTabGroup>();
         private RibbonClassBuilder _classBuilder;
         //private UI_HSBCOLOR _appButtonColorDefault = new UI_HSBCOLOR();
-        //private bool _appButtonColorExist = false;
+        private bool _hasAppButtonColor = false;
 
         public PreviewForm()
         {
@@ -226,6 +226,7 @@ namespace UIRibbonTools
                 backgroundColorFrame.ColorSelection = ColorSelection.Color;
                 highlightColorFrame.ColorSelection = ColorSelection.Color;
                 textColorFrame.ColorSelection = ColorSelection.Color;
+                appButtonColorFrame.ColorSelection = ColorSelection.Color;
             }
         }
 
@@ -236,6 +237,7 @@ namespace UIRibbonTools
                 backgroundColorFrame.ColorSelection = ColorSelection.Hsb;
                 highlightColorFrame.ColorSelection = ColorSelection.Hsb;
                 textColorFrame.ColorSelection = ColorSelection.Hsb;
+                appButtonColorFrame.ColorSelection = ColorSelection.Hsb;
             }
         }
 
@@ -248,6 +250,15 @@ namespace UIRibbonTools
             backgroundColorFrame.Init(_ribbon.GetBackgroundColor(), WhichColor.Background, _ribbon.SetBackgroundColor);
             highlightColorFrame.Init(_ribbon.GetHighlightColor(), WhichColor.Highlight, _ribbon.SetHighlightColor);
             textColorFrame.Init(_ribbon.GetTextColor(), WhichColor.Text, _ribbon.SetTextColor);
+            try
+            {
+                appButtonColorFrame.Init1(_ribbon.GetApplicationButtonColor(), WhichColor.AppButton, _ribbon.SetApplicationButtonColor);
+                _hasAppButtonColor = true;
+            }
+            catch (NotSupportedException)
+            {
+                _hasAppButtonColor = false;
+            }
 #if NET10_0_OR_GREATER
             if (Application.ColorMode == SystemColorMode.Dark)
                 _ribbon.SetDarkModeRibbon(true);
@@ -277,6 +288,8 @@ namespace UIRibbonTools
             backgroundColorFrame.SetThisColor(backgroundColorFrame.HsbSelected);
             highlightColorFrame.SetThisColor(highlightColorFrame.HsbSelected);
             textColorFrame.SetThisColor(textColorFrame.HsbSelected);
+            if (_hasAppButtonColor)
+                appButtonColorFrame.SetThisColor(appButtonColorFrame.HsbSelected);
         }
 
         private void SetDefaultColorsButton_Click(object sender, EventArgs e)
@@ -284,6 +297,8 @@ namespace UIRibbonTools
             backgroundColorFrame.SetDefaultColor();
             highlightColorFrame.SetDefaultColor();
             textColorFrame.SetDefaultColor();
+            if (_hasAppButtonColor)
+                appButtonColorFrame.SetDefaultColor();
         }
     }
 }

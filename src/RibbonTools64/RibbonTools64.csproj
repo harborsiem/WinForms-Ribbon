@@ -40,7 +40,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.264</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.269</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
   
   <ItemGroup>
@@ -145,8 +145,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RibbonFramework.CCW" Version="1.2.0" />
     <PackageReference Include="Svg" Version="3.4.7" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <NuGetRibbonFramework Condition="'$(NuGetRibbonFramework)' == ''">false</NuGetRibbonFramework>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(NuGetRibbonFramework)' == true">
+    <PackageReference Include="RibbonFramework.CCW" Version="1.2.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(NuGetRibbonFramework)' == false">
+    <Reference Include="RibbonFramework">
+      <HintPath>..\..\ccwSrc\RibbonFramework\bin\Release\net8.0-windows\RibbonFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
