@@ -64,8 +64,12 @@ namespace WinForms.Ribbon
         internal static unsafe ColorPickerEventArgs Create(in PROPERTYKEY key, in PROPVARIANT currentValue, IUISimplePropertySet? commandExecutionProperties)
         {
             Color? color = null;
-            uint uintResult = (uint)currentValue; //PropVariantToUInt32
-            UI_SWATCHCOLORTYPE colorType = (UI_SWATCHCOLORTYPE)uintResult;
+            UI_SWATCHCOLORTYPE colorType = UI_SWATCHCOLORTYPE.UI_SWATCHCOLORTYPE_NOCOLOR;
+            if (key == RibbonProperties.ColorType)
+            {
+                uint uintResult = (uint)currentValue; //PropVariantToUInt32
+                colorType = (UI_SWATCHCOLORTYPE)uintResult;
+            }
             PROPVARIANT propvar = PROPVARIANT.Empty;
             if (commandExecutionProperties != null)
             {
