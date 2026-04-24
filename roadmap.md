@@ -75,7 +75,7 @@ Important: If you don’t add the default item to the items list of a SplitButto
 
 harborsiem/WindowsRibbon discussions#33: RibbonDropDownGallery and RibbonSplitButtonGallery, GalleryItemPropertySet issue with images different in Win10, Win11, x86, x64
 
-DarkMode with FontControl is not looking good, wrong colors used.
+DarkMode with FontControl, ComboBox, Spinner is not looking good, wrong colors used.
 
 DEFINE_UIPROPERTYKEY for DarkMode and ApplicationButtonColor not documented in UIRibbon.h
 

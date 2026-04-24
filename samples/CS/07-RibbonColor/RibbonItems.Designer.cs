@@ -27,6 +27,7 @@ namespace WinForms.Ribbon
             public const uint cmdGroupColors = 17;
             public const uint cmdToggleDark = 15;
             public const uint cmdButtonDefaultColors = 16;
+            public const uint cmdButtonColor = 18;
             public const uint cmdTabDrop = 1012;
             public const uint cmdGroupDrop = 1015;
             public const uint cmdButtonDropA = 1008;
@@ -48,6 +49,7 @@ namespace WinForms.Ribbon
         public RibbonGroup GroupColors { get; private set; }
         public RibbonToggleButton ToggleDark { get; private set; }
         public RibbonButton ButtonDefaultColors { get; private set; }
+        public RibbonButton ButtonColor { get; private set; }
         public RibbonTab TabDrop { get; private set; }
         public RibbonGroup GroupDrop { get; private set; }
         public RibbonButton ButtonDropA { get; private set; }
@@ -70,6 +72,7 @@ namespace WinForms.Ribbon
             GroupColors = new RibbonGroup(ribbon, Cmd.cmdGroupColors);
             ToggleDark = new RibbonToggleButton(ribbon, Cmd.cmdToggleDark);
             ButtonDefaultColors = new RibbonButton(ribbon, Cmd.cmdButtonDefaultColors);
+            ButtonColor = new RibbonButton(ribbon, Cmd.cmdButtonColor);
             TabDrop = new RibbonTab(ribbon, Cmd.cmdTabDrop);
             GroupDrop = new RibbonGroup(ribbon, Cmd.cmdGroupDrop);
             ButtonDropA = new RibbonButton(ribbon, Cmd.cmdButtonDropA);

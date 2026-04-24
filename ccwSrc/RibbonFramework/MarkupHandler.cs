@@ -299,44 +299,10 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         private unsafe string? GetResourceIdentifier()
         {
-            ENUMRESNAMEPROCW callback = new(&EnumResNameProc);
-            List<string> names = new List<string>();
-            GCHandle namesHandle = GCHandle.Alloc(names);
-            try
-            {
-                fixed (char* pType = "UIFILE")
-                    PInvoke.EnumResourceNames(MarkupDllHandle, pType,
-                        callback,
-                        (nint)namesHandle);
-            }
-            finally
-            {
-                if (namesHandle.IsAllocated)
-                    namesHandle.Free();
-            }
-            if (names.Count == 1)
-                return names[0]; //default value = APPLICATION_RIBBON
+            ResourceNamesHandler handler = new(MarkupDllHandle, "UIFILE");
+            if (handler.Names.Count == 1)
+                return handler.Names[0]; //default value = APPLICATION_RIBBON
             return null;
-        }
-
-        /// <summary>
-        /// Callback for GetResourceIdentifier
-        /// </summary>
-        /// <param name="hModule"></param>
-        /// <param name="pType"></param>
-        /// <param name="pName"></param>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-        private static unsafe BOOL EnumResNameProc(HMODULE hModule, PCWSTR pType, PWSTR pName, nint param)
-        {
-            if (pType.ToString() == "UIFILE")
-            {
-                GCHandle listHandle = GCHandle.FromIntPtr(param);
-                List<string> names = (List<string>)listHandle.Target!;
-                names.Add(pName.ToString());
-            }
-            return true;
         }
 
         private unsafe uint GetUiFileSize(string resourceIdentifier)
@@ -344,9 +310,11 @@ namespace WinForms.Ribbon
             HRSRC hrSRC;
             uint imageSize = 0;
             fixed (char* pName = resourceIdentifier)
-            fixed (char* pType = "UIFILE")
-                hrSRC = PInvoke.FindResource(MarkupDllHandle, pName, pType);
-            if (hrSRC != HRSRC.Null)
+            {
+                fixed (char* pType = "UIFILE")
+                    hrSRC = PInvoke.FindResource(MarkupDllHandle, pName, pType);
+            }
+            if (!hrSRC.IsNull)
             {
                 imageSize = PInvoke.SizeofResource(MarkupDllHandle, hrSRC);
             }

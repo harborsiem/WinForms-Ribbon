@@ -191,8 +191,8 @@ namespace WinForms.Ribbon
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
-            base.OnHandleCreated(e);
             CheckInitialize();
+            base.OnHandleCreated(e);
         }
 
         /// <summary>
@@ -813,6 +813,11 @@ namespace WinForms.Ribbon
                 throw new InvalidOperationException(NotInitialized);
             }
 
+            HWND hwnd = new HWND(WindowHandle);
+            BOOL darkFlag = value;
+            PInvoke.AllowDarkModeForApp(darkFlag);
+            PInvoke.AllowDarkModeForWindow(hwnd, darkFlag);
+
             PROPVARIANT propvar;
             propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
             using var cpPropertyStore = Framework.GetInterface<IPropertyStore>();
@@ -822,6 +827,21 @@ namespace WinForms.Ribbon
             if (hr.Succeeded)
             {
                 hr = cpPropertyStore.Value->Commit();
+
+                if (value)
+                    PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH));
+                else
+                    PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_3DFACE));
+                //BOOL darkFlag = true;
+                WINDOWCOMPOSITIONATTRIBDATA data = new WINDOWCOMPOSITIONATTRIBDATA() { Attrib = WINDOWCOMPOSITIONATTRIB.WCA_USEDARKMODECOLORS, pvData = &darkFlag, cbData = (uint)sizeof(BOOL) };
+                PInvoke.SetWindowCompositionAttribute(hwnd, &data);
+                PInvoke.FlushMenuThemes();
+                PInvoke.RefreshImmersiveColorPolicyState();
+                PInvoke.RedrawWindow(hwnd, null, HRGN.Null,
+                    REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE |
+                    REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_INTERNALPAINT |
+                    REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN | REDRAW_WINDOW_FLAGS.RDW_UPDATENOW);
+
                 return (hr.Succeeded);
             }
             return false;
@@ -954,10 +974,22 @@ namespace WinForms.Ribbon
             _qatSetting?.Load();
 
             EventSet.Raise(s_ViewCreatedKey, this, EventArgs.Empty);
-            //if (Application.IsDarkModeEnabled)
-            //{
-            //    SetDarkModeRibbon(true);
-            //}
+
+#if NET10_0_OR_GREATER
+            if (Application.IsDarkModeEnabled)
+            {
+                //HWND hwnd = new HWND(WindowHandle);
+                //PInvoke.AllowDarkModeForApp(true);
+                //PInvoke.AllowDarkModeForWindow(hwnd, true);
+                SetDarkModeRibbon(true);
+                //PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH));
+                //BOOL darkFlag = true;
+                //WINDOWCOMPOSITIONATTRIBDATA data = new WINDOWCOMPOSITIONATTRIBDATA() { Attrib = WINDOWCOMPOSITIONATTRIB.WCA_USEDARKMODECOLORS, pvData = &darkFlag, cbData = (uint)sizeof(BOOL) };
+                //PInvoke.SetWindowCompositionAttribute(hwnd, &data);
+                //PInvoke.FlushMenuThemes();
+                //PInvoke.RefreshImmersiveColorPolicyState();
+            }
+#endif
         }
 
         /// <summary>

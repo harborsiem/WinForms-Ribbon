@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+### RibbonFramework V1.2.3, RibbonTools64 V8.2.2
+
+#### Changed (RibbonFramework)
+
+- NET10.0 support for DarkMode
+But not all Ribbon controls are looking nice in DarkMode.
+I can do nothing that these controls look nicer in DarkMode.
+I believe that Microsoft had only made the Ribbon dark mode functional for its own programs (Win10 Explorer, ?).
+But Microsoft Win10 programs like Paint and Wordpad have no dark mode, because of problems inside some ribbon controls.
+In this implementation we use undocumented Microsoft features.
+
+- CsWin32 version 0.3.275
+
+#### Changed (RibbonTools64)
+
+
+#### Changed (Samples)
+
+- 07_RibbonColor updated
+- Ready for DarkMode (NET10 and greater) (only C# samples)
+- CSharp samples with central setting build file "Directory.Build.props"
+
 ### RibbonFramework V1.2.2, RibbonTools64 V8.2.2
 
 #### Changed (RibbonFramework)

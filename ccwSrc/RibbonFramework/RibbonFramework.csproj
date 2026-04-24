@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>
@@ -36,12 +36,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="COLORREF.cs" />
-    <Compile Remove="ComSupport\SR.cs" />
-    <Compile Remove="Internals\UIRibbonScope.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Ribbon64.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
@@ -54,7 +48,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.269</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.275</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -30,12 +29,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="RibbonMarkup.ribbon" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="RibbonFramework">
-      <HintPath>..\..\..\ccwSrc\RibbonFramework\bin\Debug\net8.0-windows\RibbonFramework.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

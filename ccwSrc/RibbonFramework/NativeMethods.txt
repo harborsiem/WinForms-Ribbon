@@ -212,3 +212,16 @@ NTSTATUS
 WIN32_ERROR
 LoadRegTypeLib
 IGlobalInterfaceTable
+
+FARPROC
+GetFileVersionInfoSize
+GetFileVersionInfo
+GetModuleHandle
+GetProcAddress
+GetSysColorBrush
+InitCommonControlsEx
+VerQueryValue
+HTHEME
+GET_CLASS_LONG_INDEX
+GetStockObject
+RedrawWindow

@@ -24,8 +24,6 @@ namespace WinForms.Ribbon
 
         private RibbonStrip _ribbon;
         private readonly string NameOfMarkupResource; //for Exceptions comment
-        // Stash the delegate to keep it from being collected
-        private readonly ENUMRESNAMEPROCW _enumResNameProcedure;
 
         public string? ResourceIdentifier { get; private set; }
 
@@ -37,7 +35,6 @@ namespace WinForms.Ribbon
             _ribbon = ribbon;
             ResourceIdentifier = ribbon.ResourceIdentifier;
             MarkupDllHandle = HMODULE.Null;
-            _enumResNameProcedure = EnumResNameProc;
             InitFramework(ribbon.MarkupResource, executingAssembly);
         }
 
@@ -301,42 +298,10 @@ namespace WinForms.Ribbon
         /// <returns></returns>
         private unsafe string? GetResourceIdentifier()
         {
-            List<string> names = new List<string>();
-            GCHandle namesHandle = GCHandle.Alloc(names);
-            try
-            {
-                fixed (char* pType = "UIFILE")
-                    PInvoke.EnumResourceNames(MarkupDllHandle, pType,
-                        _enumResNameProcedure,
-                        (nint)namesHandle);
-            }
-            finally
-            {
-                if (namesHandle.IsAllocated)
-                    namesHandle.Free();
-            }
-            if (names.Count == 1)
-                return names[0]; //default value = APPLICATION_RIBBON
+            ResourceNamesHandler handler = new(MarkupDllHandle, "UIFILE");
+            if (handler.Names.Count == 1)
+                return handler.Names[0]; //default value = APPLICATION_RIBBON
             return null;
-        }
-
-        /// <summary>
-        /// Callback for GetResourceIdentifier
-        /// </summary>
-        /// <param name="hModule"></param>
-        /// <param name="pType"></param>
-        /// <param name="pName"></param>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private static unsafe BOOL EnumResNameProc(HMODULE hModule, PCWSTR pType, PWSTR pName, nint param)
-        {
-            if (pType.ToString() == "UIFILE")
-            {
-                GCHandle listHandle = GCHandle.FromIntPtr(param);
-                List<string> names = (List<string>)listHandle.Target!;
-                names.Add(pName.ToString());
-            }
-            return true;
         }
 
         private unsafe uint GetUiFileSize(string resourceIdentifier)

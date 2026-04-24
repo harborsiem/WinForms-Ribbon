@@ -65,4 +65,8 @@
 #define cmdButtonDefaultColors_TooltipDescription_RESID 60043
 #define cmdGroupColors 17 
 #define cmdGroupColors_LabelTitle_RESID 60044
-#define InternalCmd2_LabelTitle_RESID 60045
+#define cmdButtonColor 18 
+#define cmdButtonColor_LabelTitle_RESID 60045
+#define cmdButtonColor_TooltipTitle_RESID 60046
+#define cmdButtonColor_TooltipDescription_RESID 60047
+#define InternalCmd2_LabelTitle_RESID 60048
