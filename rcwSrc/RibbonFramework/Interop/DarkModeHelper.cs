@@ -89,7 +89,7 @@ namespace Windows.Win32.Foundation
 
 #if NET8_0_OR_GREATER
 
-        public unsafe readonly struct RtlGetNtVersionNumbersFP
+        internal unsafe readonly struct RtlGetNtVersionNumbersFP
         {
             public readonly delegate* unmanaged<uint*, uint*, uint*, void> Value;
 
@@ -292,9 +292,8 @@ namespace Windows.Win32.Foundation
         private bool _bCanHaveDarkMode = false;
         private static DarkModeHelper s_instance = new DarkModeHelper();
         public static DarkModeHelper Instance { get { return s_instance; } }
-        public static int MajorVersion { get; private set; }
-        public static int MinorVersion { get; private set; }
-        public static int BuildVersion { get; private set; }
+
+        public static Version WindowsVersion { get; private set; }
 
         private unsafe DarkModeHelper()
         {
@@ -338,9 +337,6 @@ namespace Windows.Win32.Foundation
                     else if (micro > 17762)
                         _bCanHaveDarkMode = true;
                 }
-                MajorVersion = major;
-                MinorVersion = minor;
-                BuildVersion = micro;
             }
             fixed (char* uxthemeLocal = uxtheme)
                 _hUxthemeLib = PInvoke.LoadLibraryEx(uxthemeLocal, HANDLE.Null, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -351,12 +347,19 @@ namespace Windows.Win32.Foundation
                     farProc = PInvoke.GetProcAddress(PInvoke.GetModuleHandle(ntdll), new PCSTR(versionNumbers));
             }
             if (!farProc.IsNull)
+            {
+                uint rtlMajor;
+                uint rtlMinor;
+                uint rtlBuild;
 #if NET8_0_OR_GREATER
                 _pRtlGetNtVersionNumbersFP = (delegate* unmanaged<uint*, uint*, uint*, void>)farProc.Value;
+                _pRtlGetNtVersionNumbersFP.Value(&rtlMajor, &rtlMinor, &rtlBuild);
 #else
                 _pRtlGetNtVersionNumbersFP = farProc.CreateDelegate<RtlGetNtVersionNumbersFP>();
+                _pRtlGetNtVersionNumbersFP(&rtlMajor, &rtlMinor, &rtlBuild);
 #endif
-
+                WindowsVersion = new Version((int)rtlMajor, (int)rtlMinor, (int)(rtlBuild & 0x0ffff));
+            }
             if (!_hUxthemeLib.IsNull && _bCanHaveDarkMode)
             {
                 // Note: these functions are undocumented! Which means I shouldn't even use them.
@@ -620,7 +623,7 @@ namespace Windows.Win32.Foundation
             }
         }
 
-        public unsafe void RtlGetNtVersionNumbers(out uint major, out uint minor, out uint build)
+        internal unsafe void RtlGetNtVersionNumbers(out uint major, out uint minor, out uint build)
         {
 #if NET8_0_OR_GREATER
             if (!_pRtlGetNtVersionNumbersFP.IsNull)
@@ -629,6 +632,7 @@ namespace Windows.Win32.Foundation
                 fixed (uint* minorLocal = &minor)
                 fixed (uint* buildLocal = &build)
                     _pRtlGetNtVersionNumbersFP.Value(majorLocal, minorLocal, buildLocal);
+                build &= 0x0ffff;
                 return;
             }
 #else
@@ -638,6 +642,7 @@ namespace Windows.Win32.Foundation
                 fixed (uint* minorLocal = &minor)
                 fixed (uint* buildLocal = &build)
                     _pRtlGetNtVersionNumbersFP(majorLocal, minorLocal, buildLocal);
+                build &= 0x0ffff;
                 return;
             }
 #endif

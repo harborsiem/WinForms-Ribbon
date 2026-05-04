@@ -9,10 +9,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - NET10.0 support for DarkMode
 But not all Ribbon controls are looking nice in DarkMode.
-I can do nothing that these controls look nicer in DarkMode.
+I can't do anything to make these controls look nicer in DarkMode.
 I believe that Microsoft had only made the Ribbon dark mode functional for its own programs (Win10 Explorer, ?).
 But Microsoft Win10 programs like Paint and Wordpad have no dark mode, because of problems inside some ribbon controls.
 In this implementation we use undocumented Microsoft features.
+So it's up to you to use the dark mode in your app.
 
 - CsWin32 version 0.3.275
 

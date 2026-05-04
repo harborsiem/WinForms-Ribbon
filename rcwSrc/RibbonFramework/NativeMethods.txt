@@ -201,7 +201,7 @@ ReleaseDC
 SelectObject
 SizeofResource
 
-//DwmSetWindowAttribute
+DwmSetWindowAttribute
 //DWMWINDOWATTRIBUTE
 //GET_CLASS_LONG_INDEX
 //SendMessage
@@ -225,3 +225,6 @@ HTHEME
 GET_CLASS_LONG_INDEX
 GetStockObject
 RedrawWindow
+SetWindowTheme
+SendMessage
+WM_NCACTIVATE

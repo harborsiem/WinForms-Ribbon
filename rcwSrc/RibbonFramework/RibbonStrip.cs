@@ -792,11 +792,12 @@ namespace WinForms.Ribbon
             {
                 throw new InvalidOperationException(NotInitialized);
             }
+#if NET10_0_OR_GREATER
             HWND hwnd = new HWND(WindowHandle);
             BOOL darkFlag = value;
             PInvoke.AllowDarkModeForApp(darkFlag);
             PInvoke.AllowDarkModeForWindow(hwnd, darkFlag);
-
+#endif
             PROPVARIANT propvar;
             propvar = (PROPVARIANT)value; //UIInitPropertyFromBoolean
             IPropertyStore propertyStore = (IPropertyStore)Framework;
@@ -807,11 +808,11 @@ namespace WinForms.Ribbon
             {
                 hr = propertyStore.Commit();
 
-                if (value)
-                    PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH));
-                else
-                    PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_3DFACE));
-                //BOOL darkFlag = true;
+#if NET10_0_OR_GREATER
+                //if (value)
+                //    PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH));
+                //else
+                //    PInvoke.SetClassLong(hwnd, GET_CLASS_LONG_INDEX.GCLP_HBRBACKGROUND, PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_3DFACE));
                 WINDOWCOMPOSITIONATTRIBDATA data = new WINDOWCOMPOSITIONATTRIBDATA() { Attrib = WINDOWCOMPOSITIONATTRIB.WCA_USEDARKMODECOLORS, pvData = &darkFlag, cbData = (uint)sizeof(BOOL) };
                 PInvoke.SetWindowCompositionAttribute(hwnd, &data);
                 PInvoke.FlushMenuThemes();
@@ -820,7 +821,7 @@ namespace WinForms.Ribbon
                     REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE |
                     REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_INTERNALPAINT |
                     REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN | REDRAW_WINDOW_FLAGS.RDW_UPDATENOW);
-                
+#endif        
                 propertyStore = null!;
                 return hr.Succeeded;
             }
