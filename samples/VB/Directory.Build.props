@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0-windows</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="RibbonFramework">
+      <HintPath>..\..\..\ccwSrc\RibbonFramework\bin\Debug\net10.0-windows\RibbonFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+
+<!--
+  <ItemGroup>
+    <PackageReference Include="RibbonFramework.CCW" Version="1.2.3" />
+  </ItemGroup>
+-->
+</Project>

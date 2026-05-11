@@ -23,8 +23,8 @@ So it's up to you to use the dark mode in your app.
 #### Changed (Samples)
 
 - 07_RibbonColor updated
-- Ready for DarkMode (NET10 and greater) (only C# samples)
-- CSharp samples with central setting build file "Directory.Build.props"
+- Ready for DarkMode (NET10 and greater)
+- CSharp, Vb samples with central setting build file "Directory.Build.props"
 
 ### RibbonFramework V1.2.2, RibbonTools64 V8.2.2
 

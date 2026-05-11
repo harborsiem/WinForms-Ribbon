@@ -55,8 +55,9 @@
     <Command Name="cmdGroupDrop" Id="1015" />
     <Command Name="cmdHelpButton" Id="1016" />
     <Command Name="cmdToggleDark" Id="15" LabelTitle="Darkmode" TooltipDescription="Toggle Darkmode for Ribbon" />
-    <Command Name="cmdButtonDefaultColors" Id="16" LabelTitle="Default Colors" TooltipDescription="Set default Colors" />
+    <Command Name="cmdButtonDefaultColors" Id="16" LabelTitle="Default Colors" TooltipDescription="Set default Colors, only available when Ribbon is NOT in darkmode." />
     <Command Name="cmdGroupColors" Id="17" LabelTitle="Colors" />
+    <Command Name="cmdButtonColor" Id="18" LabelTitle="Other Colors" TooltipTitle="Other Colors" TooltipDescription="Other colors for AppButton, Text, Background, only available when Ribbon is NOT in dark mode." />
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -91,6 +92,7 @@
           <Group CommandName="cmdGroupColors">
             <ToggleButton CommandName="cmdToggleDark" />
             <Button CommandName="cmdButtonDefaultColors" />
+            <Button CommandName="cmdButtonColor" />
           </Group>
         </Tab>
         <Tab CommandName="cmdTabDrop">

@@ -24,6 +24,11 @@ Namespace My
     ' End Sub
 
     Partial Friend Class MyApplication
+        Private Sub MyApplication_ApplyApplicationDefaults(sender As Object, e As ApplyApplicationDefaultsEventArgs) Handles Me.ApplyApplicationDefaults
+#If NET10_0_OR_GREATER Then
+            e.ColorMode = SystemColorMode.System
+#End If
+        End Sub
 
     End Class
 End Namespace

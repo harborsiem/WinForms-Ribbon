@@ -19,8 +19,15 @@ Namespace _19_Localization
 			Thread.CurrentThread.CurrentCulture = New CultureInfo("en-us")
 			Thread.CurrentThread.CurrentUICulture = New CultureInfo("en-us")
 #End If
+			' #If NET462_OR_GREATER Then
 			Application.EnableVisualStyles()
 			Application.SetCompatibleTextRenderingDefault(False)
+			' #Else
+
+			' #End If
+#If NET10_0_OR_GREATER Then
+			Application.SetColorMode(SystemColorMode.System)
+#End If
 			Application.Run(New Form1())
 		End Sub
 	End Class

@@ -24,6 +24,7 @@ Namespace Global.WinForms.Ribbon
             Public Const cmdGroupColors As UInteger = 17
             Public Const cmdToggleDark As UInteger = 15
             Public Const cmdButtonDefaultColors As UInteger = 16
+            Public Const cmdButtonColor As UInteger = 18
             Public Const cmdTabDrop As UInteger = 1012
             Public Const cmdGroupDrop As UInteger = 1015
             Public Const cmdButtonDropA As UInteger = 1008
@@ -105,6 +106,12 @@ Namespace Global.WinForms.Ribbon
                 Return _ButtonDefaultColors
             End Get
         End Property
+        Private _ButtonColor As RibbonButton
+        Public ReadOnly Property ButtonColor As RibbonButton
+            Get
+                Return _ButtonColor
+            End Get
+        End Property
         Private _TabDrop As RibbonTab
         Public ReadOnly Property TabDrop As RibbonTab
             Get
@@ -152,6 +159,7 @@ Namespace Global.WinForms.Ribbon
             _GroupColors = New RibbonGroup(_ribbon, Cmd.cmdGroupColors)
             _ToggleDark = New RibbonToggleButton(_ribbon, Cmd.cmdToggleDark)
             _ButtonDefaultColors = New RibbonButton(_ribbon, Cmd.cmdButtonDefaultColors)
+            _ButtonColor = New RibbonButton(_ribbon, Cmd.cmdButtonColor)
             _TabDrop = New RibbonTab(_ribbon, Cmd.cmdTabDrop)
             _GroupDrop = New RibbonGroup(_ribbon, Cmd.cmdGroupDrop)
             _ButtonDropA = New RibbonButton(_ribbon, Cmd.cmdButtonDropA)
