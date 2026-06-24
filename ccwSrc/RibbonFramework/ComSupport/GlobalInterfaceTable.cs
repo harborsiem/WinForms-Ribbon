@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices.Marshalling;
 using Windows.Win32.System.Com;
 
 namespace Windows.Win32.Foundation;
@@ -68,6 +67,7 @@ internal static unsafe partial class GlobalInterfaceTable
         return hr;
     }
 
+#if NET
     /// <summary>
     ///  Creates a new instance of an <see cref="IIUnknownStrategy"/> for <see cref="StrategyBasedComWrappers"/>
     ///  that uses the Global Interface Table.
@@ -78,4 +78,5 @@ internal static unsafe partial class GlobalInterfaceTable
     ///  </para>
     /// </remarks>
     public static IIUnknownStrategy CreateUnknownStrategy() => new UnknownStrategy();
+#endif
 }

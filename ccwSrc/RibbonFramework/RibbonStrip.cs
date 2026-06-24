@@ -29,7 +29,6 @@ using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.Shell.PropertiesSystem;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Com;
-using Windows.Win32.Graphics.Dwm;
 
 namespace WinForms.Ribbon
 {
@@ -553,16 +552,37 @@ namespace WinForms.Ribbon
             {
                 EventLogger?.Destroy();
 
-                // destroy ribbon framework
+                _qatSetting?.Save();
+
+                if (CpIUIImageFromBitmap != null)
+                {
 #if DEBUG
+                    using (var imageFromBitmap = CpIUIImageFromBitmap.GetInterface())
+                    {
+                        imageFromBitmap.Value->AddRef();
+                        uint refCount = imageFromBitmap.Value->Release() - 1;
+                        Debug.WriteLine("Before Dispose IUIImageFromBitmap refCount: " + refCount.ToString());
+                    }
+#endif
+                    IDisposable? localImageFromBitmap = CpIUIImageFromBitmap;
+                    CpIUIImageFromBitmap = null!;
+                    if (localImageFromBitmap != null)
+                    {
+                        // remove reference to imageFromBitmap object
+                        localImageFromBitmap.Dispose();
+                    }
+                }
+                // destroy ribbon framework
                 using (var framework = Framework.GetInterface())
                 {
                     framework.Value->Destroy();
+                    //IUIApplication.Interface.OnViewChanged is now called with UI_VIEWVERB.UI_VIEWVERB_DESTROY
+#if DEBUG
                     framework.Value->AddRef();
                     uint refCount = framework.Value->Release() - 1;
                     Debug.WriteLine("Destroy IUIFramework refCount: " + refCount.ToString());
-                }
 #endif
+                }
                 IDisposable? localFramework = Framework;
                 Framework = null;
                 if (localFramework != null)
@@ -576,24 +596,6 @@ namespace WinForms.Ribbon
 
             _shortcutHandler?.Dispose();
 
-            if (CpIUIImageFromBitmap != null)
-            {
-#if DEBUG
-                using (var imageFromBitmap = CpIUIImageFromBitmap.GetInterface())
-                {
-                    imageFromBitmap.Value->AddRef();
-                    uint refCount = imageFromBitmap.Value->Release() - 1;
-                    Debug.WriteLine("Before Dispose IUIImageFromBitmap refCount: " + refCount.ToString());
-                }
-#endif
-                IDisposable? localImageFromBitmap = CpIUIImageFromBitmap;
-                CpIUIImageFromBitmap = null!;
-                if (localImageFromBitmap != null)
-                {
-                    // remove reference to imageFromBitmap object
-                    localImageFromBitmap.Dispose();
-                }
-            }
             // remove references to ribbon items
             _mapRibbonStripItems.Clear();
 
@@ -1011,8 +1013,10 @@ namespace WinForms.Ribbon
 
         internal void OnViewDestroy()
         {
-            _qatSetting?.Save();
-            EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
+            Invoke((System.Windows.Forms.MethodInvoker)delegate
+            {
+                EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
+            });
         }
 
         /// <summary>

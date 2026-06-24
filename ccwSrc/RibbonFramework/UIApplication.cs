@@ -13,7 +13,7 @@ using Windows.Win32.System.Com.StructuredStorage;
 
 namespace WinForms.Ribbon
 {
-    internal sealed unsafe class UIApplication : IUIApplication.Interface, IUICommandHandler.Interface, IManagedWrapper<IUIApplication, IUICommandHandler>
+    internal sealed unsafe class UIApplication : IUIApplication.Interface, IUICommandHandler.Interface
     {
         private RibbonStrip _ribbon;
 
@@ -164,7 +164,7 @@ namespace WinForms.Ribbon
 
                         if (!uiRibbonScope.IsNull)
                         {
-                            _ribbon.Invoke(new MethodInvoker(_ribbon.OnViewDestroy));
+                            _ribbon.OnViewDestroy();
                             hr = HRESULT.S_OK;
                         }
                         break;

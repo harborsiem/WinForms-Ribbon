@@ -832,6 +832,7 @@ namespace WinForms.Ribbon
             if (localUIImage != null)
             {
                 localUIImage.Dispose();
+                Debug.WriteLine("UIImage RefCount: 0");
                 //PInvoke.DeleteObject(_hbitmap);
             }
         }

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+### RibbonFramework V1.2.4, RibbonTools64 V8.2.2
+
+#### Changed (RibbonFramework)
+
+- Bugfix RibbonDropDownColorPicker in RibbonFramework.RCW and NET Framework 
+- Bugfix IUIRibbonFramework was not destroyed
+- Other bug fixes
+- Update some ComSupport classes from WinForms
+
+- CsWin32 version 0.3.296
+- Experimental CCW projectfile with PolySharp for NET Framework 
+
+#### Changed (RibbonTools64)
+
 ### RibbonFramework V1.2.3, RibbonTools64 V8.2.2
 
 #### Changed (RibbonFramework)

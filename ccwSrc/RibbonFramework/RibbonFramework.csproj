@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageId>RibbonFramework.CCW</PackageId>
     <Product>Ribbon Framework for .NET WinForms</Product>
-    <Version>1.2.3</Version>
+    <Version>1.2.4</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Authors>Hartmut Borkenhagen</Authors>
     <Company>RibbonLib</Company>
@@ -33,6 +33,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/harborsiem/WinForms-Ribbon</PackageProjectUrl>
     <PackageTags>Ribbon Framework;ribbon;winforms;csharp</PackageTags>
+
+    <!-- Exclude Framework folder from non .NET Framework builds -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/Framework/**/*</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,7 +51,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <MicrosoftWindowsCsWin32PackageVersion>0.3.275</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.3.296</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

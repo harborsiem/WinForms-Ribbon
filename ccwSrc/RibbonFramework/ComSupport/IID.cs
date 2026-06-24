@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
 namespace Windows.Win32.Foundation;
 
 internal static unsafe class IID
@@ -15,7 +12,7 @@ internal static unsafe class IID
         {
             ReadOnlySpan<byte> data =
             [
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
             ];
 
             return ref Unsafe.As<byte, Guid>(ref MemoryMarshal.GetReference(data));
@@ -30,14 +27,26 @@ internal static unsafe class IID
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Guid* Get<T>() where T : unmanaged, IComIID
-        => (Guid*)Unsafe.AsPointer(ref Unsafe.AsRef(in T.Guid));
+    {
+#if NET
+        return (Guid*)Unsafe.AsPointer(ref Unsafe.AsRef(in T.Guid));
+#else
+        return (Guid*)Unsafe.AsPointer(ref Unsafe.AsRef(in default(T).Guid));
+#endif
+    }
 
     /// <summary>
     ///  Gets a reference to the IID <see cref="Guid"/> for the given <typeparamref name="T"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref Guid GetRef<T>() where T : unmanaged, IComIID
-        => ref Unsafe.AsRef(in T.Guid);
+    public static ref readonly Guid GetRef<T>() where T : unmanaged, IComIID
+    {
+#if NET
+        return ref Unsafe.AsRef(in T.Guid);
+#else
+        return ref default(T).Guid;
+#endif
+    }
 
     /// <summary>
     ///  Empty <see cref="Guid"/> (GUID_NULL in docs).

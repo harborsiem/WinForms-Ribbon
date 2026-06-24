@@ -3,7 +3,7 @@
 
 namespace Windows.Win32.Foundation;
 
-partial struct FILETIME
+internal partial struct FILETIME
 {
     public FILETIME(DateTime date)
     {

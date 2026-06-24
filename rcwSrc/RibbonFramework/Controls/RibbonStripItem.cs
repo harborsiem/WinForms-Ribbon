@@ -299,11 +299,7 @@ namespace WinForms.Ribbon
         /// <param name="typeID"></param>
         internal void RaiseDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
-            Ribbon.Invoke((MethodInvoker)delegate
-            {
-                OnDestroyUICommand(commandId, typeID);
-            });
-            //OnDestroyUICommand(commandId, typeID);
+            OnDestroyUICommand(commandId, typeID);
         }
 
         private protected virtual void OnCreateUICommand(uint commandId, UI_COMMANDTYPE typeID)
@@ -313,7 +309,10 @@ namespace WinForms.Ribbon
 
         private protected virtual void OnDestroyUICommand(uint commandId, UI_COMMANDTYPE typeID)
         {
-            EventSet.Raise(s_DestroyUICommandKey, this, EventArgs.Empty);
+            Ribbon.Invoke((MethodInvoker)delegate
+            {
+                EventSet.Raise(s_DestroyUICommandKey, this, EventArgs.Empty);
+            });
         }
 
         //internal void OnViewCreated()

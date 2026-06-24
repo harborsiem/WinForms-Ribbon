@@ -1,15 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.CompilerServices;
 using Windows.Win32.System.Variant;
-using Windows.Win32.System.Com.StructuredStorage;
 
 namespace Windows.Win32.System.Com;
 
 /// <summary>
 ///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via
-///  <see cref="PInvokeCore.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
+///  <see cref="PInvoke.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
 ///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a
 ///  one dimensional <see cref="SAFEARRAY"/>.
 /// </summary>
@@ -46,7 +44,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         }
         else if (typeof(T) == typeof(int))
         {
-            if (value->VarType is not VARENUM.VT_I4 or VARENUM.VT_INT)
+            if (value->VarType is not VARENUM.VT_I4 and not VARENUM.VT_INT)
             {
                 throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
             }

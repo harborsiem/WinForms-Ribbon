@@ -534,9 +534,21 @@ namespace WinForms.Ribbon
             {
                 EventLogger?.Destroy();
 
+                _qatSetting?.Save();
+
+                int refCount;
+                if (_cpIUIImageFromBitmap != null)
+                {
+                    // remove reference to imageFromBitmap object
+                    refCount = Marshal.ReleaseComObject(_cpIUIImageFromBitmap);
+                    Debug.WriteLine("Destroy IUIImageFromBitmap refCount: " + refCount);
+                    _cpIUIImageFromBitmap = null;
+                }
+
                 // destroy ribbon framework
                 Framework.Destroy();
-                int refCount = Marshal.ReleaseComObject(Framework);
+                //IUIApplication.Interface.OnViewChanged is now called with UI_VIEWVERB.UI_VIEWVERB_DESTROY
+                refCount = Marshal.ReleaseComObject(Framework);
                 Debug.WriteLine("Destroy IUIFramework refCount: " + refCount);
 
                 // remove reference to framework object
@@ -549,14 +561,6 @@ namespace WinForms.Ribbon
             _markupHandler?.Dispose();
 
             _shortcutHandler?.Dispose();
-
-            if (_cpIUIImageFromBitmap != null)
-            {
-                // remove reference to imageFromBitmap object
-                int refCount = Marshal.ReleaseComObject(_cpIUIImageFromBitmap);
-                Debug.WriteLine("Destroy IUIImageFromBitmap refCount: " + refCount);
-                _cpIUIImageFromBitmap = null;
-            }
 
             if (_uIApplication != null)
             {
@@ -1003,8 +1007,10 @@ namespace WinForms.Ribbon
 
         internal void OnViewDestroy()
         {
-            _qatSetting!.Save();
-            EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
+            Invoke((System.Windows.Forms.MethodInvoker)delegate
+            {
+                EventSet.Raise(s_ViewDestroyKey, this, EventArgs.Empty);
+            });
         }
 
         /// <summary>

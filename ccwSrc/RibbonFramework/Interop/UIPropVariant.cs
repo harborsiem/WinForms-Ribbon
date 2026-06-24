@@ -292,8 +292,7 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 if ((nint)propvarIn.data.punkVal != 0)
                 {
                     HRESULT hr;
-                    fixed (Guid* pInterfaceGuid = &TInterface.Guid)
-                        hr = propvarIn.data.punkVal->QueryInterface(pInterfaceGuid, (void**)ppObj);
+                    hr = propvarIn.data.punkVal->QueryInterface(IID.Get<TInterface>(), (void**)ppObj);
                     return hr;
                 }
                 return HRESULT.S_OK;
@@ -310,9 +309,8 @@ namespace Windows.Win32.System.Com.StructuredStorage
                 if ((nint)propvarIn.data.punkVal != 0)
                 {
                     HRESULT hr;
-                    TInterface* cpInterface;
-                    fixed (Guid* pInterfaceGuid = &TInterface.Guid)
-                        hr = propvarIn.data.punkVal->QueryInterface(pInterfaceGuid, (void**)&cpInterface);
+                    TInterface* cpInterface = null;
+                    hr = propvarIn.data.punkVal->QueryInterface(out cpInterface);
                     ppObj = cpInterface;
                     return hr;
                 }

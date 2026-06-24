@@ -669,10 +669,9 @@ namespace WinForms.Ribbon
                         PWSTR* pprgsz;
                         uint pcElem;
                         hr = PInvoke.PropVariantToStringVectorAlloc(propvar, &pprgsz, &pcElem);
-                        ReadOnlySpan<PWSTR> span = new ReadOnlySpan<PWSTR>(pprgsz, (int)pcElem);
-                        string[] result = new string[span.Length];
+                        string[] result = new string[(int)pcElem];
                         for (int i = 0; i < result.Length; i++)
-                            result[i] = span[i].ToStringAndCoTaskMemFree()!;
+                            result[i] = pprgsz[i].ToStringAndCoTaskMemFree()!;
                         PInvoke.CoTaskMemFree(pprgsz);
                         propvar.Clear(); //PropVariantClear
                         return result;
@@ -818,10 +817,9 @@ namespace WinForms.Ribbon
                         PWSTR* pprgsz;
                         uint pcElem;
                         hr = PInvoke.PropVariantToStringVectorAlloc(propvar, &pprgsz, &pcElem);
-                        ReadOnlySpan<PWSTR> span = new ReadOnlySpan<PWSTR>(pprgsz, (int)pcElem);
-                        string[] result = new string[span.Length];
+                        string[] result = new string[(int)pcElem];
                         for (int i = 0; i < result.Length; i++)
-                            result[i] = span[i].ToStringAndCoTaskMemFree()!;
+                            result[i] = pprgsz[i].ToStringAndCoTaskMemFree()!;
                         PInvoke.CoTaskMemFree(pprgsz);
                         propvar.Clear(); //PropVariantClear
                         return result;

@@ -167,7 +167,7 @@ namespace WinForms.Ribbon
 
                         if (uiRibbon != null)
                         {
-                            _ribbon.Invoke(new MethodInvoker(_ribbon.OnViewDestroy));
+                            _ribbon.OnViewDestroy();
                             hr = HRESULT.S_OK;
                         }
                         break;

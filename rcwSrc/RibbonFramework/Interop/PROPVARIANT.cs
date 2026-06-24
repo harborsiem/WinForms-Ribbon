@@ -38,8 +38,8 @@ namespace Windows.Win32.System.Com.StructuredStorage
 
         public bool Byref => vt.HasFlag(VT_BYREF);
 
-        [UnscopedRef]
-        public ref VARENUM vt => ref Anonymous.Anonymous.vt;
+        //[UnscopedRef]
+        //public ref VARENUM vt => ref Anonymous.Anonymous.vt;
 
         [UnscopedRef]
         public ref _Anonymous_e__Union._Anonymous_e__Struct_unmanaged._Anonymous_e__Union_unmanaged data => ref Anonymous.Anonymous.Anonymous;
@@ -240,7 +240,12 @@ namespace Windows.Win32.System.Com.StructuredStorage
 
             try
             {
-                if (array.Rank != 1)
+                // The fast path below uses Span<T>.CopyTo((T[])array), which requires an SZArray
+                // (zero-lower-bound vector). A 1-D SAFEARRAY with a non-zero lower bound comes back
+                // from CreateArrayFromSafeArray as a variable-bound 1-D array (e.g. int[*]) that
+                // can't be cast to int[]; route those through the transpose path, which writes
+                // through Unsafe.Add / MemoryMarshal.GetArrayDataReference and works for any rank.
+                if (array.Rank != 1 || array.GetLowerBound(0) != 0)
                 {
                     if (array.Length != 0)
                     {
